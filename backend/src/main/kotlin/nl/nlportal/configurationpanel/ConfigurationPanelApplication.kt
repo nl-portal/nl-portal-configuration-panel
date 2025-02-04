@@ -1,4 +1,4 @@
-package nl.nlportal.configuration_panel
+package nl.nlportal.configurationpanel
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
