@@ -1,0 +1,34 @@
+name: Validate Build
+on:
+  push:
+    branches:
+      - "next-minor"
+      - "next-major"
+      - "release/*"
+  pull_request:
+    branches:
+      - "next-minor"
+      - "next-major"
+      - "release/*"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+env:
+  nodeVersion: "20.x"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: "frontend"
+      - name: Set up Node.js ${{ env.nodeVersion }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.nodeVersion }}
+      - name: Install
+        run: npm install -g pnpm && pnpm install
+      - name: Build
+        run: pnpm build
+      - name: Test
+        run: pnpm test
