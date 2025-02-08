@@ -6,15 +6,17 @@
     <changeSet id="1" author="Ritense">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="nlp_config" />
+                <tableExists tableName="nlp_config"/>
             </not>
         </preConditions>
         <createTable tableName="nlp_config">
-            <column name="feature_id" type="varchar(255)">
+            <column name="property_key" type="varchar(255)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="enabled" type="boolean" defaultValue="false"/>
-            <column name="properties" type="JSONB"/>
+            <column name="property_value" type="text"/>
+            <column name="application" type="varchar(255)"/>
+            <column name="profile" type="varchar(55)"/>
+            <column name="label" type="varchar(55)"/>
             <column name="modified_on" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
     </changeSet>
