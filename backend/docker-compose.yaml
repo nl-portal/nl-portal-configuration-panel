@@ -1,7 +1,7 @@
 services:
     configuration-panel-database:
         container_name: configuration-panel-database
-        image: postgres:15-alpine
+        image: postgres:15
         ports:
             - "54322:5432"
         environment:

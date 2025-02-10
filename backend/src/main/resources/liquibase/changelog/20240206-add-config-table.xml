@@ -6,10 +6,10 @@
     <changeSet id="1" author="Ritense">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="nlp_config"/>
+                <tableExists tableName="nlp_configuration"/>
             </not>
         </preConditions>
-        <createTable tableName="nlp_config">
+        <createTable tableName="nlp_configuration">
             <column name="property_key" type="varchar(255)">
                 <constraints primaryKey="true"/>
             </column>
