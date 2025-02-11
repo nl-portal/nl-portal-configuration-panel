@@ -66,6 +66,7 @@ tasks.bootRun {
             "spring.datasource.url" to "jdbc:postgresql://localhost:54322/nl-portal-config",
             "spring.datasource.username" to "config",
             "spring.datasource.password" to "password",
+            "logging.level.root" to "INFO",
             "CONFIG_CACHE_TTL" to "300",
             "CONFIGURATION_SERVER_PREFIX" to "/configuration",
             "CONFIGURATION_SERVER_TOKEN" to "VerySecretToken",
