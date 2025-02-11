@@ -1,6 +1,18 @@
+server:
+  port: 8888
 spring:
   application:
-    name: configuration-panel
+    name: configuration-panel-backend
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: # env var
+    username: # env var
+    password: # env var
+    name: nl-portal-config-database
+    hikari:
+      auto-commit: false
+      poolName: "nl-portal-config-pool"
   liquibase:
     change-log: classpath:/liquibase/config-master.xml
   jpa:
@@ -22,6 +34,6 @@ spring:
           time_zone: UTC
         connection:
 
-nl-portal:
+configuration-panel:
   cache:
     config-ttl: 300

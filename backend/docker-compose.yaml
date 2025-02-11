@@ -1,0 +1,15 @@
+services:
+    configuration-panel-database:
+        container_name: configuration-panel-database
+        image: postgres:15
+        ports:
+            - "54322:5432"
+        environment:
+            POSTGRES_USER: config
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: nl-portal-config
+        volumes:
+            - configuration-panel-database-data:/var/lib/postgres # persist data even if container shuts down
+
+volumes:
+    configuration-panel-database-data:

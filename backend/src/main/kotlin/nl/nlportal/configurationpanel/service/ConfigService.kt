@@ -1,6 +1,6 @@
 package nl.nlportal.configurationpanel.service
 
-import nl.nlportal.configurationpanel.domain.Config
+import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.repository.ConfigRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
@@ -11,11 +11,14 @@ class ConfigService(
 ) {
 
     @Cacheable("configCache")
-    fun getConfigByFeatureId(featureId: String): Config? {
-        return configRepository.findByFeatureId(featureId)
+    fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
+        application: String,
+        propertyKey: String
+    ): ConfigurationProperty? {
+        return configRepository.findByApplicationAndPropertyKey(application, propertyKey)
     }
 
-    fun addConfig(config: Config): Config? {
+    fun addConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? {
         return configRepository.save(config)
     }
 }
