@@ -1,0 +1,4 @@
+window.OIDC_URL = "${OIDC_URL}";
+window.OIDC_REALM = "${OIDC_REALM}";
+window.OIDC_CLIENT_ID = "${OIDC_CLIENT_ID}";
+window.OIDC_REDIRECT_URI = "${OIDC_REDIRECT_URI}";
