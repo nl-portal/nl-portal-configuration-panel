@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 @EnableCaching
 @Configuration
 class CacheConfig(
-    @Value("\${nl-portal.cache.config-ttl}") private val configTtl: Long
+    @Value("\${configuration-panel.cache.config-ttl:500}") private val configTtl: Long
 ) : CachingConfigurer {
 
     @Override

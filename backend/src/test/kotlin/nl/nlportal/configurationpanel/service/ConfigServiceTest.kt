@@ -1,20 +1,20 @@
 package nl.nlportal.configurationpanel.service
 
-import nl.nlportal.configurationpanel.domain.Config
+import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.repository.ConfigRepository
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
-import java.time.LocalDateTime
+import java.time.Instant
 
 @ExtendWith(MockitoExtension::class)
 class ConfigServiceTest {
@@ -25,43 +25,52 @@ class ConfigServiceTest {
     @InjectMocks
     private lateinit var configService: ConfigService
 
-    private lateinit var sampleConfig: Config
+    private lateinit var sampleConfig: ConfigurationProperty
 
     @BeforeEach
     fun setUp() {
-        sampleConfig = Config(
-            featureId="feature_123",
-            enabled = true,
-            properties = emptyMap(),
-            modifiedOn = LocalDateTime.now()
+        sampleConfig = ConfigurationProperty(
+            propertyKey = "feature_123",
+            propertyValue = "value1",
+            application = "my-application1",
+            modifiedOn = Instant.now()
         )
     }
 
     @Test
     fun `getConfigByFeatureId should return config when found`() {
         // Arrange
-        `when`(configRepository.findByFeatureId("feature_123")).thenReturn(sampleConfig)
+        `when`(configRepository.findByApplicationAndPropertyKey("application", "feature_123"))
+            .thenReturn(sampleConfig)
 
         // Act
-        val result = configService.getConfigByFeatureId("feature_123")
+        val result =
+            configService.getConfigurationPropertyByApplicationAndPropertyKeyOrNull("application", "feature_123")
 
         // Assert
         assertNotNull(result)
         assertEquals(sampleConfig, result)
-        verify(configRepository, times(1)).findByFeatureId("feature_123")
+        verify(configRepository, times(1))
+            .findByApplicationAndPropertyKey("application", "feature_123")
     }
 
     @Test
     fun `getConfigByFeatureId should return null when config is not found`() {
         // Arrange
-        `when`(configRepository.findByFeatureId("non_existing_feature")).thenReturn(null)
+        `when`(configRepository.findByApplicationAndPropertyKey("application", "non_existing_feature"))
+            .thenReturn(null)
 
         // Act
-        val result = configService.getConfigByFeatureId("non_existing_feature")
+        val result =
+            configService.getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
+                "application",
+                "non_existing_feature"
+            )
 
         // Assert
         assertNull(result)
-        verify(configRepository, times(1)).findByFeatureId("non_existing_feature")
+        verify(configRepository, times(1))
+            .findByApplicationAndPropertyKey("application", "non_existing_feature")
     }
 
     @Test
@@ -70,7 +79,7 @@ class ConfigServiceTest {
         `when`(configRepository.save(sampleConfig)).thenReturn(sampleConfig)
 
         // Act
-        val result = configService.addConfig(sampleConfig)
+        val result = configService.addConfigurationProperty(sampleConfig)
 
         // Assert
         assertNotNull(result)

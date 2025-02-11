@@ -2,6 +2,8 @@ val ehcacheVersion="3.10.8"
 val hypersistenceVersion="3.8.3"
 val postgresVersion="42.7.4"
 val guavaVersion="33.4.0-jre"
+val springCloudServerVersion="4.2.0"
+val kotlinLoggingVersion="7.0.3"
 
 plugins {
 	kotlin("jvm") version "1.9.25"
@@ -28,6 +30,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.cloud:spring-cloud-config-server:$springCloudServerVersion")
+	implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:$springCloudServerVersion")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -38,6 +42,7 @@ dependencies {
 	implementation("com.github.ben-manes.caffeine:caffeine")
 	implementation("com.google.guava:guava:$guavaVersion")
 
+	implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -49,6 +54,12 @@ kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict")
 	}
+}
+
+tasks.bootRun {
+	environment.set("spring.datasource.url", "jdbc:postgresql://localhost:54322/nl-portal-config")
+	environment.set("spring.datasource.username", "config")
+	environment.set("spring.datasource.password", "password")
 }
 
 tasks.withType<Test> {
