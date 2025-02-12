@@ -21,11 +21,12 @@ import org.springframework.security.core.GrantedAuthority
 
 class ApiTokenAuthentication(
     private val token: String,
+    authenticated: Boolean,
     authorities: List<GrantedAuthority> = emptyList(),
 ) : AbstractAuthenticationToken(authorities) {
 
     init {
-        isAuthenticated = true
+        isAuthenticated = authenticated
     }
 
     override fun getCredentials(): Any {

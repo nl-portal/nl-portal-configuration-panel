@@ -40,10 +40,10 @@ class ConfigResource(
     }
 
     @GetMapping("/v1/configuration/{application}")
-    fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
+    fun getConfigurationPropertiesByApplicationOrNull(
         @PathVariable("application") application: String
     ): List<ConfigurationProperty>? {
-        return configService.getConfigurationPropertyByApplication(application)
+        return configService.getConfigurationPropertiesByApplicationOrNull(application)
     }
 
     @PostMapping("/v1/configuration")

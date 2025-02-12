@@ -18,7 +18,6 @@ package nl.nlportal.configurationpanel.security
 
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.authentication.AuthenticationProvider
-import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken
 
@@ -30,9 +29,10 @@ class TokenAuthenticationProvider(private val configurationToken: String) : Auth
             throw AuthenticationCredentialsNotFoundException("Bad Request Credentials")
         } else {
             if (credentials == configurationToken) {
-                return ApiTokenAuthentication(token = credentials)
+                return ApiTokenAuthentication(authenticated = true, token = credentials)
+            } else {
+                return ApiTokenAuthentication(authenticated = false, token = credentials)
             }
-            throw BadCredentialsException("Bad Request Credentials")
         }
     }
 

@@ -34,7 +34,7 @@ class ConfigService(
         return configRepository.findByApplicationAndPropertyKey(application, propertyKey)
     }
 
-    fun getConfigurationPropertyByApplication(application: String): List<ConfigurationProperty>? {
+    fun getConfigurationPropertiesByApplicationOrNull(application: String): List<ConfigurationProperty>? {
         return configRepository.findByApplication(application)
     }
 
