@@ -14,19 +14,26 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.repository
+package nl.nlportal.configurationpanel.security
 
-import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.security.authentication.AbstractAuthenticationToken
+import org.springframework.security.core.GrantedAuthority
 
-interface ConfigRepository : JpaRepository<ConfigurationProperty, String> {
+class ApiTokenAuthentication(
+    private val token: String,
+    authenticated: Boolean,
+    authorities: List<GrantedAuthority> = emptyList(),
+) : AbstractAuthenticationToken(authorities) {
 
-    fun findByApplication(application: String): List<ConfigurationProperty>?
+    init {
+        isAuthenticated = authenticated
+    }
 
-    fun findByApplicationAndPropertyKey(application: String, propertyKey: String): ConfigurationProperty?
+    override fun getCredentials(): Any {
+        return token
+    }
 
-    fun findByApplicationAndPropertyKeyStartsWith(
-        application: String,
-        propertyKeyPrefix: String
-    ): List<ConfigurationProperty>?
+    override fun getPrincipal(): Any {
+        return "Api Client"
+    }
 }

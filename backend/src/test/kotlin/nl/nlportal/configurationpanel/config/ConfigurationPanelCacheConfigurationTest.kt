@@ -1,5 +1,22 @@
+/*
+ * Copyright 2025 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package nl.nlportal.configurationpanel.config
 
+import nl.nlportal.configurationpanel.configuration.ConfigurationPanelCacheConfiguration
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.repository.ConfigRepository
 import nl.nlportal.configurationpanel.service.ConfigService
@@ -15,8 +32,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.Instant
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [CacheConfig::class, ConfigService::class])
-class CacheConfigTest {
+@SpringBootTest(classes = [ConfigurationPanelCacheConfiguration::class, ConfigService::class])
+class ConfigurationPanelCacheConfigurationTest {
 
     @Autowired
     lateinit var configService: ConfigService

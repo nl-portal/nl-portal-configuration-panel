@@ -11,4 +11,4 @@ spring:
         jdbc:
           sql: SELECT property_key as KEY, property_value as VALUE from nlp_configuration where application=? and (profile=? or label=?)
           sql-without-profile: SELECT property_key as KEY, property_value as VALUE from nlp_configuration where application=? and (profile is null or label=?)
-        prefix: /api/v1/configuration
+        prefix: ${CONFIGURATION_SERVER_PREFIX}
