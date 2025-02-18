@@ -69,6 +69,7 @@ tasks.bootRun {
             "CONFIG_CACHE_TTL" to "30000",
             "CONFIGURATION_SERVER_PREFIX" to "/configuration",
             "CONFIGURATION_SERVER_TOKEN" to "VerySecretToken",
+            "JWT_ISSUER_URI" to "http://localhost:8082/auth/realms/nlportalconfig"
         )
     )
 }
