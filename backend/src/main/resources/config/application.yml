@@ -1,8 +1,11 @@
 server:
   port: 8888
+
 spring:
   application:
     name: configuration-panel-backend
+  cache:
+    type: simple
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
@@ -37,8 +40,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8082/auth/realms/nlportalconfig
-
+          issuer-uri: ${JWT_ISSUER_URI}
 configuration-panel:
   cache:
     config-ttl: ${CONFIG_CACHE_TTL}

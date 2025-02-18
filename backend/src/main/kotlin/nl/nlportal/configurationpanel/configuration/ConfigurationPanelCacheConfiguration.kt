@@ -16,38 +16,29 @@
 
 package nl.nlportal.configurationpanel.configuration
 
-import com.google.common.cache.CacheBuilder
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.cache.Cache
-import org.springframework.cache.CacheManager
-import org.springframework.cache.annotation.CachingConfigurer
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.EnableCaching
-import org.springframework.cache.concurrent.ConcurrentMapCache
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager
 import org.springframework.context.annotation.Configuration
-import java.util.concurrent.TimeUnit
+import org.springframework.scheduling.annotation.Scheduled
 
 @EnableCaching
 @Configuration
-class ConfigurationPanelCacheConfiguration(
-    @Value("\${configuration-panel.cache.config-ttl}") private val configTtl: Long = 500
-) : CachingConfigurer {
+class ConfigurationPanelCacheConfiguration: CacheManagerCustomizer<ConcurrentMapCacheManager> {
 
-    @Override
-    override fun cacheManager(): CacheManager {
-        val cacheManager: ConcurrentMapCacheManager = object : ConcurrentMapCacheManager() {
-            override fun createConcurrentMapCache(name: String): Cache {
-                return ConcurrentMapCache(
-                    name,
-                    CacheBuilder.newBuilder()
-                        .expireAfterAccess(configTtl, TimeUnit.MILLISECONDS)
-                        .build<Any, Any>()
-                        .asMap(),
-                    true
-                )
-            }
-        }
+    override fun customize(cacheManager: ConcurrentMapCacheManager) {
+        cacheManager.setCacheNames(listOf("configCache"))
+    }
 
-        return cacheManager
+    @CacheEvict(cacheNames = ["configCache"], allEntries = true)
+    @Scheduled(fixedRateString = "\${configuration-panel.cache.config-ttl}")
+    fun emptyConfigCache() {
+        logger.debug { "Emptying configCache" }
+    }
+
+    companion object {
+        val logger = KotlinLogging.logger { }
     }
 }

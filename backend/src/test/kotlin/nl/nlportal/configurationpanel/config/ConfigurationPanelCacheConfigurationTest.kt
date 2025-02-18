@@ -27,12 +27,20 @@ import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.cache.CacheManager
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager
+import org.springframework.context.annotation.Bean
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.Instant
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [ConfigurationPanelCacheConfiguration::class, ConfigService::class])
+@SpringBootTest(classes = [
+    ConfigurationPanelCacheConfiguration::class,
+    ConfigService::class,
+    TestCacheConfiguration::class
+])
 class ConfigurationPanelCacheConfigurationTest {
 
     @Autowired
@@ -65,11 +73,18 @@ class ConfigurationPanelCacheConfigurationTest {
             configService
                 .getConfigurationPropertyByApplicationAndPropertyKeyOrNull("my-application1", "feature1")
 
-        // Verify it's the same (cached)
         assertEquals(firstCall, secondCall)
 
         // Verify repository was only called once
         Mockito.verify(configRepository, Mockito.times(1))
             .findByApplicationAndPropertyKey("my-application1", "feature1")
+    }
+}
+
+@TestConfiguration
+class TestCacheConfiguration {
+    @Bean
+    fun cacheManager(): CacheManager {
+        return ConcurrentMapCacheManager("configCache")
     }
 }
