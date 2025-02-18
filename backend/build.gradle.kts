@@ -43,7 +43,6 @@ dependencies {
     implementation("io.hypersistence:hypersistence-utils-hibernate-62:$hypersistenceVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("com.github.ben-manes.caffeine:caffeine")
-    implementation("com.google.guava:guava:$guavaVersion")
 
     implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
@@ -67,7 +66,7 @@ tasks.bootRun {
             "spring.datasource.username" to "config",
             "spring.datasource.password" to "password",
             "logging.level.root" to "INFO",
-            "CONFIG_CACHE_TTL" to "300",
+            "CONFIG_CACHE_TTL" to "30000",
             "CONFIGURATION_SERVER_PREFIX" to "/configuration",
             "CONFIGURATION_SERVER_TOKEN" to "VerySecretToken",
         )
