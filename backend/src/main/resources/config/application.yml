@@ -36,7 +36,11 @@ spring:
         jdbc:
           time_zone: UTC
         connection:
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI}
 configuration-panel:
   cache:
     config-ttl: ${CONFIG_CACHE_TTL}
