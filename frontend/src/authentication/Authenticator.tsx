@@ -1,48 +1,37 @@
-import {FC, ReactNode, useEffect} from "react";
+import {FC, Fragment, ReactNode, useEffect} from "react";
 import {useAuth} from "react-oidc-context";
+import {Paragraph} from "@gemeente-denhaag/typography";
 
-const Authenticator: FC<{  children?: ReactNode }> = ({children}) => {
-  const auth = useAuth();
+const Authenticator: FC<{ children?: ReactNode }> = ({children}) => {
+    const auth = useAuth();
 
-  useEffect(() => {
-    if(!auth.isAuthenticated && !auth.isLoading) {
-      void auth.signinRedirect()
+    useEffect(() => {
+        if (!auth.isAuthenticated && !auth.isLoading) {
+            void auth.signinRedirect()
+        }
+    }, [auth])
+
+    useEffect(() => {
+        const handleTokenExpired = () => auth.signoutRedirect();
+
+        auth.events.addAccessTokenExpired(handleTokenExpired);
+    }, []);
+
+    if (auth.isLoading) {
+        return <Paragraph>Loading...</Paragraph>
     }
-  }, [auth])
 
-  useEffect(() => {
-    const handleTokenExpiring = async () => {
-      try {
-        await auth.revokeTokens();
-      } catch (error) {
-        console.error("Error revoking tokens: ", error);
-      }
-    };
+    if (auth.error) {
+        return <Paragraph>{auth.error.message}</Paragraph>
+    }
 
-    // addAccessTokenExpiring() returns a cleanup function
-    return auth.events.addAccessTokenExpiring(handleTokenExpiring);
-  }, [auth.events]);
-
-  if (auth.isLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (auth.error) {
-    return <div>Oops ... {auth.error.message}</div>
-  }
-
-  if (auth.isAuthenticated) {
-    return (
-      <>
-        <div style={{margin: "20px"}}>
-          Hello {auth.user?.profile.email}{" "}
-          <button className="log-button" onClick={() => void auth.signoutRedirect()}>Log out</button>
-        </div>
-
-        {children}
-      </>
-    )
-  }
+    if (auth.isAuthenticated) {
+        return (
+            <Fragment>
+                {children}
+            </Fragment>
+        )
+    }
 };
 
 export default Authenticator;

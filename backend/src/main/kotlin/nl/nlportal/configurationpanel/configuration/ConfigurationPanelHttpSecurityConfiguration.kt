@@ -16,6 +16,7 @@
 
 package nl.nlportal.configurationpanel.configuration
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.security.TokenAuthenticationProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

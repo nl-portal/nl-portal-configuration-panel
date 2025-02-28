@@ -1,0 +1,9 @@
+@use "../styles/mixins";
+
+.configurations-page {
+  padding-block-start: var(--nlportal-header-height);
+}
+
+.configurations-page__title {
+  padding-top: 4em;
+}
