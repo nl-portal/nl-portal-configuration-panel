@@ -69,6 +69,27 @@ importers:
       '@eslint/js':
         specifier: ^9.17.0
         version: 9.19.0
+      '@gemeente-denhaag/action':
+        specifier: ^2.0.0
+        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/form-field':
+        specifier: ^2.0.0
+        version: 2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/form-field-error-message':
+        specifier: ^2.0.0
+        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/form-fieldset':
+        specifier: ^2.0.0
+        version: 2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/form-label':
+        specifier: ^2.0.0
+        version: 2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/radio-button':
+        specifier: ^2.0.0
+        version: 2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/text-input':
+        specifier: ^2.1.0
+        version: 2.1.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/react':
         specifier: ^18.3.18
         version: 18.3.18
@@ -93,6 +114,9 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.14.0
+      react-intl:
+        specifier: ^7.1.6
+        version: 7.1.6(react@18.3.1)(typescript@5.6.3)
       sass:
         specifier: ^1.85.1
         version: 1.85.1
@@ -482,6 +506,12 @@ packages:
   '@gemeente-denhaag/action@0.1.2':
     resolution: {integrity: sha512-UPnsJF2Rcs3YTCwf/WOAcg4H1i9BBCSWBgINZ/eRvz8q8YccP6/3ov2DLwMv/NfggmR/IeTE67CnJgXCnvo18A==}
 
+  '@gemeente-denhaag/action@2.0.0':
+    resolution: {integrity: sha512-thLDSaq877yHG/kv32NbNJLb9hxDYymLkJFz46Q7H6mqxgzHpXvoxwGHEfABZdUpuY4gYB+8VcBP8fZGCAXHcg==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
+
   '@gemeente-denhaag/alert@0.1.2':
     resolution: {integrity: sha512-KNHOfX1SxJPqeC3ZMFk/RP0rza1d8KT2X1fuMLHjurNalaLVWbFYzMMAmGXnCLatjCiLIj0ZgN3Jn21Qh5GS/Q==}
     peerDependencies:
@@ -539,20 +569,44 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
+  '@gemeente-denhaag/form-field-error-message@2.0.0':
+    resolution: {integrity: sha512-ZWWwrOAi1hDjCSOLNBxMw6cB/g+dY1X+w8kOlJmm5Lp483xa5ki87VMPj4tsEzSMAxLVog4/f3CdqPyyiraQ6Q==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
+
   '@gemeente-denhaag/form-field@0.3.0-alpha.298':
     resolution: {integrity: sha512-NFkXcX98iejS/VUGbgWWFobu2vAV38+nh3Cylu6v2AtgL/eYfKlzx+eYJYBzB25dulNw4KnAVyKifnTYBRGmvA==}
     peerDependencies:
       react: ^18.0.0
+
+  '@gemeente-denhaag/form-field@2.0.0':
+    resolution: {integrity: sha512-jb007iNyU62Dgg7idxKRQ5grqDwZVzXENDoTcy4k6/ePef8RUxVB/iu40SLaVeGinYc1kSPo//mzGEUidkPsfg==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
 
   '@gemeente-denhaag/form-fieldset@0.3.0-alpha.55':
     resolution: {integrity: sha512-ZKddclU96qPMXzYr+N4ZDoRSmQ4FS95mDxiyf22EJMgoy5D1f1GQ0a2R1z6nh+sFrWHw5HIXO6BBMbj9W5UB5A==}
     peerDependencies:
       react: ^18.0.0
 
+  '@gemeente-denhaag/form-fieldset@2.0.0':
+    resolution: {integrity: sha512-K8jGEQEbe2FbQqi2l/3rqSv2UWdd2UWK5Ns7wBljcxPC8eVHP6vF4P6Z/WXJOP9Gt3den0kzvFiVmVMusIOGWQ==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
+
   '@gemeente-denhaag/form-label@0.3.0-alpha.55':
     resolution: {integrity: sha512-kN92LiGD3FVA/ShtgOAXy3m8k9ZlmcYOqph1K+799yV4zvVWJCW1v+lu8PPSu29BooPvOaLhm1x8BVMAHPjRiQ==}
     peerDependencies:
       react: ^18.0.0
+
+  '@gemeente-denhaag/form-label@2.0.0':
+    resolution: {integrity: sha512-/xv0FtsdGpWmH84MrwI1wBPiE8k7Gq19eVSOTMm9HCpmjQ77skGMOPAVyrs8PzHpvrwE0dFhswTm3h6BPBJwpg==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
 
   '@gemeente-denhaag/iconbutton@0.2.3-alpha.422':
     resolution: {integrity: sha512-ifrscwMRrlxTQjp4BdEyrQTivcWYefAjuvEkwtc5W0BW7o6nFH9Cy3FP4xG81NTFKb5OnC6dFg6oVGvmw2andQ==}
@@ -632,6 +686,12 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
+  '@gemeente-denhaag/radio-button@2.0.0':
+    resolution: {integrity: sha512-JnpYdWtBxCTgFgG7nigolvNQ391Df2tdZnMdM6Wj1WVNjRfKhq/Dq/RLHHKGUs5wJLbBTsAaJ8x89cJbZzj5SQ==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
+
   '@gemeente-denhaag/responsive-content@0.1.1-alpha.282':
     resolution: {integrity: sha512-mTMVWCqjQF1JbnA7AlQK0TpWm7uwLlWg/o4sHdWW0hPKHv2B+4DVGWkdAFW3C9wITFlhuJ4UHKiMUGbjIeECHA==}
 
@@ -680,6 +740,12 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
+  '@gemeente-denhaag/text-input@2.1.0':
+    resolution: {integrity: sha512-YAnIFNFs6kij3/4+BuIjlJCDJ5J+DBl4zhDyzDmNAAEzrICzfchVKHXH8l3x82DOSC/qPX7bstFixtReMlnrcg==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
+
   '@gemeente-denhaag/typography@0.2.3':
     resolution: {integrity: sha512-Q8CrE3Xz0Zh6JUk6N39DKxdKDtfY8agDwB7TwDjoFWCMz3IRgCSxmN0hqhK67RzpWXZ0Kjf+h10TnHWtgdw4vQ==}
     peerDependencies:
@@ -698,6 +764,12 @@ packages:
     resolution: {integrity: sha512-QLVzeZSHOxyVKZJS7E54nQmv5Ub4MxBZBDEGeHc53SO1CtTPie2kdu97kKdmy+QgtqvY1s9VK0NQSTVAJKZiew==}
     peerDependencies:
       react: ^18.0.0
+
+  '@gemeente-denhaag/utils@2.0.0':
+    resolution: {integrity: sha512-2dqA5oBrE8XEGOw3r7lv7dFo6WPu3UToUYtAJnuwmvlClII0E0+X1oycxupqrAv0kRqCwFAX7YgM0wZwik2Jmw==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
 
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
@@ -1793,6 +1865,9 @@ packages:
 
   date-fns@3.6.0:
     resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   debug@4.4.0:
     resolution: {integrity: sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==}
@@ -3167,6 +3242,17 @@ snapshots:
     transitivePeerDependencies:
       - react
 
+  '@gemeente-denhaag/action@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@gemeente-denhaag/button': 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/icons': 3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/link': 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/utils': 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      clsx: 2.1.1
+      date-fns: 4.1.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   '@gemeente-denhaag/alert@0.1.2(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@gemeente-denhaag/button': 0.2.3(react@18.3.1)
@@ -3268,6 +3354,11 @@ snapshots:
     dependencies:
       react: 18.3.1
 
+  '@gemeente-denhaag/form-field-error-message@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   '@gemeente-denhaag/form-field@0.3.0-alpha.298(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@utrecht/component-library-react': 4.2.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3277,6 +3368,18 @@ snapshots:
       - '@babel/runtime'
       - date-fns
       - react-dom
+      - react-vega
+      - vega
+
+  '@gemeente-denhaag/form-field@2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@utrecht/component-library-react': 9.0.1(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@utrecht/components': 7.4.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@babel/runtime'
+      - date-fns
       - react-vega
       - vega
 
@@ -3292,6 +3395,18 @@ snapshots:
       - react-vega
       - vega
 
+  '@gemeente-denhaag/form-fieldset@2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@utrecht/component-library-react': 9.0.1(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@utrecht/components': 7.4.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@babel/runtime'
+      - date-fns
+      - react-vega
+      - vega
+
   '@gemeente-denhaag/form-label@0.3.0-alpha.55(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@utrecht/component-library-react': 4.2.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3301,6 +3416,18 @@ snapshots:
       - '@babel/runtime'
       - date-fns
       - react-dom
+      - react-vega
+      - vega
+
+  '@gemeente-denhaag/form-label@2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@utrecht/component-library-react': 9.0.1(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@utrecht/components': 7.4.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@babel/runtime'
+      - date-fns
       - react-vega
       - vega
 
@@ -3430,6 +3557,18 @@ snapshots:
       - react-vega
       - vega
 
+  '@gemeente-denhaag/radio-button@2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@utrecht/component-library-react': 9.0.1(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@utrecht/components': 7.4.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@babel/runtime'
+      - date-fns
+      - react-vega
+      - vega
+
   '@gemeente-denhaag/responsive-content@0.1.1-alpha.282': {}
 
   '@gemeente-denhaag/responsive-content@1.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
@@ -3489,6 +3628,18 @@ snapshots:
       - react-vega
       - vega
 
+  '@gemeente-denhaag/text-input@2.1.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@utrecht/component-library-react': 9.0.1(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@utrecht/components': 7.4.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@babel/runtime'
+      - date-fns
+      - react-vega
+      - vega
+
   '@gemeente-denhaag/typography@0.2.3(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@gemeente-denhaag/design-tokens-common': 0.2.3-alpha.424
@@ -3534,6 +3685,12 @@ snapshots:
     dependencies:
       date-fns: 3.6.0
       react: 18.3.1
+
+  '@gemeente-denhaag/utils@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      date-fns: 4.1.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   '@graphql-typed-document-node/core@3.2.0(graphql@16.10.0)':
     dependencies:
@@ -4646,6 +4803,8 @@ snapshots:
       '@babel/runtime': 7.26.9
 
   date-fns@3.6.0: {}
+
+  date-fns@4.1.0: {}
 
   debug@4.4.0:
     dependencies:

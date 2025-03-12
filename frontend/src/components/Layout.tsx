@@ -3,10 +3,11 @@ import {Outlet} from "react-router-dom";
 import {Page as PageWrapper,} from "@gemeente-denhaag/page";
 import ResponsiveContent from "@gemeente-denhaag/responsive-content";
 import Header from "./Header";
+import {ConfigPanelPaths} from "../constants/paths.ts";
+import styles from "./Layout.module.scss"
 
 interface LayoutComponentProps {
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    paths: { [key: string]: ((...args: any[]) => string) | string | undefined };
+    paths: ConfigPanelPaths;
     headerLogo: ReactElement;
 }
 
@@ -21,7 +22,7 @@ const LayoutComponent: FC<LayoutComponentProps> = ({
                 <Header
                     logo={headerLogo}
                 />
-                <main className="denhaag-page-content__main">
+                <main className={styles["layout-content"] + " denhaag-page-content__main"}>
                     {<Outlet context={{paths}}/>}
                 </main>
             </ResponsiveContent>

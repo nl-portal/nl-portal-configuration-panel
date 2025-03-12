@@ -38,6 +38,10 @@ class ConfigService(
         return configRepository.findByApplication(application)
     }
 
+    fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application: String, featureKey: String): List<ConfigurationProperty>? {
+        return configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
+    }
+
     fun addConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? {
         return configRepository.save(config)
     }

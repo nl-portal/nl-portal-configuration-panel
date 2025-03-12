@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export interface ConfigPanelPaths {
+    configurations: string;
+    features: string;
+    feature: (featureId?: string) => string;
+}
 
-export const paths = {
-    configuration: "/",
+export const paths: ConfigPanelPaths = {
+    configurations: "/",
+    features: "/features",
+    feature: (featureId = ":featureId") => `/features/${featureId}`,
 };

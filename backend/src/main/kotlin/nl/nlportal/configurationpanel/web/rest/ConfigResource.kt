@@ -46,6 +46,14 @@ class ConfigResource(
         return configService.getConfigurationPropertiesByApplicationOrNull(application)
     }
 
+    @GetMapping("/v1/configuration/{application}/features/{featureKey}")
+    fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
+        @PathVariable("application") application: String,
+        @PathVariable("featureKey") featureKey: String
+    ): List<ConfigurationProperty>? {
+        return configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
+    }
+
     @PostMapping("/v1/configuration")
     fun addConfigurationProperty(@RequestBody config: ConfigurationProperty): ConfigurationProperty? {
         return configService.addConfigurationProperty(config)

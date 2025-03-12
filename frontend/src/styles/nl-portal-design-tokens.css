@@ -87,7 +87,7 @@
     border-top: 2px solid var(--rijkshuisstijl-donkerblauw);
   }
 
-  div[class*="_detail-list"] {
+  div[class*="_features-list"] {
     padding: 0;
     margin: 0;
   }

@@ -20,6 +20,7 @@ import classNames from "classnames";
 import ResponsiveContent from "@gemeente-denhaag/responsive-content";
 import LogoutButton from "./LogoutButton.tsx";
 import CurrentUser from "./CurrentUser.tsx";
+import LanguageSwitcher from "./LanguageSwitcher.tsx"
 
 interface HeaderProps {
     logo: ReactElement;
@@ -66,7 +67,10 @@ const Header = ({
                                         <CurrentUser/>
                                     </div>
                                     <div className={styles["header__element--medium-spacing"]}>
-                                        <LogoutButton></LogoutButton>
+                                        <LogoutButton/>
+                                    </div>
+                                    <div className={styles["header__element--medium-spacing"]}>
+                                        <LanguageSwitcher />
                                     </div>
                                 </Fragment>
                             </div>
