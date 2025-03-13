@@ -2,10 +2,10 @@ import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
 import {PageGrid} from "@nl-portal/nl-portal-user-interface";
 import {PageHeader} from "@gemeente-denhaag/page";
 import ConfigurationPropertiesList from "../components/ConfigurationPropertiesList.tsx";
-import useConfigurations from "../hooks/useConfigurations.tsx"
+import useConfigurationsQuery from "../queries/useConfigurationsQuery.tsx"
 
 const ConfigurationsPage = () => {
-    const {allConfigurations} = useConfigurations();
+    const configurations = useConfigurationsQuery();
 
     return (
         <PageGrid>
@@ -16,9 +16,9 @@ const ConfigurationsPage = () => {
                 These are the currently configured Spring Properties.
             </Paragraph>
             <ConfigurationPropertiesList
-                error={allConfigurations.isError}
-                loading={allConfigurations.isLoading}
-                configurationProperties={allConfigurations.data}
+                error={configurations.isError}
+                loading={configurations.isLoading}
+                configurationProperties={configurations.data}
             ></ConfigurationPropertiesList>
         </PageGrid>
     );

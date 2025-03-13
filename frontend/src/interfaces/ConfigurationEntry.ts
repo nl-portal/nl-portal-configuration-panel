@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2025 Ritense BV, the Netherlands.
  *
@@ -13,17 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ReactElement} from "react";
-import BerichtenFeatureConfiguration from "../components/BerichtenFeatureConfiguration.tsx";
 
-interface FeatureConfiguration {
-    featureId: string;
-    featureComponent: ReactElement;
+export default interface ConfigurationEntry {
+    propertyKey: string,
+    propertyValue: string,
 }
-
-export const features: FeatureConfiguration[] = [
-    {
-        featureId: "berichten",
-        featureComponent: <BerichtenFeatureConfiguration/>
-    },
-]

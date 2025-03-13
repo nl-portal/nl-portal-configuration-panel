@@ -72,6 +72,9 @@ importers:
       '@gemeente-denhaag/action':
         specifier: ^2.0.0
         version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/checkbox':
+        specifier: ^2.0.0
+        version: 2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@gemeente-denhaag/form-field':
         specifier: ^2.0.0
         version: 2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -542,6 +545,12 @@ packages:
     resolution: {integrity: sha512-4O+Ipq1evrYWraqBmm+rtnMLjL0veadSaS2/JwI6/ru2Gy/HAY2cU/s0Pzk2siRddS82vlQN4Px3XKVykGHzxA==}
     peerDependencies:
       react: ^18.0.0
+
+  '@gemeente-denhaag/checkbox@2.0.0':
+    resolution: {integrity: sha512-K/ZmKto09ce4egAeEnm5RD9Ai9Q+jtVF6few1jEryxpn3+xpD55gFqUsCZnG0JpjoANNhybmL6r+PMN9dVicFg==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
 
   '@gemeente-denhaag/contact-timeline@0.1.2':
     resolution: {integrity: sha512-KSy5Iuij+KZR+55pvzZXKLrgGVni4itd3EwkZkw00gNFaxk0XXce8zRgerbKx6BaPCB+nHjhq2k2hQ/UmqSmig==}
@@ -3314,6 +3323,18 @@ snapshots:
       - '@babel/runtime'
       - date-fns
       - react-dom
+      - react-vega
+      - vega
+
+  '@gemeente-denhaag/checkbox@2.0.0(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@utrecht/component-library-react': 9.0.1(@babel/runtime@7.26.9)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@utrecht/components': 7.4.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@babel/runtime'
+      - date-fns
       - react-vega
       - vega
 

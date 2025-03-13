@@ -13,17 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {ReactElement} from "react";
-import BerichtenFeatureConfiguration from "../components/BerichtenFeatureConfiguration.tsx";
 
-interface FeatureConfiguration {
-    featureId: string;
-    featureComponent: ReactElement;
-}
-
-export const features: FeatureConfiguration[] = [
-    {
-        featureId: "berichten",
-        featureComponent: <BerichtenFeatureConfiguration/>
-    },
-]
+declare module 'lodash';

@@ -7,23 +7,22 @@ import {Heading2} from "@gemeente-denhaag/typography";
 import styles from './FeatureConfigurationPage.module.scss'
 import {FormattedMessage} from "react-intl";
 import {features} from "../constants/features.tsx";
-import {useEffect} from "react";
+import {cloneElement, useEffect, useState} from "react";
 
 const FeatureConfigurationPage = () => {
     const {featureId} = useParams();
     const navigate = useNavigate();
-    const configurationComponent =
-        features.find(it => it.featureId == featureId)?.component
-
+    const feature = features.find(it => it.featureId == featureId)
+    const [valid, setValid] = useState<boolean>(false)
     const onSave = (): void => {
     };
 
     useEffect(() => {
-            if (!configurationComponent) {
+            if (!feature) {
                 navigate(paths.features)
             }
         }
-        , [configurationComponent, navigate])
+        , [feature, navigate])
 
     return (
         <PageGrid>
@@ -31,14 +30,16 @@ const FeatureConfigurationPage = () => {
                 <Heading2><FormattedMessage id={"features." + featureId}/></Heading2>
             </PageHeader>
             <div className={styles["feature-config__content"]}>
-                {configurationComponent}
+                {(
+                    feature?.featureComponent && cloneElement(feature?.featureComponent, {onValid: setValid, onSave: onSave})
+                )}
             </div>
             <div>
                 <div className={styles["feature-config__buttons"]}>
                     <Button
                         className={styles["feature-config__button"]}
                         onClick={onSave}
-                        disabled={true}
+                        disabled={!valid}
                     >
                         Save
                     </Button>

@@ -34,6 +34,7 @@
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@gemeente-denhaag/action": "^2.0.0",
+    "@gemeente-denhaag/checkbox": "^2.0.0",
     "@gemeente-denhaag/form-field": "^2.0.0",
     "@gemeente-denhaag/form-field-error-message": "^2.0.0",
     "@gemeente-denhaag/form-fieldset": "^2.0.0",

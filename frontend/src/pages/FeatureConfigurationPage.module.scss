@@ -35,14 +35,9 @@
   }
 }
 
-.feature-config__text-field-container {
-  margin-block-end: var(--nlportal-space-block-4xl, 3rem);
+.feature-config__content {
   width: 100%;
   display: flex;
-
-  @include mixins.breakpoint(tablet) {
-    width: var(--nlportal-edit-feature-text-field-width, 260px);
-  }
 }
 
 .feature-config__text-field {

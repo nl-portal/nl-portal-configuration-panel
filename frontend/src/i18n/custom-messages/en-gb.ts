@@ -5,6 +5,8 @@ export const EN_GB_MESSAGES: Messages = {
     "features.feature": "Feature",
     "features.configure": "Configure",
     "features.berichten": "Messages",
+    "features.berichten.enable": "Enabled",
+    "features.berichten.configuration": "Configuration",
     "features.openklant2": "OpenKlant 2",
     "featureDetailPage.title": "Feature Configuration",
     "featuresPage.title": "Features",
