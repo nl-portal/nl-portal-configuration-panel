@@ -1,7 +1,7 @@
 import ConfigurationsPage from "../pages/ConfigurationsPage.tsx";
 import {Navigate} from "react-router-dom";
 import {paths} from "./paths.ts";
-import FeatureDetailPage from "../pages/FeatureDetailPage.tsx";
+import FeatureConfigurationPage from "../pages/FeatureConfigurationPage.tsx";
 import FeaturesPage from "../pages/FeaturesPage.tsx";
 
 export const routes = [
@@ -15,7 +15,7 @@ export const routes = [
     },
     {
         path: paths.feature(),
-        element: <FeatureDetailPage/>,
+        element: <FeatureConfigurationPage/>,
     },
     {
         path: "*",

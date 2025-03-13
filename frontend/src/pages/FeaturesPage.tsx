@@ -4,6 +4,7 @@ import {FormattedMessage} from "react-intl";
 import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
 import styles from "./FeaturesPage.module.scss"
 import FeaturesList from "../components/FeaturesList.tsx";
+import {features} from "../constants/features.tsx";
 
 const FeaturesPage = () => {
 
@@ -16,14 +17,7 @@ const FeaturesPage = () => {
                 <FormattedMessage id="featuresPage.subtitle"/>
             </Paragraph>
             <FeaturesList
-                features={[
-                    {
-                        featureId: 'berichten',
-                    },
-                    {
-                        featureId: 'openklant2',
-                    }
-                ]}
+                features={features.map(feat => feat.featureId)}
             />
         </div>
     </PageGrid>

@@ -4,12 +4,10 @@ import styles from "./FeaturesList.module.scss";
 import {Link} from "@gemeente-denhaag/link";
 import {Paragraph} from "@gemeente-denhaag/typography";
 import {CellObject, PortalLink, Table} from "@nl-portal/nl-portal-user-interface";
-import {EditIcon} from "@gemeente-denhaag/icons";
+import {SettingsIcon} from "@gemeente-denhaag/icons";
 
 interface FeaturesListProps {
-    features: Array<{
-        featureId: string;
-    }>;
+    features: string[]
 }
 
 const FeaturesList = ({features}: FeaturesListProps) => {
@@ -24,16 +22,16 @@ const FeaturesList = ({features}: FeaturesListProps) => {
                         children: <Paragraph><b><FormattedMessage id={"features.feature"}/></b></Paragraph>,
                     },
                 ]}
-                rows={features.map(({featureId}) => (
+                rows={features.map((featureId) => (
                         [
                             <span className={styles["features-list__header"]}>
                                 <Paragraph><FormattedMessage id={"features." + featureId}/></Paragraph>
                             </span>,
                             <Link
                                 href={`/features/${featureId}`}
-                                icon={<EditIcon/>}
+                                icon={<SettingsIcon/>}
                                 Link={PortalLink}
-                                iconAlign="start"
+                                iconAlign="end"
                             >
                                 <div className={styles["features-list__value-edit"]}>
                                     <Paragraph><FormattedMessage id={"features.configure"}/></Paragraph>

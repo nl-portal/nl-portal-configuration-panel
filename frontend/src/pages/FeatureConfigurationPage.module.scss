@@ -1,6 +1,6 @@
 @use "../styles/mixins";
 
-.edit-feature__buttons {
+.feature-config__buttons {
   display: flex;
   flex-direction: column;
 
@@ -9,7 +9,7 @@
   }
 }
 
-.edit-feature__button {
+.feature-config__button {
   width: 100%;
 
   @include mixins.breakpoint(tablet) {
@@ -35,7 +35,7 @@
   }
 }
 
-.edit-feature__text-field-container {
+.feature-config__text-field-container {
   margin-block-end: var(--nlportal-space-block-4xl, 3rem);
   width: 100%;
   display: flex;
@@ -45,6 +45,6 @@
   }
 }
 
-.edit-feature__text-field {
+.feature-config__text-field {
   width: 100%;
 }

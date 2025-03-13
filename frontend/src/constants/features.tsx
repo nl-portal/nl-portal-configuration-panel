@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {ReactElement} from "react";
+import BerichtenConfiguration from "../components/BerichtenConfiguration.tsx";
 
-export interface ConfigPanelPaths {
-    configurations: string;
-    features: string;
-    feature: (featureId?: string) => string;
+interface FeatureConfiguration {
+    featureId: string;
+    component: ReactElement;
 }
 
-export const paths: ConfigPanelPaths = {
-    configurations: "/",
-    features: "/features",
-    feature: (featureId = ":featureId") => `/features/${featureId}`,
-};
+export const features: FeatureConfiguration[] = [
+    {
+        featureId: "berichten",
+        component: <BerichtenConfiguration/>
+    },
+]
