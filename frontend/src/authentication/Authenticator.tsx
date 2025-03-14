@@ -15,7 +15,7 @@ const Authenticator: FC<{ children?: ReactNode }> = ({children}) => {
         const handleTokenExpired = () => auth.signoutRedirect();
 
         auth.events.addAccessTokenExpired(handleTokenExpired);
-    }, []);
+    }, [auth]);
 
     if (auth.isLoading) {
         return <Paragraph>Loading...</Paragraph>

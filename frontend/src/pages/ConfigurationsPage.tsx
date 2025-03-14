@@ -2,7 +2,7 @@ import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
 import {PageGrid} from "@nl-portal/nl-portal-user-interface";
 import {PageHeader} from "@gemeente-denhaag/page";
 import ConfigurationPropertiesList from "../components/ConfigurationPropertiesList.tsx";
-import useConfigurationsQuery from "../queries/useConfigurationsQuery.tsx"
+import useConfigurationsQuery from "../hooks/useConfigurationsQuery.tsx"
 
 const ConfigurationsPage = () => {
     const configurations = useConfigurationsQuery();

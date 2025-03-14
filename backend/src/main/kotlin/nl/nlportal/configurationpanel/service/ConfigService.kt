@@ -45,4 +45,8 @@ class ConfigService(
     fun addConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? {
         return configRepository.save(config)
     }
+
+    fun addConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> {
+        return configRepository.saveAll(configs)
+    }
 }

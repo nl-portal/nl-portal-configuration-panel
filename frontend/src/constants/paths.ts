@@ -21,7 +21,7 @@ export interface ConfigPanelPaths {
 }
 
 export const paths: ConfigPanelPaths = {
-    configurations: "/",
+    configurations: "/configurations",
     features: "/features",
     feature: (featureId = ":featureId") => `/features/${featureId}`,
 };

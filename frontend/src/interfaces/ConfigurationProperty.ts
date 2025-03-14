@@ -15,7 +15,11 @@
  * limitations under the License.
  */
 
-export default interface ConfigurationEntry {
+export default interface ConfigurationProperty {
     propertyKey: string,
     propertyValue: string,
+    application: string,
+    profile?: string,
+    label?: string,
+    modifiedOn?: string,
 }

@@ -48,6 +48,7 @@
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
+    "flat": "^6.0.1",
     "globals": "^15.14.0",
     "react-intl": "^7.1.6",
     "sass": "^1.85.1",

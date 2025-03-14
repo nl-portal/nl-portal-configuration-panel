@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2025 Ritense BV, the Netherlands.
  *
@@ -13,20 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BerichtenFeatureConfiguration from "../components/BerichtenFeatureConfiguration.tsx";
-import {FC} from "react";
-import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
 
-interface FeatureConfiguration {
-    featureId: string;
-    featureConfigurationPrefix: string;
-    featureComponent: FC<FeatureConfigurationProps>;
+export default interface FeatureConfigurationProps {
+    onValid: (isValid: boolean) => void;
+    onChange: (featureConfiguration: object | undefined) => void;
+    featureConfiguration: object | undefined;
 }
-
-export const features: FeatureConfiguration[] = [
-    {
-        featureId: "berichten",
-        featureConfigurationPrefix: "nl-portal.config.berichten",
-        featureComponent: BerichtenFeatureConfiguration
-    },
-]

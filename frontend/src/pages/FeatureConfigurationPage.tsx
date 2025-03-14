@@ -1,28 +1,71 @@
 import {Button} from "@gemeente-denhaag/button";
 import {useNavigate, useParams} from "react-router-dom";
 import {paths} from "../constants/paths";
-import {PageGrid} from "@nl-portal/nl-portal-user-interface";
+import {PageGrid, Skeleton} from "@nl-portal/nl-portal-user-interface";
 import {PageHeader} from "@gemeente-denhaag/page";
-import {Heading2} from "@gemeente-denhaag/typography";
+import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
 import styles from './FeatureConfigurationPage.module.scss'
 import {FormattedMessage} from "react-intl";
 import {features} from "../constants/features.tsx";
-import {cloneElement, useEffect, useState} from "react";
+import {createElement, useEffect, useState} from "react";
+import useConfigurationPropertyMapper from "../hooks/useConfigurationPropertyMapperHook.tsx";
+import useConfigurationsByFeature from "../hooks/useConfigurationsByFeatureQuery.tsx";
+import useConfigurations from "../hooks/useConfigurationsMutation.tsx";
 
 const FeatureConfigurationPage = () => {
     const {featureId} = useParams();
     const navigate = useNavigate();
-    const feature = features.find(it => it.featureId == featureId)
-    const [valid, setValid] = useState<boolean>(false)
-    const onSave = (): void => {
+    const feature = features.find(it => it.featureId == featureId);
+    const configurationMapper = useConfigurationPropertyMapper();
+    const configurations = useConfigurationsByFeature({featurePrefix: feature?.featureConfigurationPrefix});
+    const {mutate: mutateConfigurations, isSuccess: mutateConfigurationsSuccess} = useConfigurations();
+    const [prefillFeatureConfig, setPrefillFeatureConfig] = useState<object | undefined>();
+    const [featureConfig, setFeatureConfig] = useState<object | undefined>();
+    const [isValid, setIsValid] = useState<boolean>(false);
+    const handleChange = (configuration: object | undefined) => {
+        setFeatureConfig(configuration)
+    };
+    const handleValid = (isValid: boolean) => {
+        setIsValid(prefillFeatureConfig != featureConfig ? isValid : false);
+    };
+    const saveFeatureConfiguration = () => {
+        if (featureConfig) {
+            const configurationProperties =
+                configurationMapper.toProperties(featureConfig, feature?.featureConfigurationPrefix);
+            if (configurationProperties.length > 0) {
+                mutateConfigurations(configurationProperties);
+            }
+        }
     };
 
     useEffect(() => {
-            if (!feature) {
-                navigate(paths.features)
-            }
+        if (mutateConfigurationsSuccess) {
+            setPrefillFeatureConfig(featureConfig)
         }
-        , [feature, navigate])
+    }, [mutateConfigurationsSuccess])
+
+    useEffect(() => {
+        if (configurations.data) {
+            const config: object =
+                configurationMapper.parseProperties(configurations.data, feature?.featureConfigurationPrefix);
+            setPrefillFeatureConfig(config);
+        }
+    }, [configurations.data])
+
+    if (configurations.isLoading) {
+        return (
+            <section>
+                <Skeleton height={60}/>
+            </section>
+        );
+    }
+
+    if (configurations.isError)
+        return (
+            <section>
+                <Paragraph>Failed to load Configuration Properties</Paragraph>
+            </section>
+        );
 
     return (
         <PageGrid>
@@ -31,17 +74,23 @@ const FeatureConfigurationPage = () => {
             </PageHeader>
             <div className={styles["feature-config__content"]}>
                 {(
-                    feature?.featureComponent && cloneElement(feature?.featureComponent, {onValid: setValid, onSave: onSave})
+                    feature?.featureComponent &&
+                    configurations &&
+                    createElement(feature?.featureComponent, {
+                        featureConfiguration: prefillFeatureConfig,
+                        onValid: handleValid,
+                        onChange: handleChange
+                    })
                 )}
             </div>
             <div>
                 <div className={styles["feature-config__buttons"]}>
                     <Button
                         className={styles["feature-config__button"]}
-                        onClick={onSave}
-                        disabled={!valid}
+                        onClick={saveFeatureConfiguration}
+                        disabled={!isValid}
                     >
-                        Save
+                        <FormattedMessage id={"features.config.save"}></FormattedMessage>
                     </Button>
                     <Button
                         variant="secondary-action"
@@ -49,7 +98,7 @@ const FeatureConfigurationPage = () => {
                         onClick={() => navigate(paths.features)}
                         disabled={false}
                     >
-                        Cancel
+                        <FormattedMessage id={"features.config.cancel"}></FormattedMessage>
                     </Button>
                 </div>
             </div>

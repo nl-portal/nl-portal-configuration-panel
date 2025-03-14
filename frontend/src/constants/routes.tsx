@@ -19,6 +19,6 @@ export const routes = [
     },
     {
         path: "*",
-        element: <Navigate to={paths.configurations}/>,
+        element: <Navigate to={paths.features}/>,
     },
 ];

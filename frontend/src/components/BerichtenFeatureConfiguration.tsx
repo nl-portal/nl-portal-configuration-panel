@@ -19,11 +19,8 @@ import {FormLabel} from "@gemeente-denhaag/form-label";
 import {Heading4, Paragraph} from "@gemeente-denhaag/typography";
 import {Checkbox} from "@gemeente-denhaag/checkbox";
 import {useEffect, useState} from "react";
-import {Skeleton} from "@nl-portal/nl-portal-user-interface";
-import useConfigurationsByFeature from "../queries/useConfigurationsByFeatureQuery.tsx";
 import {FormattedMessage} from "react-intl";
-import ConfigurationParser from "../utils/ConfigurationParser.tsx";
-import _ from "lodash";
+import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
 
 interface BerichtenConfiguration {
     enabled?: string;
@@ -32,44 +29,26 @@ interface BerichtenConfiguration {
     }
 }
 
-interface BerichtenFeatureConfigurationProps {
-    onValid?: (valid: boolean) => void
-    onSave?: (json: JSON) => void
+interface BerichtenFeatureConfigurationProps extends FeatureConfigurationProps {
+    featureConfiguration: BerichtenConfiguration | undefined
 }
 
-const BerichtenFeatureConfiguration = (props: BerichtenFeatureConfigurationProps) => {
-    const prefix = 'nl-portal.config.berichten'
-    const configurations = useConfigurationsByFeature({featureKey: prefix})
+const BerichtenFeatureConfiguration = ({featureConfiguration, onValid, onChange}: BerichtenFeatureConfigurationProps) => {
     const [berichtenConfiguration, setBerichtenConfiguration] = useState<BerichtenConfiguration | undefined>()
 
     useEffect(() => {
-        if (configurations.data) {
-            const berichtenConfig: BerichtenConfiguration = ConfigurationParser(configurations.data).fromPrefix(prefix)
-            setBerichtenConfiguration(
-                berichtenConfig
-            )
-        }
-
-    }, [configurations.data])
+        if (featureConfiguration) setBerichtenConfiguration(featureConfiguration)
+    }, [featureConfiguration])
 
     useEffect(() => {
-        if (props.onValid) props.onValid(true);
-    }, [props])
+        if (onChange) {
+            onChange(berichtenConfiguration)
+        }
+    }, [berichtenConfiguration, onChange])
 
-    if (configurations.isLoading) {
-        return (
-            <section>
-                <Skeleton height={60}/>
-            </section>
-        );
-    }
-
-    if (configurations.isError)
-        return (
-            <section>
-                <Paragraph>Failed to load Configuration Properties</Paragraph>
-            </section>
-        );
+    useEffect(() => {
+        if (onValid) onValid(true);
+    }, [onValid])
 
     return (<div className={"edit-feature__text-field-container"}>
             <Fieldset>
@@ -84,16 +63,10 @@ const BerichtenFeatureConfiguration = (props: BerichtenFeatureConfigurationProps
                             name={"enabled"}
                             checked={berichtenConfiguration?.enabled == "true"}
                             onChange={(e) => {
-                                if (berichtenConfiguration) {
-                                    setBerichtenConfiguration({
-                                        ...berichtenConfiguration,
-                                        enabled: e.target.checked.toString(),
-                                    })
-                                } else {
-                                    setBerichtenConfiguration(
-                                        {enabled: e.target.checked.toString()}
-                                    )
-                                }
+                                setBerichtenConfiguration({
+                                    ...berichtenConfiguration,
+                                    enabled: e.target.checked.toString(),
+                                })
                             }}
                         />
                         <FormLabel htmlFor="true" type="checkbox">

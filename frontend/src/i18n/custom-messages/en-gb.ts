@@ -4,6 +4,8 @@ export const EN_GB_MESSAGES: Messages = {
   [DEFAULT_LOCALES.ENGLISH]: {
     "features.feature": "Feature",
     "features.configure": "Configure",
+    "features.config.save": "Save",
+    "features.config.cancel": "Cancel",
     "features.berichten": "Messages",
     "features.berichten.enable": "Enabled",
     "features.berichten.configuration": "Configuration",

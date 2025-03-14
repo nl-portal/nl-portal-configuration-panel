@@ -31,7 +31,7 @@ class ConfigResource(
     private val configService: ConfigService
 ) {
 
-    @GetMapping("/v1/configuration/{application}/{propertyKey}")
+    @GetMapping("/v1/configurations/{application}/{propertyKey}")
     fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
         @PathVariable("application") application: String,
         @PathVariable("propertyKey") propertyKey: String
@@ -39,14 +39,14 @@ class ConfigResource(
         return configService.getConfigurationPropertyByApplicationAndPropertyKeyOrNull(application, propertyKey)
     }
 
-    @GetMapping("/v1/configuration/{application}")
+    @GetMapping("/v1/configurations/{application}")
     fun getConfigurationPropertiesByApplicationOrNull(
         @PathVariable("application") application: String
     ): List<ConfigurationProperty>? {
         return configService.getConfigurationPropertiesByApplicationOrNull(application)
     }
 
-    @GetMapping("/v1/configuration/{application}/features/{featureKey}")
+    @GetMapping("/v1/configurations/{application}/features/{featureKey}")
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String
@@ -54,8 +54,8 @@ class ConfigResource(
         return configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
     }
 
-    @PostMapping("/v1/configuration")
-    fun addConfigurationProperty(@RequestBody config: ConfigurationProperty): ConfigurationProperty? {
-        return configService.addConfigurationProperty(config)
+    @PostMapping("/v1/configurations")
+    fun addConfigurationProperties(@RequestBody configs: List<ConfigurationProperty>): List<ConfigurationProperty> {
+        return configService.addConfigurationProperties(configs)
     }
 }

@@ -1,10 +1,10 @@
 import {useQuery} from "@tanstack/react-query";
 import {useAuth} from "react-oidc-context";
-import ConfigurationEntry from "../interfaces/ConfigurationEntry.ts";
+import ConfigurationProperty from "../interfaces/ConfigurationProperty.ts";
 
 interface UseConfigurationsByFeatureQueryProps {
     applicationName?: string;
-    featureKey?: string;
+    featurePrefix?: string;
     refetchInterval?: number | false | undefined;
 }
 
@@ -19,13 +19,13 @@ export const useConfigurationsByFeatureQuery = (
         }
     const variables = {...defaultVariables, ...options}
 
-    return useQuery<ConfigurationEntry[]>({
+    return useQuery<ConfigurationProperty[]>({
         queryKey: ['configurationsByFeature'],
         refetchInterval: variables.refetchInterval,
-        enabled: () => !!variables.featureKey,
+        enabled: () => !!variables.featurePrefix,
         queryFn: async () => {
             const response = await fetch(
-                `/api/v1/configuration/${variables.applicationName}/features/${variables.featureKey || ''}`,
+                `/api/v1/configurations/${variables.applicationName}/features/${variables.featurePrefix || ''}`,
                 {
                     method: 'GET',
                     headers: {
@@ -36,11 +36,12 @@ export const useConfigurationsByFeatureQuery = (
             )
             return await response.json()
         },
-        select: (configurationEntries): ConfigurationEntry[] => {
-            return configurationEntries.map(({propertyKey, propertyValue}) => {
+        select: (configurations): ConfigurationProperty[] => {
+            return configurations.map(({propertyKey, propertyValue, application}) => {
                 return {
                     propertyKey: propertyKey,
-                    propertyValue: propertyValue
+                    propertyValue: propertyValue,
+                    application: application,
                 }
             })
         }

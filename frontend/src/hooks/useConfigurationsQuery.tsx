@@ -22,7 +22,7 @@ export const useConfigurationsQuery = (
         refetchInterval: variables.refetchInterval,
         queryFn: async () => {
             const response = await fetch(
-                `/api/v1/configuration/${variables.applicationName}`,
+                `/api/v1/configurations/${variables.applicationName}`,
                 {
                     method: 'GET',
                     headers: {
