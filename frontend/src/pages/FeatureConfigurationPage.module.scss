@@ -3,6 +3,7 @@
 .feature-config__buttons {
   display: flex;
   flex-direction: column;
+  justify-content: right;
 
   @include mixins.breakpoint(tablet) {
     flex-direction: row;
