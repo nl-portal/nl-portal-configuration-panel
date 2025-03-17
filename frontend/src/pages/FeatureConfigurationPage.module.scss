@@ -36,10 +36,21 @@
 }
 
 .feature-config__content {
-  width: 100%;
   display: flex;
+  justify-content: center;
 }
 
-.feature-config__text-field {
-  width: 100%;
+.feature-config__form {
+
+  @include mixins.breakpoint(mobile) {
+    width: 100%;
+  }
+
+  @include mixins.breakpoint(desktop) {
+    width: 75%;
+  }
+
+  div {
+    margin-bottom: var(--nl-portal-space-block-md, 1rem);
+  }
 }

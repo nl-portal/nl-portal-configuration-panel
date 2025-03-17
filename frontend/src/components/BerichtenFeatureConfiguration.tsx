@@ -16,16 +16,18 @@
 import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
-import {Heading4, Paragraph} from "@gemeente-denhaag/typography";
+import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
 import {Checkbox} from "@gemeente-denhaag/checkbox";
 import {useEffect, useState} from "react";
 import {FormattedMessage} from "react-intl";
 import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
+import TextInput from "@gemeente-denhaag/text-input";
+import styles from '../pages/FeatureConfigurationPage.module.scss'
 
 interface BerichtenConfiguration {
     enabled?: string;
     properties?: {
-        berichtObjectTypeUrl?: string
+        "bericht-object-type-url"?: string
     }
 }
 
@@ -33,7 +35,11 @@ interface BerichtenFeatureConfigurationProps extends FeatureConfigurationProps {
     featureConfiguration: BerichtenConfiguration | undefined
 }
 
-const BerichtenFeatureConfiguration = ({featureConfiguration, onValid, onChange}: BerichtenFeatureConfigurationProps) => {
+const BerichtenFeatureConfiguration = ({
+                                           featureConfiguration,
+                                           onValid,
+                                           onChange
+                                       }: BerichtenFeatureConfigurationProps) => {
     const [berichtenConfiguration, setBerichtenConfiguration] = useState<BerichtenConfiguration | undefined>()
 
     useEffect(() => {
@@ -50,32 +56,50 @@ const BerichtenFeatureConfiguration = ({featureConfiguration, onValid, onChange}
         if (onValid) onValid(true);
     }, [onValid])
 
-    return (<div className={"edit-feature__text-field-container"}>
-            <Fieldset>
-                <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-                    <Heading4><FormattedMessage id={"features.berichten.configuration"}></FormattedMessage></Heading4>
-                </FieldsetLegend>
-                <FormField type="checkbox">
-                    <Paragraph className="utrecht-form-field__label">
-                        <Checkbox
-                            id="berichten.enabled"
-                            className="utrecht-form-field__input"
-                            name={"enabled"}
-                            checked={berichtenConfiguration?.enabled == "true"}
+    return (
+        <Fieldset className={styles["feature-config__form"]}>
+            <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+                <Heading3><FormattedMessage id={"features.berichten.configuration"}></FormattedMessage></Heading3>
+            </FieldsetLegend>
+            <FormField type="checkbox">
+                <Paragraph className="utrecht-form-field__label">
+                    <Checkbox
+                        id="berichten.enabled"
+                        className="utrecht-form-field__input"
+                        name={"enabled"}
+                        checked={berichtenConfiguration?.enabled == "true"}
+                        onChange={(e) => {
+                            setBerichtenConfiguration({
+                                ...berichtenConfiguration,
+                                enabled: e.target.checked.toString(),
+                            })
+                        }}
+                    />
+                    <FormLabel htmlFor="true" type="checkbox">
+                        <FormattedMessage id={"features.berichten.enable"}></FormattedMessage>
+                    </FormLabel>
+                </Paragraph>
+            </FormField>
+            {berichtenConfiguration?.enabled == "true" && (
+                <FormField type="text">
+                    <Paragraph>
+                        <FormattedMessage id={"features.berichten.berichtObjectTypeUrl"}>
+                        </FormattedMessage>
+                        <TextInput
+                            id="berichten.berichtObjectTypeUrl"
+                            name={"berichtObjectTypeUrl"}
+                            defaultValue={berichtenConfiguration?.properties?.["bericht-object-type-url"]}
                             onChange={(e) => {
                                 setBerichtenConfiguration({
                                     ...berichtenConfiguration,
-                                    enabled: e.target.checked.toString(),
+                                    ...{properties: {'bericht-object-type-url': e.target.value}},
                                 })
                             }}
                         />
-                        <FormLabel htmlFor="true" type="checkbox">
-                            <FormattedMessage id={"features.berichten.enable"}></FormattedMessage>
-                        </FormLabel>
                     </Paragraph>
                 </FormField>
-            </Fieldset>
-        </div>
+            )}
+        </Fieldset>
     )
 }
 
