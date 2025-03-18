@@ -1,9 +1,25 @@
+/*
+ * Copyright 2025 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {Button} from "@gemeente-denhaag/button";
 import {useNavigate, useParams} from "react-router-dom";
 import {paths} from "../constants/paths";
 import {PageGrid, Skeleton} from "@nl-portal/nl-portal-user-interface";
 import {PageHeader} from "@gemeente-denhaag/page";
-import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
+import {Heading2, Heading3} from "@gemeente-denhaag/typography";
 import styles from './FeatureConfigurationPage.module.scss'
 import {FormattedMessage} from "react-intl";
 import {features} from "../constants/features.tsx";
@@ -63,7 +79,12 @@ const FeatureConfigurationPage = () => {
     if (configurations.isError)
         return (
             <section>
-                <Paragraph>Failed to load Configuration Properties</Paragraph>
+                <Heading3>
+                    <FormattedMessage
+                        id={"features.config.configurationsError"}
+                        values={{featureId: feature?.featureId}}
+                    />
+                </Heading3>
             </section>
         );
 
