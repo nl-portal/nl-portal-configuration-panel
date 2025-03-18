@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.configuration
+package nl.nlportal.configurationpanel.security.config
 
 import nl.nlportal.configurationpanel.security.TokenAuthenticationProvider
 import org.springframework.beans.factory.annotation.Value

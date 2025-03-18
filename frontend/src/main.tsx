@@ -1,16 +1,32 @@
-import { createRoot } from 'react-dom/client'
+/*
+ * Copyright 2025 Ritense BV, the Netherlands.
+ *
+ * Licensed under EUPL, Version 1.2 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import {config} from "./constants/config.ts";
-import OidcWrapper from "./authentication/OidcWrapper.tsx";
-import {StrictMode} from "react";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {routes} from "./constants/routes.tsx";
+
+const router = createBrowserRouter([
+    {
+        element: <App/>,
+        children: routes,
+    },
+]);
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <OidcWrapper authority={config.OIDC_URL}
-                 client_id={config.OIDC_CLIENT_ID}
-                 redirect_uri={config.OIDC_REDIRECT_URI}>
-      <App />
-    </OidcWrapper>
-  </StrictMode>
+    <RouterProvider router={router}/>
 )
