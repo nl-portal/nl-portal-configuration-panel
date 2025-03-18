@@ -20,9 +20,9 @@ import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
 import {Checkbox} from "@gemeente-denhaag/checkbox";
 import {useEffect, useState} from "react";
 import {FormattedMessage} from "react-intl";
-import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
+import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import TextInput from "@gemeente-denhaag/text-input";
-import styles from '../pages/FeatureConfigurationPage.module.scss'
+import styles from '../../pages/FeatureConfigurationPage.module.scss'
 
 interface BerichtenConfiguration {
     enabled?: string;

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BerichtenFeatureConfiguration from "../components/BerichtenFeatureConfiguration.tsx";
+import BerichtenFeatureConfiguration from "../components/features/BerichtenFeatureConfiguration.tsx";
 import {FC} from "react";
 import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
+import TaakFeatureConfiguration from "../components/features/TaakFeatureConfiguration.tsx";
 
 interface FeatureConfiguration {
     featureId: string;
@@ -24,6 +25,11 @@ interface FeatureConfiguration {
 }
 
 export const features: FeatureConfiguration[] = [
+    {
+        featureId: "taak",
+        featureConfigurationPrefix: "nl-portal.config.taak",
+        featureComponent: TaakFeatureConfiguration
+    },
     {
         featureId: "berichten",
         featureConfigurationPrefix: "nl-portal.config.berichten",
