@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {Fragment} from "react";
 import {FormattedMessage} from "react-intl";
 import styles from "./FeaturesList.module.scss";
 import {Link} from "@gemeente-denhaag/link";
@@ -27,38 +25,36 @@ interface FeaturesListProps {
 }
 
 const FeaturesList = ({features}: FeaturesListProps) => {
-
     return (
-        <Fragment>
-            <Table
-                headers={[
-                    {
-                        key: "features",
-                        head: true,
-                        children: <Paragraph><b><FormattedMessage id={"features.feature"}/></b></Paragraph>,
-                    },
-                ]}
-                rows={features.map((featureId) => (
-                        [
-                            <span className={styles["features-list__header"]}>
-                                <Paragraph><FormattedMessage id={"features." + featureId}/></Paragraph>
-                            </span>,
-                            <Link
-                                href={`/features/${featureId}`}
-                                icon={<SettingsIcon/>}
-                                Link={PortalLink}
-                                iconAlign="end"
-                            >
-                                <div className={styles["features-list__value-edit"]}>
-                                    <Paragraph><FormattedMessage id={"features.configure"}/></Paragraph>
-                                </div>
-                            </Link>
-                        ]
-                    )
-                ) as unknown as CellObject[][]
-                }
-            />
-        </Fragment>
+      <Table
+          headers={[
+              {
+                  key: "features",
+                  head: true,
+                  children: <Paragraph><b><FormattedMessage id={"features.feature"}/></b></Paragraph>,
+              },
+          ]}
+          rows={features.map((featureId) => (
+            [
+                <span key={`feature-${featureId}`} className={styles["features-list__header"]}>
+                    <Paragraph><FormattedMessage id={"features." + featureId}/></Paragraph>
+                </span>,
+                <Link
+                    key={`feature-link-${featureId}`}
+                    href={`/features/${featureId}`}
+                    icon={<SettingsIcon/>}
+                    Link={PortalLink}
+                    iconAlign="end"
+                >
+                    <div className={styles["features-list__value-edit"]}>
+                        <Paragraph><FormattedMessage id={"features.configure"}/></Paragraph>
+                    </div>
+                </Link>
+            ]
+              )
+          ) as unknown as CellObject[][]
+          }
+      />
     )
 }
 
