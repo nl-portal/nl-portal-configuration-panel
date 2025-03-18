@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.configuration
+package nl.nlportal.configurationpanel.security.config
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.security.TokenAuthenticationProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
