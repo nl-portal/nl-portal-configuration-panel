@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DEFAULT_LOCALES, Messages } from "@nl-portal/nl-portal-localization";
+import {DEFAULT_LOCALES, Messages} from "@nl-portal/nl-portal-localization";
 
 export const NL_NL_MESSAGES: Messages = {
   [DEFAULT_LOCALES.DUTCH]: {
@@ -28,6 +28,11 @@ export const NL_NL_MESSAGES: Messages = {
     "features.berichten.enable": "Geactiveerd",
     "features.berichten.berichtObjectTypeUrl": "Bericht Objecttype Url:",
     "features.openklant2": "OpenKlant 2",
+    "features.taak": "Taak",
+    "features.taak.configuration": "Configuratie",
+    "features.taak.enable": "Geactiveerd",
+    "features.taak.typeUrl": "Type Objecttype Url",
+    "features.taak.typeUrlV2": "Type 2 Objecttype Url",
     "featureDetailPage.title": "Feature Configuratie",
     "featuresPage.title": "Features",
     "featuresPage.subtitle": "Configureer hier de features van NL Portal."
