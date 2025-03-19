@@ -18,6 +18,7 @@ import {FC} from "react";
 import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
 import TaakFeatureConfiguration from "../components/features/TaakFeatureConfiguration.tsx";
 import ObjectsApiFeatureConfiguration from "../components/features/ObjectsApiFeatureConfiguration.tsx";
+import CatalogiApiFeatureConfiguration from "../components/features/CatalogiApiFeatureConfiguration.tsx";
 
 interface FeatureConfiguration {
     featureId: string;
@@ -26,6 +27,11 @@ interface FeatureConfiguration {
 }
 
 export const features: FeatureConfiguration[] = [
+    {
+        featureId: 'catalogiapi',
+        featureConfigurationPrefix: "nl-portal.config.catalogiapi",
+        featureComponent: CatalogiApiFeatureConfiguration,
+    },
     {
         featureId: "taak",
         featureConfigurationPrefix: "nl-portal.config.taak",
