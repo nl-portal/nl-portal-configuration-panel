@@ -27,7 +27,7 @@ interface FeaturesListProps {
 const FeaturesList = ({features}: FeaturesListProps) => {
     return (
       <Table
-          headers={[
+          headers={[ 
               {
                   key: "features",
                   head: true,
@@ -36,11 +36,10 @@ const FeaturesList = ({features}: FeaturesListProps) => {
           ]}
           rows={features.map((featureId) => (
             [
-                <span key={`feature-${featureId}`} className={styles["features-list__header"]}>
+                <span className={styles["features-list__header"]}>
                     <Paragraph><FormattedMessage id={"features." + featureId}/></Paragraph>
                 </span>,
                 <Link
-                    key={`feature-link-${featureId}`}
                     href={`/features/${featureId}`}
                     icon={<SettingsIcon/>}
                     Link={PortalLink}
