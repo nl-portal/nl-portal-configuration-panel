@@ -1,4 +1,4 @@
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, Fragment, useEffect, useState} from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
 import {FormattedMessage} from "react-intl";
@@ -78,35 +78,35 @@ const TaakFeatureConfiguration = ({
         </Paragraph>
       </FormField>
       {taakConfiguration?.enabled == "true" && (
-        <>
-        <FormField type="text">
-          <Paragraph>
-            <FormattedMessage id={"features.taak.typeUrl"}></FormattedMessage>
-          </Paragraph>
-          <TextInput
-              id="taak.typeUrl"
-              name={"typeUrl"}
-              defaultValue={taakConfiguration?.properties?.taakobject["type-url"]}
+        <Fragment>
+          <FormField type="text">
+            <Paragraph>
+              <FormattedMessage id={"features.taak.typeUrl"}></FormattedMessage>
+            </Paragraph>
+            <TextInput
+                id="taak.typeUrl"
+                name={"typeUrl"}
+                defaultValue={taakConfiguration?.properties?.taakobject["type-url"]}
+                onChange={(e) => {
+                  handleInputChange( "properties.taakobject.type-url", e);
+                }}
+            />
+          </FormField>
+          <FormField type="text">
+            <Paragraph>
+              <FormattedMessage id={"features.taak.typeUrlV2"}></FormattedMessage>
+            </Paragraph>
+            <TextInput
+              id="taak.typeUrlV2"
+              name={"typeUrlV2"}
+              defaultValue={taakConfiguration?.properties?.taakobject["type-url-v2"]}
+              required
               onChange={(e) => {
-                handleInputChange( "properties.taakobject.type-url", e);
+                handleInputChange( "properties.taakobject.type-url-v2", e);
               }}
-          />
-        </FormField>
-        <FormField type="text">
-          <Paragraph>
-            <FormattedMessage id={"features.taak.typeUrlV2"}></FormattedMessage>
-          </Paragraph>
-          <TextInput
-            id="taak.typeUrlV2"
-            name={"typeUrlV2"}
-            defaultValue={taakConfiguration?.properties?.taakobject["type-url-v2"]}
-            required
-            onChange={(e) => {
-              handleInputChange( "properties.taakobject.type-url-v2", e);
-            }}
-          />
-        </FormField>
-        </>
+            />
+          </FormField>
+        </Fragment>
       )}
     </Fieldset>
   )
