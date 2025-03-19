@@ -1,4 +1,4 @@
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, Fragment, useEffect, useState} from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
 import {FormattedMessage} from "react-intl";
@@ -76,35 +76,35 @@ const ObjectsApiFeatureConfiguration = ({
         </Paragraph>
       </FormField>
       {objectApiConfiguration?.enabled == "true" && (
-        <>
-        <FormField type="text">
-          <Paragraph>
-            <FormattedMessage id={"features.objectsapi.url"}></FormattedMessage>
-          </Paragraph>
-          <TextInput
-              id="objectsApi.url"
-              name={"url"}
-              defaultValue={objectApiConfiguration?.properties?.url}
+        <Fragment>
+          <FormField type="text">
+            <Paragraph>
+              <FormattedMessage id={"features.objectsapi.url"}></FormattedMessage>
+            </Paragraph>
+            <TextInput
+                id="objectsApi.url"
+                name={"url"}
+                defaultValue={objectApiConfiguration?.properties?.url}
+                onChange={(e) => {
+                  handleInputChange( "properties.url", e);
+                }}
+            />
+          </FormField>
+          <FormField type="text">
+            <Paragraph>
+              <FormattedMessage id={"features.objectsapi.token"}></FormattedMessage>
+            </Paragraph>
+            <TextInput
+              id="objectsApi.token"
+              name={"token"}
+              defaultValue={objectApiConfiguration?.properties?.token}
+              required
               onChange={(e) => {
-                handleInputChange( "properties.url", e);
+                handleInputChange( "properties.token", e);
               }}
-          />
-        </FormField>
-        <FormField type="text">
-          <Paragraph>
-            <FormattedMessage id={"features.objectsapi.token"}></FormattedMessage>
-          </Paragraph>
-          <TextInput
-            id="objectsApi.token"
-            name={"token"}
-            defaultValue={objectApiConfiguration?.properties?.token}
-            required
-            onChange={(e) => {
-              handleInputChange( "properties.token", e);
-            }}
-          />
-        </FormField>
-        </>
+            />
+          </FormField>
+        </Fragment>
       )}
     </Fieldset>
   )
