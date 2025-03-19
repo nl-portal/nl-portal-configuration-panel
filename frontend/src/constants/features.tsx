@@ -17,6 +17,7 @@ import BerichtenFeatureConfiguration from "../components/features/BerichtenFeatu
 import {FC} from "react";
 import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
 import TaakFeatureConfiguration from "../components/features/TaakFeatureConfiguration.tsx";
+import ObjectsApiFeatureConfiguration from "../components/features/ObjectsApiFeatureConfiguration.tsx";
 
 interface FeatureConfiguration {
     featureId: string;
@@ -35,4 +36,9 @@ export const features: FeatureConfiguration[] = [
         featureConfigurationPrefix: "nl-portal.config.berichten",
         featureComponent: BerichtenFeatureConfiguration
     },
+    {
+        featureId: "objectsapi",
+        featureConfigurationPrefix: "nl-portal-config.objectsapi",
+        featureComponent: ObjectsApiFeatureConfiguration
+    }
 ]

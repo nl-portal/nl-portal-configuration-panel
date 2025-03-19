@@ -119,7 +119,9 @@ const FeatureConfigurationPage = () => {
                         onClick={() => navigate(paths.features)}
                         disabled={false}
                     >
-                        <FormattedMessage id={"features.config.cancel"}></FormattedMessage>
+                        <FormattedMessage id={isValid
+                          ? "features.config.cancel"
+                          : "features.config.back"}></FormattedMessage>
                     </Button>
                 </div>
             </div>
