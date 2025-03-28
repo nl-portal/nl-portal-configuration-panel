@@ -30,7 +30,7 @@ plugins {
 }
 
 group = "nl.nlportal"
-version = "0.0.1-SNAPSHOT"
+version = "0.1.0"
 
 java {
     toolchain {
@@ -85,7 +85,7 @@ tasks.bootRun {
             "CONFIG_CACHE_TTL" to "30000",
             "CONFIGURATION_SERVER_PREFIX" to "/configuration",
             "CONFIGURATION_SERVER_TOKEN" to "VerySecretToken",
-            "JWT_ISSUER_URI" to "http://localhost:8082/auth/realms/nlportalconfig"
+            "JWKS_URI" to "http://localhost:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs"
         )
     )
 }

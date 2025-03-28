@@ -1,6 +1,10 @@
 server:
   port: 8888
 
+logging:
+  level:
+    root: ${LOGLEVEL:INFO}
+
 spring:
   application:
     name: configuration-panel-backend
@@ -9,9 +13,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: # env var
-    username: # env var
-    password: # env var
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     name: nl-portal-config-database
     hikari:
       auto-commit: false
@@ -40,7 +44,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${JWT_ISSUER_URI}
+          jwk-set-uri: ${JWKS_URI}
 configuration-panel:
   cache:
     config-ttl: ${CONFIG_CACHE_TTL}

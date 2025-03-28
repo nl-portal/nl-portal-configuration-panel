@@ -2,7 +2,7 @@
   "name": "configuration-panel-frontend",
   "private": true,
   "version": "0.1.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "vite --port 3333",
     "build": "tsc -b && vite build",

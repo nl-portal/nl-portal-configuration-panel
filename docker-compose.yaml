@@ -1,0 +1,68 @@
+services:
+    configuration-panel-backend-local:
+        profiles:
+            -   local
+        container_name: configuration-panel-backend
+        build: backend/
+        depends_on:
+            -   configuration-panel-database
+        ports:
+            -   "8888:8888"
+        environment: &configuration-panel-backend-env
+            LOGLEVEL: "DEBUG"
+            DATABASE_URL: "jdbc:postgresql://host.docker.internal:54322/nl-portal-config"
+            DATABASE_USERNAME: "config"
+            DATABASE_PASSWORD: "password"
+            CONFIG_CACHE_TTL: "30000"
+            CONFIGURATION_SERVER_PREFIX: "/configuration"
+            CONFIGURATION_SERVER_TOKEN: "VerySecretToken"
+            JWKS_URI: "http://host.docker.internal:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs"
+
+    configuration-panel-frontend-local:
+        profiles:
+            -   local
+        container_name: configuration-panel-frontend
+        build: frontend/
+        ports:
+            -   "3333:8080"
+        environment: &configuration-panel-frontend-env
+            OIDC_URL: "http://localhost:8082/auth/realms/nlportalconfig"
+            OIDC_REALM: "nlportalconfig"
+            OIDC_CLIENT_ID: "nl-portal-config"
+            OIDC_REDIRECT_URI: "http://localhost:3333/keycloak/callback"
+            OIDC_POST_LOGOUT_REDIRECT_URI: "http://localhost:3333"
+
+    configuration-panel-backend-remote:
+        image: ghcr.io/nl-portal/configuration-panel-backend
+        profiles:
+            -   remote
+        container_name: configuration-panel-backend
+        depends_on:
+            -   configuration-panel-database
+        ports:
+            -   "8888:8888"
+        environment: *configuration-panel-backend-env
+
+    configuration-panel-frontend-remote:
+        image: ghcr.io/nl-portal/configuration-panel-frontend
+        profiles:
+            -   remote
+        container_name: configuration-panel-frontend
+        ports:
+            -   "3333:8080"
+        environment: *configuration-panel-frontend-env
+
+    configuration-panel-database:
+        container_name: configuration-panel-database
+        image: postgres:15
+        ports:
+            - "54322:5432"
+        environment:
+            POSTGRES_USER: config
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: nl-portal-config
+        volumes:
+            - configuration-panel-database-data:/var/lib/postgres # persist data even if container shuts down
+
+volumes:
+    configuration-panel-database-data:
