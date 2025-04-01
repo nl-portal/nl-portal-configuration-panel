@@ -92,7 +92,7 @@ tasks.bootRun {
             "CONFIG_SERVER_PREFIX" to "/configuration",
             "CONFIG_SERVER_TOKEN" to "VerySecretToken",
             "CONFIG_NOTIFY_ENABLED" to "true",
-            "CONFIG_NOTIFY_LIST" to "http://localhost:8090/, https://example.com",
+            "CONFIG_NOTIFY_LIST" to "http://localhost:8090/",
         )
     )
 }
