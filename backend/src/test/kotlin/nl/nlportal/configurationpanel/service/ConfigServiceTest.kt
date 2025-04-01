@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
@@ -22,13 +21,16 @@ class ConfigServiceTest {
     @Mock
     private lateinit var configRepository: ConfigRepository
 
-    @InjectMocks
+    @Mock
+    private lateinit var notifyService: NotifyService
+
     private lateinit var configService: ConfigService
 
     private lateinit var sampleConfig: ConfigurationProperty
 
     @BeforeEach
     fun setUp() {
+        configService = ConfigService(configRepository, notifyService)
         sampleConfig = ConfigurationProperty(
             propertyKey = "feature_123",
             propertyValue = "value1",
@@ -79,7 +81,7 @@ class ConfigServiceTest {
         `when`(configRepository.save(sampleConfig)).thenReturn(sampleConfig)
 
         // Act
-        val result = configService.addConfigurationProperty(sampleConfig)
+        val result = configService.saveConfigurationProperty(sampleConfig)
 
         // Assert
         assertNotNull(result)
