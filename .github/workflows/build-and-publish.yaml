@@ -29,6 +29,8 @@ jobs:
         defaults:
             run:
                 working-directory: "./backend"
+        needs:
+            - prepare-variables
         steps:
             -   uses: actions/checkout@v4
             -   name: Set up JDK ${{ env.JAVA_VERSION }}
@@ -51,6 +53,8 @@ jobs:
         defaults:
             run:
                 working-directory: "./frontend"
+        needs:
+            - prepare-variables
         steps:
             -   uses: actions/checkout@v4
             -   name: Set up Node.js ${{ env.NODE_VERSION }}
@@ -101,6 +105,7 @@ jobs:
                 uses: actions/download-artifact@v4
                 with:
                     name: configuration-panel-backend-build
+                    path: backend/
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
@@ -122,7 +127,7 @@ jobs:
                 id: build-and-push
                 with:
                     file: ./backend/Dockerfile
-                    context: ./backend/
+                    context: .
                     push: true
                     tags: ${{ steps.docker_meta.outputs.tags }}
                     labels: ${{ steps.docker_meta.outputs.labels }}
@@ -175,6 +180,7 @@ jobs:
                 uses: actions/download-artifact@v4
                 with:
                     name: configuration-panel-frontend-dist
+                    path: frontend/
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
@@ -196,7 +202,7 @@ jobs:
                 id: build-and-push
                 with:
                     file: ./frontend/Dockerfile
-                    context: ./frontend/
+                    context: .
                     push: true
                     tags: ${{ steps.docker_meta.outputs.tags }}
                     labels: ${{ steps.docker_meta.outputs.labels }}
