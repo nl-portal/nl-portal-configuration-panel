@@ -27,17 +27,18 @@ You can choose to build docker images of the backend and frontend for running lo
 instead of in a development environment by following these steps:
 
 1. Build the backend app
-    ```shell
-    ./backend/gradlew bootJar
-    ```
+   ```shell
+   cd backend
+   ./gradlew bootJar
+   ```
 1. Build the frontend app
-    ```shell
-    pnpm -C frontend i && pnpm -C frontend build
-    ```
+   ```shell
+   pnpm -C frontend i && pnpm -C frontend build
+   ```
 1. Build and compose the images with docker
-    ```shell
-    docker compose --profile local up -d
-    ```
+   ```shell
+   docker compose --profile local up -d --build
+   ```
 
 ### From source
 

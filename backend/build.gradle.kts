@@ -83,11 +83,11 @@ kotlin {
 tasks.bootRun {
     environment.putAll(
         mapOf(
-            "spring.datasource.url" to "jdbc:postgresql://localhost:54322/nl-portal-config",
-            "spring.datasource.username" to "config",
-            "spring.datasource.password" to "password",
+            "DATABASE_URL" to "jdbc:postgresql://localhost:54322/nl-portal-config",
+            "DATABASE_USERNAME" to "config",
+            "DATABASE_PASSWORD" to "password",
             "logging.level.root" to "DEBUG",
-            "JWKS_URI" to "http://localhost:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs"
+            "JWKS_URI" to "http://localhost:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs",
             "CONFIG_CACHE_TTL" to "30000",
             "CONFIG_SERVER_PREFIX" to "/configuration",
             "CONFIG_SERVER_TOKEN" to "VerySecretToken",
