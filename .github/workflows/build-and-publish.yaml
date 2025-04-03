@@ -31,10 +31,10 @@ jobs:
                 working-directory: "./backend"
         steps:
             -   uses: actions/checkout@v4
-            -   name: Set up JDK ${{ env.javaVersion }}
+            -   name: Set up JDK ${{ env.JAVA_VERSION }}
                 uses: actions/setup-java@v4
                 with:
-                    java-version: "${{ env.javaVersion }}"
+                    java-version: "${{ env.JAVA_VERSION }}"
                     distribution: "temurin"
             -   name: Set up gradle
                 uses: gradle/actions/setup-gradle@v4
