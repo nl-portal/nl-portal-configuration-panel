@@ -28,7 +28,7 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
             run:
-                working-directory: "./backend"
+                working-directory: "backend"
         needs:
             - prepare-variables
         steps:
@@ -52,7 +52,7 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
             run:
-                working-directory: "./frontend"
+                working-directory: "frontend"
         needs:
             - prepare-variables
         steps:
@@ -66,8 +66,7 @@ jobs:
             -   name: Build
                 run: pnpm build
             -   name: Preparation step
-                run: mkdir deployment | mv build/ conf/ deployment/
-
+                run: mkdir deployment | mv build/ conf/ entrypoint.sh Dockerfile deployment/
             -   name: Archive dist folder
                 uses: actions/upload-artifact@v4
                 with:
@@ -76,9 +75,6 @@ jobs:
                     retention-days: 1
     publish-be:
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: "./backend"
         needs:
             - prepare-variables
             - build-be
@@ -105,10 +101,6 @@ jobs:
                 uses: actions/download-artifact@v4
                 with:
                     name: configuration-panel-backend-build
-                    path: backend/
-
-            -   name: Display structure of downloaded files
-                run: pwd && ls -R
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
@@ -129,7 +121,7 @@ jobs:
                 uses: docker/build-push-action@v6
                 id: build-and-push
                 with:
-                    file: ./backend/Dockerfile
+                    file: Dockerfile
                     context: .
                     push: true
                     tags: ${{ steps.docker_meta.outputs.tags }}
@@ -154,9 +146,6 @@ jobs:
                        --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
     publish-fe:
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: "./frontend"
         needs:
             - prepare-variables
             - build-fe
@@ -165,11 +154,6 @@ jobs:
             packages: write
             id-token: write
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v3.5.2
-                with:
-                    fetch-depth: 1
-
             -   name: Install Cosign
                 uses: sigstore/cosign-installer@v3.5.0
 
@@ -183,7 +167,6 @@ jobs:
                 uses: actions/download-artifact@v4
                 with:
                     name: configuration-panel-frontend-dist
-                    path: frontend/
 
             -   name: Display structure of downloaded files
                 run: pwd && ls -R
@@ -207,7 +190,7 @@ jobs:
                 uses: docker/build-push-action@v6
                 id: build-and-push
                 with:
-                    file: ./frontend/Dockerfile
+                    file: Dockerfile
                     context: .
                     push: true
                     tags: ${{ steps.docker_meta.outputs.tags }}
