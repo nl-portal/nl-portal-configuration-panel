@@ -121,7 +121,7 @@ jobs:
                 uses: docker/build-push-action@v6
                 id: build-and-push
                 with:
-                    file: Dockerfile
+                    file: ./backend/Dockerfile
                     context: .
                     push: true
                     tags: ${{ steps.docker_meta.outputs.tags }}
@@ -195,7 +195,7 @@ jobs:
                 uses: docker/build-push-action@v6
                 id: build-and-push
                 with:
-                    file: Dockerfile
+                    file: ./frontend/Dockerfile
                     context: .
                     push: true
                     tags: ${{ steps.docker_meta.outputs.tags }}
