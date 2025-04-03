@@ -107,6 +107,9 @@ jobs:
                     name: configuration-panel-backend-build
                     path: backend/
 
+            -   name: Display structure of downloaded files
+                run: ls -R backend/
+
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
                 with:
@@ -181,6 +184,9 @@ jobs:
                 with:
                     name: configuration-panel-frontend-dist
                     path: frontend/
+
+            -   name: Display structure of downloaded files
+                run: ls -R frontend/
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
