@@ -36,6 +36,7 @@ services:
 
     configuration-panel-backend-remote:
         image: ghcr.io/nl-portal/configuration-panel-backend
+        platform: linux/amd64
         profiles:
             -   remote
         container_name: configuration-panel-backend
@@ -47,6 +48,7 @@ services:
 
     configuration-panel-frontend-remote:
         image: ghcr.io/nl-portal/configuration-panel-frontend
+        platform: linux/amd64
         profiles:
             -   remote
         container_name: configuration-panel-frontend
