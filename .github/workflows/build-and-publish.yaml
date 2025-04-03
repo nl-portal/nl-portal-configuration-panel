@@ -44,7 +44,7 @@ jobs:
                 uses: actions/upload-artifact@v4
                 with:
                     name: configuration-panel-backend-build
-                    path: build/
+                    path: backend/build/
                     retention-days: 1
     build-fe:
         runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
                 uses: actions/upload-artifact@v4
                 with:
                     name: configuration-panel-frontend-dist
-                    path: deployment/
+                    path: frontend/deployment/
                     retention-days: 1
     publish-be:
         runs-on: ubuntu-latest
