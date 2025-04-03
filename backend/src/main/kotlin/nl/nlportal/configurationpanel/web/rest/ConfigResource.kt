@@ -55,7 +55,7 @@ class ConfigResource(
     }
 
     @PostMapping("/v1/configurations")
-    fun addConfigurationProperties(@RequestBody configs: List<ConfigurationProperty>): List<ConfigurationProperty> {
-        return configService.addConfigurationProperties(configs)
+    fun saveConfigurationProperties(@RequestBody configs: List<ConfigurationProperty>): List<ConfigurationProperty> {
+        return configService.saveConfigurationProperties(configs)
     }
 }

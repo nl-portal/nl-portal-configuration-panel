@@ -21,6 +21,7 @@ val guavaVersion = "33.4.0-jre"
 val springCloudServerVersion = "4.2.0"
 val springSecurityOauth2Version = "6.4.2"
 val kotlinLoggingVersion = "7.0.3"
+val mockitoAgent = configurations.create("mockitoAgent")
 
 plugins {
     kotlin("jvm") version "1.9.25"
@@ -65,7 +66,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.mockito:mockito-core:5.16.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    mockitoAgent("org.mockito:mockito-core:5.16.1") { isTransitive = false }
 }
 
 kotlin {
@@ -82,14 +87,17 @@ tasks.bootRun {
             "spring.datasource.username" to "config",
             "spring.datasource.password" to "password",
             "logging.level.root" to "DEBUG",
+            "JWT_ISSUER_URI" to "http://localhost:8082/auth/realms/nlportalconfig",
             "CONFIG_CACHE_TTL" to "30000",
-            "CONFIGURATION_SERVER_PREFIX" to "/configuration",
-            "CONFIGURATION_SERVER_TOKEN" to "VerySecretToken",
-            "JWT_ISSUER_URI" to "http://localhost:8082/auth/realms/nlportalconfig"
+            "CONFIG_SERVER_PREFIX" to "/configuration",
+            "CONFIG_SERVER_TOKEN" to "VerySecretToken",
+            "CONFIG_NOTIFY_ENABLED" to "true",
+            "CONFIG_NOTIFY_LIST" to "http://localhost:8090/",
         )
     )
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    jvmArgs("-javaagent:${mockitoAgent.asPath}")
 }

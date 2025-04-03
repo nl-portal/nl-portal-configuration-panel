@@ -20,6 +20,7 @@ import nl.nlportal.configurationpanel.configuration.ConfigurationPanelCacheConfi
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.repository.ConfigRepository
 import nl.nlportal.configurationpanel.service.ConfigService
+import nl.nlportal.configurationpanel.service.NotifyService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -36,11 +37,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.Instant
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [
-    ConfigurationPanelCacheConfiguration::class,
-    ConfigService::class,
-    TestCacheConfiguration::class
-])
+@SpringBootTest(
+    classes = [
+        ConfigurationPanelCacheConfiguration::class,
+        ConfigService::class,
+        NotifyService::class,
+        TestCacheConfiguration::class
+    ]
+)
 class ConfigurationPanelCacheConfigurationTest {
 
     @Autowired
@@ -48,6 +52,9 @@ class ConfigurationPanelCacheConfigurationTest {
 
     @MockitoBean
     lateinit var configRepository: ConfigRepository
+
+    @MockitoBean
+    lateinit var notifyService: NotifyService
 
     @Test
     fun `test caching behavior`() {
