@@ -46,7 +46,10 @@ spring:
         jwt:
           jwk-set-uri: ${JWKS_URI}
 configuration-panel:
-  cache:
-    config-ttl: ${CONFIG_CACHE_TTL}
-  security:
-    token: ${CONFIGURATION_SERVER_TOKEN}
+    cache:
+        config-ttl: ${CONFIG_CACHE_TTL}
+    security:
+        token: ${CONFIG_SERVER_TOKEN}
+    notify:
+        notify-on-changes: ${CONFIG_NOTIFY_ENABLED:false}
+        notify-list: ${CONFIG_NOTIFY_LIST}
