@@ -108,7 +108,7 @@ jobs:
                     path: backend/
 
             -   name: Display structure of downloaded files
-                run: ls -R backend/
+                run: pwd && ls -R
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
@@ -186,7 +186,7 @@ jobs:
                     path: frontend/
 
             -   name: Display structure of downloaded files
-                run: ls -R frontend/
+                run: pwd && ls -R
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
