@@ -11,11 +11,28 @@ The following software has to be installed to be able to use this application
 |                                | NodeJS 20                | NodeJS 20       |
 |                                | PNPM                     | PNPM            |
 
+## Dependencies
+
+### NL Portal Docker Compose
+
+This application relies on the keycloak and keycloak-db services from the
+[NL Portal Docker Compose](https://github.com/nl-portal/nl-portal-docker-compose) project.
+Please make sure those are composed and running.
+
 ## Running the application
+
+Follow one of the following to start up the application:  
+* [Run latest prebuilt app images](#by-pulling-and-running-latest-prebuilt-docker-images)
+* [Build and run app images](#by-building-and-running-docker-images)
+* [Run from source](#from-source)
+
+Once started, the application will become available at http://localhost:3333. The default user credentials
+for this application are `admin:admin` (if you're using the above-mentioned compose).
 
 ### By pulling and running latest prebuilt docker images
 
-Running the latest public docker images can be done with the following command:
+Running the latest public docker images can be done via your favourite IDE by running the `docker-compose` file with
+the `remote` profile or by running the following command in your terminal:
 
 ```shell
 docker compose --profile remote up -d
