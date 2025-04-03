@@ -15,9 +15,9 @@ The following software has to be installed to be able to use this application
 
 ### NL Portal Docker Compose
 
-This application relies on the keycloak and keycloak-db services from the
-[NL Portal Docker Compose](https://github.com/nl-portal/nl-portal-docker-compose) project.
-Please make sure those are composed and running.
+This application relies on the keycloak and keycloak-db services from the NL Portal Docker Compose project.
+Please make sure those are composed and running by following the instructions
+[here](https://github.com/nl-portal/nl-portal-docker-compose?tab=readme-ov-file#keycloak-and-database-only).
 
 ## Running the application
 
