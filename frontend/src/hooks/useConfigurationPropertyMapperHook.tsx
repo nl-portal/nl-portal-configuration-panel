@@ -40,13 +40,15 @@ const useConfigurationPropertyMapperHook = () => {
         const flattenedProperties: object = flatten(configuration);
 
         Object.entries(flattenedProperties).map(([key, value]) => {
+            if (typeof value !== "object") {
                 configurationProperties.push(
                     {
                         propertyKey: prefix ? `${prefix}.${key}` : key,
-                        propertyValue: value,
+                        propertyValue: value.toString(),
                         application: application
                     }
                 )
+            }
             }
         )
 

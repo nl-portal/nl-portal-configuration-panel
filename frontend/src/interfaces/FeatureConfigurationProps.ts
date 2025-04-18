@@ -16,7 +16,8 @@
  */
 
 export default interface FeatureConfigurationProps {
-    onValid: (isValid: boolean) => void;
-    onChange: (featureConfiguration: object | undefined) => void;
-    featureConfiguration: object | undefined;
+    onChange?: (featureConfiguration: object) => void;
+    onValid?: (isValid: boolean) => void;
+    onSubmit?: () => void;
+    prefillConfiguration?: object;
 }

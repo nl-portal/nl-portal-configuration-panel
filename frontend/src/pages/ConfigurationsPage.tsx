@@ -15,10 +15,10 @@
  */
 
 import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
-import {PageGrid} from "@nl-portal/nl-portal-user-interface";
 import {PageHeader} from "@gemeente-denhaag/page";
 import ConfigurationPropertiesList from "../components/ConfigurationPropertiesList.tsx";
 import useConfigurationsQuery from "../hooks/useConfigurationsQuery.tsx"
+import PageGrid from "../components/PageGrid.tsx";
 
 const ConfigurationsPage = () => {
     const configurations = useConfigurationsQuery();

@@ -36,7 +36,7 @@ export const useConfigurationsByFeatureQuery = (
     const variables = {...defaultVariables, ...options}
 
     return useQuery<ConfigurationProperty[]>({
-        queryKey: ['configurationsByFeature'],
+        queryKey: ['queryConfigurationsByFeature'],
         refetchInterval: variables.refetchInterval,
         enabled: () => !!variables.featurePrefix,
         queryFn: async () => {

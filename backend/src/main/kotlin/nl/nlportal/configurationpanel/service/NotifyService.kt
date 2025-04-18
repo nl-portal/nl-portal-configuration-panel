@@ -20,7 +20,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.client.NlPortalClient
 import nl.nlportal.configurationpanel.configuration.NotifyConfigurationProperties
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 
 @Service
 class NotifyService(
@@ -33,8 +33,8 @@ class NotifyService(
             notifyConfigurationProperties.notifyList.forEach {
                 try {
                     nlPortalClient.restartNlPortalViaActuator(it)
-                } catch (e: HttpClientErrorException) {
-                    logger.debug(e) { "Failed to restart NLPalClient at url $it" }
+                } catch (e: RestClientException) {
+                    logger.debug(e) { "Failed to restart NL Portal Client at url $it" }
                 }
             }
         }

@@ -6,31 +6,33 @@ import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
 import styles from "../ConfigurationForm.module.scss"
-import TextInput from "@gemeente-denhaag/text-input";
-import {RadioButton} from "@gemeente-denhaag/radio-button";
 import ConfigurationForm from "../ConfigurationForm.tsx";
-import {useForm} from "react-hook-form";
 import PasswordInput from "../PasswordInput.tsx";
+import TextInput from "@gemeente-denhaag/text-input";
+import {useForm} from "react-hook-form";
+import {RadioButton} from "@gemeente-denhaag/radio-button";
 
-interface CatalogiApiConfiguration {
+interface DmnConfiguration {
     enabled?: string;
     properties?: {
         "url"?: string,
         "client-id"?: string,
         "secret"?: string,
+        "username"?: string,
+        "password"?: string,
     }
 }
 
-interface CatalogiApiFeatureConfigurationProps extends FeatureConfigurationProps {
-    prefillConfiguration?: CatalogiApiConfiguration
+interface DmnFeatureConfigurationProps extends FeatureConfigurationProps {
+    prefillConfiguration?: DmnConfiguration
 }
 
-const CatalogiApiFeatureConfiguration = ({
-                                             prefillConfiguration,
-                                             onChange,
-                                             onSubmit
-                                         }: CatalogiApiFeatureConfigurationProps) => {
-    const [currentConfiguration, setCurrentConfiguration] = useState<CatalogiApiConfiguration>(prefillConfiguration || {})
+const DmnFeatureConfiguration = ({
+                                     prefillConfiguration,
+                                     onSubmit,
+                                     onChange
+                                 }: DmnFeatureConfigurationProps) => {
+    const [currentConfiguration, setCurrentConfiguration] = useState<DmnConfiguration>(prefillConfiguration || {})
     const {
         register,
         watch,
@@ -38,7 +40,9 @@ const CatalogiApiFeatureConfiguration = ({
         formState,
         handleSubmit,
         getValues: getFormValue
-    } = useForm<CatalogiApiConfiguration>({defaultValues: {...prefillConfiguration, enabled: "false"}})
+    } = useForm<DmnConfiguration>({
+        defaultValues: {...prefillConfiguration, enabled: "false"},
+    })
 
     useEffect(() => {
         if (prefillConfiguration) reset(prefillConfiguration)
@@ -56,12 +60,12 @@ const CatalogiApiFeatureConfiguration = ({
                            onChange={() => {
                                setCurrentConfiguration(getFormValue())
                            }}
-                           onSubmit={handleSubmit(()=> onSubmit)}
+                           onSubmit={handleSubmit(() => onSubmit)}
                            children={
                                <Fragment>
                                    <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
                                        <Heading3><FormattedMessage
-                                           id={"features.catalogiapi.configuration"}></FormattedMessage></Heading3>
+                                           id={"features.dmn.configuration"}></FormattedMessage></Heading3>
                                    </FieldsetLegend>
                                    <Fieldset role={"radiogroup"}>
                                        <FormField className={styles["form-field__radio-option"]}
@@ -101,13 +105,13 @@ const CatalogiApiFeatureConfiguration = ({
                                            <FormField
                                                label={
                                                    <FormLabel htmlFor={"url"}>
-                                                       <FormattedMessage id={"features.catalogiapi.url"}/>
+                                                       <FormattedMessage id={"features.dmn.url"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.url.description"}/>
+                                                           id={"features.dmn.url.description"}/>
                                                    </Paragraph>
                                                }
                                            >
@@ -120,37 +124,73 @@ const CatalogiApiFeatureConfiguration = ({
                                            <FormField
                                                label={
                                                    <FormLabel htmlFor={"client-id"}>
-                                                       <FormattedMessage id={"features.catalogiapi.client-id"}/>
+                                                       <FormattedMessage id={"features.dmn.client-id"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.client-id.description"}/>
+                                                           id={"features.dmn.client-id.description"}/>
                                                    </Paragraph>
                                                }
                                            >
                                                <TextInput
                                                    {...register("properties.client-id")}
-                                                   id="client-id"
+                                                   id="clientid"
                                                />
                                            </FormField>
                                            <FormField
                                                label={
                                                    <FormLabel htmlFor={"secret"}>
-                                                       <FormattedMessage id={"features.catalogiapi.secret"}/>
+                                                       <FormattedMessage id={"features.dmn.secret"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.secret.description"}/>
+                                                           id={"features.dmn.secret.description"}/>
                                                    </Paragraph>
                                                }
                                            >
                                                <PasswordInput
                                                    {...register("properties.secret")}
                                                    id="secret"
+                                               />
+                                           </FormField>
+                                           <FormField
+                                               label={
+                                                   <FormLabel htmlFor={"username"}>
+                                                       <FormattedMessage id={"features.dmn.username"}/>
+                                                   </FormLabel>
+                                               }
+                                               description={
+                                                   <Paragraph>
+                                                       <FormattedMessage
+                                                           id={"features.dmn.username.description"}/>
+                                                   </Paragraph>
+                                               }
+                                           >
+                                               <TextInput
+                                                   {...register("properties.username")}
+                                                   id="username"
+                                               />
+                                           </FormField>
+                                           <FormField
+                                               label={
+                                                   <FormLabel htmlFor={"password"}>
+                                                       <FormattedMessage id={"features.dmn.password"}/>
+                                                   </FormLabel>
+                                               }
+                                               description={
+                                                   <Paragraph>
+                                                       <FormattedMessage
+                                                           id={"features.dmn.password.description"}/>
+                                                   </Paragraph>
+                                               }
+                                           >
+                                               <PasswordInput
+                                                   {...register("properties.password")}
+                                                   id="password"
                                                />
                                            </FormField>
                                        </Fragment>
@@ -161,4 +201,4 @@ const CatalogiApiFeatureConfiguration = ({
     )
 }
 
-export default CatalogiApiFeatureConfiguration;
+export default DmnFeatureConfiguration;

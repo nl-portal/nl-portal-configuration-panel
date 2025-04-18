@@ -5,32 +5,33 @@ import {FormattedMessage} from "react-intl";
 import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
-import styles from "../ConfigurationForm.module.scss"
+import styles from '../ConfigurationForm.module.scss';
 import TextInput from "@gemeente-denhaag/text-input";
+import {useForm} from "react-hook-form";
 import {RadioButton} from "@gemeente-denhaag/radio-button";
 import ConfigurationForm from "../ConfigurationForm.tsx";
-import {useForm} from "react-hook-form";
-import PasswordInput from "../PasswordInput.tsx";
+import {Select, SelectOption} from '@utrecht/component-library-react';
 
-interface CatalogiApiConfiguration {
+// import {Select, SelectOption} from "@gemeente-denhaag/select";
+
+interface PrefillConfiguration {
     enabled?: string;
     properties?: {
-        "url"?: string,
-        "client-id"?: string,
-        "secret"?: string,
+        "type-url"?: string,
+        "prefill-sha-version"?: string,
     }
 }
 
-interface CatalogiApiFeatureConfigurationProps extends FeatureConfigurationProps {
-    prefillConfiguration?: CatalogiApiConfiguration
+interface PrefillFeatureConfigurationProps extends FeatureConfigurationProps {
+    prefillConfiguration?: PrefillConfiguration | undefined
 }
 
-const CatalogiApiFeatureConfiguration = ({
-                                             prefillConfiguration,
-                                             onChange,
-                                             onSubmit
-                                         }: CatalogiApiFeatureConfigurationProps) => {
-    const [currentConfiguration, setCurrentConfiguration] = useState<CatalogiApiConfiguration>(prefillConfiguration || {})
+const PrefillFeatureConfiguration = ({
+                                         onChange,
+                                         onSubmit,
+                                         prefillConfiguration,
+                                     }: PrefillFeatureConfigurationProps) => {
+    const [currentConfiguration, setCurrentConfiguration] = useState<PrefillConfiguration>(prefillConfiguration || {})
     const {
         register,
         watch,
@@ -38,30 +39,30 @@ const CatalogiApiFeatureConfiguration = ({
         formState,
         handleSubmit,
         getValues: getFormValue
-    } = useForm<CatalogiApiConfiguration>({defaultValues: {...prefillConfiguration, enabled: "false"}})
+    } = useForm<PrefillConfiguration>({defaultValues: {...prefillConfiguration, enabled: "false"}})
 
     useEffect(() => {
         if (prefillConfiguration) reset(prefillConfiguration)
 
-    }, [prefillConfiguration])
+    }, [prefillConfiguration, reset])
 
     useEffect(() => {
         if (onChange && currentConfiguration && formState.isDirty && formState.isValid) {
             onChange(currentConfiguration)
         }
-    }, [currentConfiguration])
+    }, [currentConfiguration, formState.isDirty, formState.isValid, onChange])
 
     return (
         <ConfigurationForm className={styles["feature-config__form"]}
                            onChange={() => {
                                setCurrentConfiguration(getFormValue())
                            }}
-                           onSubmit={handleSubmit(()=> onSubmit)}
+                           onSubmit={handleSubmit(() => onSubmit)}
                            children={
                                <Fragment>
                                    <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
                                        <Heading3><FormattedMessage
-                                           id={"features.catalogiapi.configuration"}></FormattedMessage></Heading3>
+                                           id={"features.prefill.configuration"}></FormattedMessage></Heading3>
                                    </FieldsetLegend>
                                    <Fieldset role={"radiogroup"}>
                                        <FormField className={styles["form-field__radio-option"]}
@@ -100,60 +101,61 @@ const CatalogiApiFeatureConfiguration = ({
                                        <Fragment>
                                            <FormField
                                                label={
-                                                   <FormLabel htmlFor={"url"}>
-                                                       <FormattedMessage id={"features.catalogiapi.url"}/>
+                                                   <FormLabel htmlFor={"type-url"}>
+                                                       <FormattedMessage id={"features.prefill.type-url"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.url.description"}/>
+                                                           id={"features.prefill.type-url.description"}/>
                                                    </Paragraph>
                                                }
                                            >
                                                <TextInput
-                                                   {...register("properties.url")}
-                                                   id="url"
+                                                   {...register("properties.type-url")}
+                                                   id="type-url"
                                                    type="url"
                                                />
                                            </FormField>
                                            <FormField
                                                label={
-                                                   <FormLabel htmlFor={"client-id"}>
-                                                       <FormattedMessage id={"features.catalogiapi.client-id"}/>
+                                                   <FormLabel htmlFor={"prefill-sha-version"}>
+                                                       <FormattedMessage id={"features.prefill.prefill-sha-version"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.client-id.description"}/>
+                                                           id={"features.prefill.prefill-sha-version.description"}/>
                                                    </Paragraph>
-                                               }
-                                           >
-                                               <TextInput
-                                                   {...register("properties.client-id")}
-                                                   id="client-id"
-                                               />
-                                           </FormField>
-                                           <FormField
-                                               label={
-                                                   <FormLabel htmlFor={"secret"}>
-                                                       <FormattedMessage id={"features.catalogiapi.secret"}/>
-                                                   </FormLabel>
-                                               }
-                                               description={
-                                                   <Paragraph>
-                                                       <FormattedMessage
-                                                           id={"features.catalogiapi.secret.description"}/>
-                                                   </Paragraph>
-                                               }
-                                           >
-                                               <PasswordInput
-                                                   {...register("properties.secret")}
-                                                   id="secret"
-                                               />
+                                               }>
+                                               <Select className={styles["form-field__select"]}
+                                                   {...register("properties.prefill-sha-version")}
+                                                   id="prefill-sha-version"
+                                               >
+                                                   <SelectOption
+                                                       key={"SHA1"}
+                                                       value={"SHA1"}
+                                                   >
+                                                       SHA1
+                                                   </SelectOption>
+                                                   <SelectOption
+                                                       key={"SHA256"}
+                                                       value={"SHA256"}
+                                                   >
+                                                       SHA256
+                                                   </SelectOption>
+                                                   <SelectOption
+                                                       key={"SHA512"}
+                                                       value={"SHA512"}
+                                                   >
+                                                       SHA512
+                                                   </SelectOption>
+                                               </Select>
                                            </FormField>
                                        </Fragment>
+
                                    )}
                                </Fragment>
                            }>
@@ -161,4 +163,4 @@ const CatalogiApiFeatureConfiguration = ({
     )
 }
 
-export default CatalogiApiFeatureConfiguration;
+export default PrefillFeatureConfiguration;

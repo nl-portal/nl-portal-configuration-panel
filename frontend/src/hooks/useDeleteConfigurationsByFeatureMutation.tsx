@@ -14,42 +14,39 @@
  * limitations under the License.
  */
 
-import {useQuery} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import {useAuth} from "react-oidc-context";
 
-interface UseConfigurationsQueryProps {
+interface UseDeleteConfigurationsByFeatureMutationProps {
     applicationName?: string;
+    featurePrefix?: string;
     refetchInterval?: number | false | undefined;
 }
 
-export const useConfigurationsQuery = (
-    options: UseConfigurationsQueryProps = {}
-) => {
+export const useDeleteConfigurationsByFeatureMutation = (options: UseDeleteConfigurationsByFeatureMutationProps) => {
     const auth = useAuth();
-    const defaultVariables: UseConfigurationsQueryProps =
+    const defaultVariables =
         {
             applicationName: 'nl-portal-backend-libraries',
             refetchInterval: false
         }
     const variables = {...defaultVariables, ...options}
 
-    return useQuery({
-        queryKey: ['queryConfigurations'],
-        refetchInterval: variables.refetchInterval,
-        queryFn: async () => {
-            const response = await fetch(
-                `/api/v1/configurations/${variables.applicationName}`,
+    return useMutation({
+        mutationKey: ['deleteConfigurations'],
+        retryDelay: 500,
+        mutationFn: async (): Promise<void> => {
+            await fetch(
+                `/api/v1/configurations/${variables.applicationName}/features/${variables.featurePrefix}`,
                 {
-                    method: 'GET',
+                    method: 'DELETE',
                     headers: {
-                        Accept: 'application/json',
                         Authorization: 'Bearer ' + auth.user?.access_token,
                     }
                 }
             )
-            return await response.json()
         }
     })
 }
 
-export default useConfigurationsQuery;
+export default useDeleteConfigurationsByFeatureMutation;

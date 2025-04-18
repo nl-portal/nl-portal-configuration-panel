@@ -46,6 +46,15 @@ class ConfigService(
         return configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
     }
 
+    fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
+        application: String,
+        featureKey: String
+    ) {
+        configRepository
+            .findByApplicationAndPropertyKeyStartsWith(application, featureKey)
+            ?.apply { configRepository.deleteAll(this) }
+    }
+
     fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? {
         return configRepository.save(config)
     }

@@ -18,6 +18,7 @@ package nl.nlportal.configurationpanel.web.rest
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.service.ConfigService
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,14 +31,6 @@ import org.springframework.web.bind.annotation.RestController
 class ConfigResource(
     private val configService: ConfigService
 ) {
-
-    @GetMapping("/v1/configurations/{application}/{propertyKey}")
-    fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
-        @PathVariable("application") application: String,
-        @PathVariable("propertyKey") propertyKey: String
-    ): ConfigurationProperty? {
-        return configService.getConfigurationPropertyByApplicationAndPropertyKeyOrNull(application, propertyKey)
-    }
 
     @GetMapping("/v1/configurations/{application}")
     fun getConfigurationPropertiesByApplicationOrNull(
@@ -52,6 +45,14 @@ class ConfigResource(
         @PathVariable("featureKey") featureKey: String
     ): List<ConfigurationProperty>? {
         return configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
+    }
+
+    @DeleteMapping("/v1/configurations/{application}/features/{featureKey}")
+    fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
+        @PathVariable("application") application: String,
+        @PathVariable("featureKey") featureKey: String
+    ) {
+        configService.deleteConfigurationPropertiesByApplicationAndFeatureKey(application, featureKey)
     }
 
     @PostMapping("/v1/configurations")
