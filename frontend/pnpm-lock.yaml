@@ -29,6 +29,12 @@ importers:
       '@gemeente-denhaag/form-label':
         specifier: ^2.0.0
         version: 2.0.0(@babel/runtime@7.27.1)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/iconbutton':
+        specifier: ^2.0.2
+        version: 2.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/icons':
+        specifier: ^3.0.2
+        version: 3.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@gemeente-denhaag/link':
         specifier: ^2.0.0
         version: 2.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -50,6 +56,9 @@ importers:
       '@gemeente-denhaag/table':
         specifier: ^2.0.0
         version: 2.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@gemeente-denhaag/text-input':
+        specifier: ^2.1.0
+        version: 2.1.0(@babel/runtime@7.27.1)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@gemeente-denhaag/typography':
         specifier: ^2.0.2
         version: 2.0.3(@babel/runtime@7.27.1)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -785,6 +794,12 @@ packages:
     resolution: {integrity: sha512-ZVZTQFbF7ApKLYgVt3QAVGfiYy5sdlRIMKwm7o9a61tvcrEPoaJaWiwafRBFDY/fWqtPWLxGNL1mQv5CegiSJA==}
     peerDependencies:
       react: ^18.0.0
+
+  '@gemeente-denhaag/text-input@2.1.0':
+    resolution: {integrity: sha512-YAnIFNFs6kij3/4+BuIjlJCDJ5J+DBl4zhDyzDmNAAEzrICzfchVKHXH8l3x82DOSC/qPX7bstFixtReMlnrcg==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
 
   '@gemeente-denhaag/typography@0.2.3':
     resolution: {integrity: sha512-Q8CrE3Xz0Zh6JUk6N39DKxdKDtfY8agDwB7TwDjoFWCMz3IRgCSxmN0hqhK67RzpWXZ0Kjf+h10TnHWtgdw4vQ==}
@@ -3617,6 +3632,18 @@ snapshots:
       - '@babel/runtime'
       - date-fns
       - react-dom
+      - react-vega
+      - vega
+
+  '@gemeente-denhaag/text-input@2.1.0(@babel/runtime@7.27.1)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@utrecht/component-library-react': 9.0.1(@babel/runtime@7.27.1)(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@utrecht/components': 7.4.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - '@babel/runtime'
+      - date-fns
       - react-vega
       - vega
 
