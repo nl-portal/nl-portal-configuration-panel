@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 import BerichtenFeatureConfiguration from "../components/features/BerichtenFeatureConfiguration.tsx";
-import {FC} from "react";
-import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.ts";
 import TaakFeatureConfiguration from "../components/features/TaakFeatureConfiguration.tsx";
 import ObjectsApiFeatureConfiguration from "../components/features/ObjectsApiFeatureConfiguration.tsx";
 import CatalogiApiFeatureConfiguration from "../components/features/CatalogiApiFeatureConfiguration.tsx";
 import ProductFeatureConfiguration from "../components/features/ProductFeatureConfiguration.tsx";
 import DmnFeatureConfiguration from "../components/features/DmnFeatureConfiguration.tsx";
 import PrefillFeatureConfiguration from "../components/features/PrefillFeatureConfiguration.tsx";
-
-interface FeatureConfiguration {
-    featureId: string;
-    featureConfigurationPrefix: string;
-    featureComponent: FC<FeatureConfigurationProps>;
-}
+import BesluitenApiFeatureConfiguration from "../components/features/BesluitenApiFeatureConfiguration.tsx";
+import FeatureConfiguration from "../interfaces/FeatureConfiguration.ts";
 
 export const features: FeatureConfiguration[] = [
     {
         featureId: 'catalogiapi',
         featureConfigurationPrefix: "nl-portal.config.catalogiapi",
         featureComponent: CatalogiApiFeatureConfiguration,
+    },
+    {
+        featureId: 'besluitenapi',
+        featureConfigurationPrefix: "nl-portal.config.besluitenapi",
+        featureComponent: BesluitenApiFeatureConfiguration,
     },
     {
         featureId: "objectsapi",
