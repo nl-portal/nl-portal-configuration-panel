@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
-import {FormField} from "@gemeente-denhaag/form-field";
-import {FormLabel} from "@gemeente-denhaag/form-label";
-import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
-import {Checkbox} from "@gemeente-denhaag/checkbox";
-import {useEffect, useState} from "react";
-import {FormattedMessage} from "react-intl";
+import {Fragment, useEffect, useState} from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
+import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
+import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
+import {FormattedMessage} from "react-intl";
+import {FormField} from "@gemeente-denhaag/form-field";
+import {RadioButton} from "@gemeente-denhaag/radio-button";
+import {FormLabel} from "@gemeente-denhaag/form-label";
+import {ConfigurationForm} from "../ConfigurationForm.tsx";
+import {useForm} from "react-hook-form";
+import styles from "../ConfigurationForm.module.scss"
 import TextInput from "@gemeente-denhaag/text-input";
-import styles from '../../pages/FeatureConfigurationPage.module.scss'
 
 interface BerichtenConfiguration {
     enabled?: string;
@@ -32,75 +34,104 @@ interface BerichtenConfiguration {
 }
 
 interface BerichtenFeatureConfigurationProps extends FeatureConfigurationProps {
-    featureConfiguration: BerichtenConfiguration | undefined
+    prefillConfiguration?: BerichtenConfiguration
 }
 
 const BerichtenFeatureConfiguration = ({
-                                           featureConfiguration,
-                                           onValid,
-                                           onChange
+                                           prefillConfiguration,
+                                           onChange,
+                                           onSubmit
                                        }: BerichtenFeatureConfigurationProps) => {
-    const [berichtenConfiguration, setBerichtenConfiguration] = useState<BerichtenConfiguration | undefined>()
+    const [currentConfiguration, setCurrentConfiguration] = useState<BerichtenConfiguration>(prefillConfiguration || {})
+    const {
+        register,
+        watch,
+        reset,
+        formState,
+        handleSubmit,
+        getValues: getFormValue
+    } = useForm<BerichtenConfiguration>({defaultValues: {...prefillConfiguration, enabled: "false"}})
 
     useEffect(() => {
-        if (featureConfiguration) setBerichtenConfiguration(featureConfiguration)
-    }, [featureConfiguration])
+        if (prefillConfiguration) reset(prefillConfiguration)
+
+    }, [prefillConfiguration, reset])
 
     useEffect(() => {
-        if (onChange) {
-            onChange(berichtenConfiguration)
+        if (onChange && currentConfiguration && formState.isDirty && formState.isValid) {
+            onChange(currentConfiguration)
         }
-    }, [berichtenConfiguration, onChange])
-
-    useEffect(() => {
-        if (onValid) onValid(true);
-    }, [onValid])
+    }, [currentConfiguration, formState.isDirty, formState.isValid, onChange])
 
     return (
-        <Fieldset className={styles["feature-config__form"]}>
-            <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-                <Heading3><FormattedMessage id={"features.berichten.configuration"}></FormattedMessage></Heading3>
-            </FieldsetLegend>
-            <FormField type="checkbox">
-                <Paragraph className="utrecht-form-field__label">
-                    <Checkbox
-                        id="berichten.enabled"
-                        className="utrecht-form-field__input"
-                        name={"enabled"}
-                        checked={berichtenConfiguration?.enabled == "true"}
-                        onChange={(e) => {
-                            setBerichtenConfiguration({
-                                ...berichtenConfiguration,
-                                enabled: e.target.checked.toString(),
-                            })
-                        }}
-                    />
-                    <FormLabel htmlFor="true" type="checkbox">
-                        <FormattedMessage id={"features.berichten.enable"}></FormattedMessage>
-                    </FormLabel>
-                </Paragraph>
-            </FormField>
-            {berichtenConfiguration?.enabled == "true" && (
-                <FormField type="text">
-                    <Paragraph>
-                        <FormattedMessage id={"features.berichten.berichtObjectTypeUrl"}>
-                        </FormattedMessage>
-                        <TextInput
-                            id="berichten.berichtObjectTypeUrl"
-                            name={"berichtObjectTypeUrl"}
-                            defaultValue={berichtenConfiguration?.properties?.["bericht-object-type-url"]}
-                            onChange={(e) => {
-                                setBerichtenConfiguration({
-                                    ...berichtenConfiguration,
-                                    ...{properties: {'bericht-object-type-url': e.target.value}},
-                                })
-                            }}
-                        />
-                    </Paragraph>
-                </FormField>
-            )}
-        </Fieldset>
+        <ConfigurationForm className={styles["feature-config__form"]}
+                           onChange={() => {
+                               setCurrentConfiguration(getFormValue())
+                           }}
+                           onSubmit={handleSubmit(()=> onSubmit)}
+                           children={
+                               <Fragment>
+                                   <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+                                       <Heading3><FormattedMessage
+                                           id={"features.berichten.configuration"}></FormattedMessage></Heading3>
+                                   </FieldsetLegend>
+                                   <Fieldset role={"radiogroup"}>
+                                       <FormField className={styles["form-field__radio-option"]}
+                                                  type="radio"
+                                                  label={
+                                                      <FormLabel htmlFor={"enabled.true"}>
+                                                          <FormattedMessage
+                                                              id={"features.feature.enabled.true"}></FormattedMessage>
+                                                      </FormLabel>
+                                                  }
+                                       >
+                                           <RadioButton
+                                               {...register("enabled")}
+                                               className="utrecht-form-field__input"
+                                               id={"enabled.true"}
+                                               value={"true"}
+                                           />
+                                       </FormField>
+                                       <FormField className={styles["form-field__radio-option"]}
+                                                  type="radio"
+                                                  label={
+                                                      <FormLabel htmlFor={"enabled.false"}>
+                                                          <FormattedMessage
+                                                              id={"features.feature.enabled.false"}></FormattedMessage>
+                                                      </FormLabel>
+                                                  }>
+                                           <RadioButton
+                                               {...register("enabled")}
+                                               className="utrecht-form-field__input"
+                                               id={"enabled.false"}
+                                               value={"false"}
+                                           />
+                                       </FormField>
+                                   </Fieldset>
+                                   {watch("enabled") === "true" && (
+                                       <FormField
+                                           label={
+                                               <FormLabel htmlFor={"bericht-object-type-url"}>
+                                                   <FormattedMessage id={"features.berichten.bericht-object-type-url"}/>
+                                               </FormLabel>
+                                           }
+                                           description={
+                                               <Paragraph>
+                                                   <FormattedMessage
+                                                       id={"features.berichten.bericht-object-type-url.description"}/>
+                                               </Paragraph>
+                                           }
+                                       >
+                                           <TextInput
+                                               {...register("properties.bericht-object-type-url")}
+                                               id="bericht-object-type-url"
+                                               type="url"
+                                           />
+                                       </FormField>)}
+                               </Fragment>
+                           }>
+        </ConfigurationForm>
     )
 }
 
-export default BerichtenFeatureConfiguration
+export default BerichtenFeatureConfiguration;

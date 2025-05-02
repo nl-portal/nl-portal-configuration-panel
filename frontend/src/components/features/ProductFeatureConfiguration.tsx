@@ -5,32 +5,32 @@ import {FormattedMessage} from "react-intl";
 import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
-import styles from "../ConfigurationForm.module.scss"
+import styles from '../ConfigurationForm.module.scss';
 import TextInput from "@gemeente-denhaag/text-input";
-import {RadioButton} from "@gemeente-denhaag/radio-button";
-import ConfigurationForm from "../ConfigurationForm.tsx";
 import {useForm} from "react-hook-form";
-import PasswordInput from "../PasswordInput.tsx";
+import ConfigurationForm from "../ConfigurationForm.tsx";
+import {RadioButton} from "@gemeente-denhaag/radio-button";
 
-interface CatalogiApiConfiguration {
+interface ProductConfiguration {
     enabled?: string;
     properties?: {
-        "url"?: string,
-        "client-id"?: string,
-        "secret"?: string,
+        "product-type-url"?: string,
+        "product-instantie-type-url"?: string
+        "product-details-type-url"?: string
+        "product-verbruiks-object-type-url"?: string
     }
 }
 
-interface CatalogiApiFeatureConfigurationProps extends FeatureConfigurationProps {
-    prefillConfiguration?: CatalogiApiConfiguration
+interface ProductFeatureConfigurationProps extends FeatureConfigurationProps {
+    prefillConfiguration?: ProductConfiguration | undefined
 }
 
-const CatalogiApiFeatureConfiguration = ({
-                                             prefillConfiguration,
-                                             onChange,
-                                             onSubmit
-                                         }: CatalogiApiFeatureConfigurationProps) => {
-    const [currentConfiguration, setCurrentConfiguration] = useState<CatalogiApiConfiguration>(prefillConfiguration || {})
+const ProductFeatureConfiguration = ({
+                                         prefillConfiguration,
+                                         onSubmit,
+                                         onChange
+                                     }: ProductFeatureConfigurationProps) => {
+    const [currentConfiguration, setCurrentConfiguration] = useState<ProductConfiguration>(prefillConfiguration || {})
     const {
         register,
         watch,
@@ -38,7 +38,9 @@ const CatalogiApiFeatureConfiguration = ({
         formState,
         handleSubmit,
         getValues: getFormValue
-    } = useForm<CatalogiApiConfiguration>({defaultValues: {...prefillConfiguration, enabled: "false"}})
+    } = useForm<ProductConfiguration>({
+        defaultValues: {...prefillConfiguration, enabled: "false"},
+    })
 
     useEffect(() => {
         if (prefillConfiguration) reset(prefillConfiguration)
@@ -56,12 +58,12 @@ const CatalogiApiFeatureConfiguration = ({
                            onChange={() => {
                                setCurrentConfiguration(getFormValue())
                            }}
-                           onSubmit={handleSubmit(()=> onSubmit)}
+                           onSubmit={handleSubmit(() => onSubmit)}
                            children={
                                <Fragment>
                                    <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
                                        <Heading3><FormattedMessage
-                                           id={"features.catalogiapi.configuration"}></FormattedMessage></Heading3>
+                                           id={"features.product.configuration"}></FormattedMessage></Heading3>
                                    </FieldsetLegend>
                                    <Fieldset role={"radiogroup"}>
                                        <FormField className={styles["form-field__radio-option"]}
@@ -100,57 +102,81 @@ const CatalogiApiFeatureConfiguration = ({
                                        <Fragment>
                                            <FormField
                                                label={
-                                                   <FormLabel htmlFor={"url"}>
-                                                       <FormattedMessage id={"features.catalogiapi.url"}/>
+                                                   <FormLabel htmlFor={"product-type-url"}>
+                                                       <FormattedMessage id={"features.product.product-type-url"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.url.description"}/>
+                                                           id={"features.product.product-type-url.description"}/>
                                                    </Paragraph>
                                                }
                                            >
                                                <TextInput
-                                                   {...register("properties.url")}
-                                                   id="url"
+                                                   {...register("properties.product-type-url")}
+                                                   id="product-type-url"
                                                    type="url"
                                                />
                                            </FormField>
                                            <FormField
                                                label={
-                                                   <FormLabel htmlFor={"client-id"}>
-                                                       <FormattedMessage id={"features.catalogiapi.client-id"}/>
+                                                   <FormLabel htmlFor={"product-instantie-type-url"}>
+                                                       <FormattedMessage
+                                                           id={"features.product.product-instantie-type-url"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.client-id.description"}/>
+                                                           id={"features.product.product-instantie-type-url.description"}/>
                                                    </Paragraph>
                                                }
                                            >
                                                <TextInput
-                                                   {...register("properties.client-id")}
-                                                   id="client-id"
+                                                   {...register("properties.product-instantie-type-url")}
+                                                   id="product-instantie-type-url"
+                                                   type="url"
                                                />
                                            </FormField>
                                            <FormField
                                                label={
-                                                   <FormLabel htmlFor={"secret"}>
-                                                       <FormattedMessage id={"features.catalogiapi.secret"}/>
+                                                   <FormLabel htmlFor={"product-details-type-url"}>
+                                                       <FormattedMessage
+                                                           id={"features.product.product-details-type-url"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.catalogiapi.secret.description"}/>
+                                                           id={"features.product.product-details-type-url.description"}/>
                                                    </Paragraph>
                                                }
                                            >
-                                               <PasswordInput
-                                                   {...register("properties.secret")}
-                                                   id="secret"
+                                               <TextInput
+                                                   {...register("properties.product-details-type-url")}
+                                                   id="product-details-type-url"
+                                                   type="url"
+                                               />
+                                           </FormField>
+                                           <FormField
+                                               label={
+                                                   <FormLabel htmlFor={"product-verbruiks-object-type-url"}>
+                                                       <FormattedMessage
+                                                           id={"features.product.product-verbruiks-object-type-url"}/>
+                                                   </FormLabel>
+                                               }
+                                               description={
+                                                   <Paragraph>
+                                                       <FormattedMessage
+                                                           id={"features.product.product-verbruiks-object-type-url.description"}/>
+                                                   </Paragraph>
+                                               }
+                                           >
+                                               <TextInput
+                                                   {...register("properties.product-verbruiks-object-type-url")}
+                                                   id="product-verbruiks-object-type-url"
+                                                   type="url"
                                                />
                                            </FormField>
                                        </Fragment>
@@ -161,4 +187,4 @@ const CatalogiApiFeatureConfiguration = ({
     )
 }
 
-export default CatalogiApiFeatureConfiguration;
+export default ProductFeatureConfiguration;

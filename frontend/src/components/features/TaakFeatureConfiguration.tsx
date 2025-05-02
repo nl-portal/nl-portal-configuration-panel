@@ -1,115 +1,145 @@
-import {ChangeEvent, Fragment, useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
 import {FormattedMessage} from "react-intl";
 import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
-import {Checkbox} from "@gemeente-denhaag/checkbox";
 import {FormLabel} from "@gemeente-denhaag/form-label";
-import styles from '../../pages/FeatureConfigurationPage.module.scss'
+import styles from '../ConfigurationForm.module.scss';
 import TextInput from "@gemeente-denhaag/text-input";
-import _ from "lodash";
+import ConfigurationForm from "../ConfigurationForm.tsx";
+import {RadioButton} from "@gemeente-denhaag/radio-button";
+import {useForm} from "react-hook-form";
 
 interface TaakConfiguration {
-  enabled?: string;
-  properties?: {
-    "taakobject": {
-      "type-url"?: string,
-      "type-url-v2"?: string
+    enabled?: string;
+    properties?: {
+        "type-url"?: string,
+        "type-url-v2"?: string
     }
-  }
 }
 
 interface TaakFeatureConfigurationProps extends FeatureConfigurationProps {
-  featureConfiguration: TaakConfiguration | undefined
+    prefillConfiguration?: TaakConfiguration
 }
 
 const TaakFeatureConfiguration = ({
-                                    featureConfiguration,
-                                    onValid,
-                                    onChange
+                                      prefillConfiguration,
+                                      onSubmit,
+                                      onChange
                                   }: TaakFeatureConfigurationProps) => {
-  const [taakConfiguration, setTaakConfiguration] = useState<TaakConfiguration | undefined>()
+    const [currentConfiguration, setCurrentConfiguration] = useState<TaakConfiguration>(prefillConfiguration || {})
+    const {
+        register,
+        watch,
+        reset,
+        formState,
+        handleSubmit,
+        getValues: getFormValue
+    } = useForm<TaakConfiguration>({defaultValues: {...prefillConfiguration, enabled: "false"}})
 
-  useEffect(() => {
-    if (featureConfiguration) setTaakConfiguration(featureConfiguration)
-  }, [featureConfiguration]);
+    useEffect(() => {
+        if (prefillConfiguration) reset(prefillConfiguration)
 
-  useEffect(() => {
-    if (onChange) {
-      onChange(taakConfiguration);
-    }
-  }, [taakConfiguration, onChange]);
+    }, [prefillConfiguration, reset])
 
-  useEffect(() => {
-    if (onValid) onValid(true)
-  }, [onValid]);
+    useEffect(() => {
+        if (onChange && currentConfiguration && formState.isDirty && formState.isValid) {
+            onChange(currentConfiguration)
+        }
+    }, [currentConfiguration, formState.isDirty, formState.isValid, onChange])
 
-  const handleInputChange = (
-    propertyPath: string,
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    const newConfiguration = _.clone(taakConfiguration ?? {});
-    _.set(newConfiguration, propertyPath, event.target.value)
-    setTaakConfiguration(newConfiguration)
-  }
-
-  return (
-    <Fieldset className={styles["feature-config__form"]}>
-      <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-        <Heading3><FormattedMessage id={"features.taak.configuration"}></FormattedMessage></Heading3>
-      </FieldsetLegend>
-      <FormField type="checkbox">
-        <Paragraph className="utrecht-form-field__label">
-          <Checkbox
-            id="taak.enabled"
-            className="utrecht-form-field__input"
-            checked={taakConfiguration?.enabled == "true"}
-            onChange={(e) => {
-              setTaakConfiguration({
-                ...taakConfiguration,
-                enabled: e.target.checked.toString(),
-              })
-            }}
-          />
-          <FormLabel htmlFor="true" type="checkbox">
-            <FormattedMessage id={"features.taak.enable"}></FormattedMessage>
-          </FormLabel>
-        </Paragraph>
-      </FormField>
-      {taakConfiguration?.enabled == "true" && (
-        <Fragment>
-          <FormField type="text">
-            <Paragraph>
-              <FormattedMessage id={"features.taak.typeUrl"}></FormattedMessage>
-            </Paragraph>
-            <TextInput
-                id="taak.typeUrl"
-                name={"typeUrl"}
-                defaultValue={taakConfiguration?.properties?.taakobject["type-url"]}
-                onChange={(e) => {
-                  handleInputChange( "properties.taakobject.type-url", e);
-                }}
-            />
-          </FormField>
-          <FormField type="text">
-            <Paragraph>
-              <FormattedMessage id={"features.taak.typeUrlV2"}></FormattedMessage>
-            </Paragraph>
-            <TextInput
-              id="taak.typeUrlV2"
-              name={"typeUrlV2"}
-              defaultValue={taakConfiguration?.properties?.taakobject["type-url-v2"]}
-              required
-              onChange={(e) => {
-                handleInputChange( "properties.taakobject.type-url-v2", e);
-              }}
-            />
-          </FormField>
-        </Fragment>
-      )}
-    </Fieldset>
-  )
+    return (
+        <ConfigurationForm className={styles["feature-config__form"]}
+                           onChange={() => {
+                               setCurrentConfiguration(getFormValue())
+                           }}
+                           onSubmit={handleSubmit(() => onSubmit)}
+                           children={
+                               <Fragment>
+                                   <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+                                       <Heading3><FormattedMessage
+                                           id={"features.berichten.configuration"}></FormattedMessage></Heading3>
+                                   </FieldsetLegend>
+                                   <Fieldset role={"radiogroup"}>
+                                       <FormField className={styles["form-field__radio-option"]}
+                                                  type="radio"
+                                                  label={
+                                                      <FormLabel htmlFor={"enabled.true"}>
+                                                          <FormattedMessage
+                                                              id={"features.feature.enabled.true"}></FormattedMessage>
+                                                      </FormLabel>
+                                                  }
+                                       >
+                                           <RadioButton
+                                               {...register("enabled")}
+                                               className="utrecht-form-field__input"
+                                               id={"enabled.true"}
+                                               value={"true"}
+                                           />
+                                       </FormField>
+                                       <FormField className={styles["form-field__radio-option"]}
+                                                  type="radio"
+                                                  label={
+                                                      <FormLabel htmlFor={"enabled.false"}>
+                                                          <FormattedMessage
+                                                              id={"features.feature.enabled.false"}></FormattedMessage>
+                                                      </FormLabel>
+                                                  }>
+                                           <RadioButton
+                                               {...register("enabled")}
+                                               className="utrecht-form-field__input"
+                                               id={"enabled.false"}
+                                               value={"false"}
+                                           />
+                                       </FormField>
+                                   </Fieldset>
+                                   {watch("enabled") === "true" && (
+                                       <Fragment>
+                                           <FormField
+                                               label={
+                                                   <FormLabel htmlFor={"type-url"}>
+                                                       <FormattedMessage id={"features.taak.type-url"}/>
+                                                   </FormLabel>
+                                               }
+                                               description={
+                                                   <Paragraph>
+                                                       <FormattedMessage
+                                                           id={"features.taak.type-url.description"}/>
+                                                   </Paragraph>
+                                               }
+                                           >
+                                               <TextInput
+                                                   {...register("properties.type-url")}
+                                                   id="type-url"
+                                                   type="url"
+                                               />
+                                           </FormField>
+                                           <FormField
+                                               label={
+                                                   <FormLabel htmlFor={"type-url-v2"}>
+                                                       <FormattedMessage id={"features.taak.type-url-v2"}/>
+                                                   </FormLabel>
+                                               }
+                                               description={
+                                                   <Paragraph>
+                                                       <FormattedMessage
+                                                           id={"features.taak.type-url-v2.description"}/>
+                                                   </Paragraph>
+                                               }
+                                           >
+                                               <TextInput
+                                                   {...register("properties.type-url-v2")}
+                                                   id="type-url-v2"
+                                                   type="url"
+                                               />
+                                           </FormField>
+                                       </Fragment>
+                                   )}
+                               </Fragment>
+                           }>
+        </ConfigurationForm>
+    )
 }
 
 export default TaakFeatureConfiguration

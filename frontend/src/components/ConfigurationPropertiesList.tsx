@@ -16,7 +16,8 @@
 
 import styles from "./ConfigurationPropertiesList.module.scss";
 import {Paragraph} from "@gemeente-denhaag/typography";
-import {CellObject, Skeleton, Table} from "@nl-portal/nl-portal-user-interface";
+import Skeleton from "react-loading-skeleton";
+import Table, {CellObject} from "./Table.tsx";
 
 interface ConfigProperty {
     propertyKey: string;

@@ -19,6 +19,9 @@ import FeatureConfigurationProps from "../interfaces/FeatureConfigurationProps.t
 import TaakFeatureConfiguration from "../components/features/TaakFeatureConfiguration.tsx";
 import ObjectsApiFeatureConfiguration from "../components/features/ObjectsApiFeatureConfiguration.tsx";
 import CatalogiApiFeatureConfiguration from "../components/features/CatalogiApiFeatureConfiguration.tsx";
+import ProductFeatureConfiguration from "../components/features/ProductFeatureConfiguration.tsx";
+import DmnFeatureConfiguration from "../components/features/DmnFeatureConfiguration.tsx";
+import PrefillFeatureConfiguration from "../components/features/PrefillFeatureConfiguration.tsx";
 
 interface FeatureConfiguration {
     featureId: string;
@@ -33,6 +36,11 @@ export const features: FeatureConfiguration[] = [
         featureComponent: CatalogiApiFeatureConfiguration,
     },
     {
+        featureId: "objectsapi",
+        featureConfigurationPrefix: "nl-portal.config.objectsapi",
+        featureComponent: ObjectsApiFeatureConfiguration
+    },
+    {
         featureId: "taak",
         featureConfigurationPrefix: "nl-portal.config.taak",
         featureComponent: TaakFeatureConfiguration
@@ -43,8 +51,18 @@ export const features: FeatureConfiguration[] = [
         featureComponent: BerichtenFeatureConfiguration
     },
     {
-        featureId: "objectsapi",
-        featureConfigurationPrefix: "nl-portal-config.objectsapi",
-        featureComponent: ObjectsApiFeatureConfiguration
+        featureId: "product",
+        featureConfigurationPrefix: "nl-portal.config.product",
+        featureComponent: ProductFeatureConfiguration
+    },
+    {
+        featureId: "dmn",
+        featureConfigurationPrefix: "nl-portal.config.dmn",
+        featureComponent: DmnFeatureConfiguration
+    },
+    {
+        featureId: "prefill",
+        featureConfigurationPrefix: "nl-portal.config.prefill",
+        featureComponent: PrefillFeatureConfiguration
     }
 ]

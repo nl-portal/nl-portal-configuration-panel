@@ -17,37 +17,57 @@
 import {Button} from "@gemeente-denhaag/button";
 import {useNavigate, useParams} from "react-router-dom";
 import {paths} from "../constants/paths";
-import {PageGrid, Skeleton} from "@nl-portal/nl-portal-user-interface";
 import {PageHeader} from "@gemeente-denhaag/page";
-import {Heading2, Heading3} from "@gemeente-denhaag/typography";
+import {Heading2, Heading3, Heading4} from "@gemeente-denhaag/typography";
 import styles from './FeatureConfigurationPage.module.scss'
 import {FormattedMessage} from "react-intl";
 import {features} from "../constants/features.tsx";
-import {createElement, useEffect, useState} from "react";
+import {createElement, useCallback, useEffect, useState} from "react";
 import useConfigurationPropertyMapper from "../hooks/useConfigurationPropertyMapperHook.tsx";
 import useConfigurationsByFeature from "../hooks/useConfigurationsByFeatureQuery.tsx";
-import useConfigurations from "../hooks/useConfigurationsMutation.tsx";
+import Skeleton from "react-loading-skeleton";
+import PageGrid from "../components/PageGrid.tsx";
+import useConfigurationsMutation from "../hooks/useConfigurationsMutation.tsx";
+import {toast} from "react-toastify";
+import _ from "lodash";
 
 const FeatureConfigurationPage = () => {
     const {featureId} = useParams();
     const navigate = useNavigate();
     const feature = features.find(it => it.featureId == featureId);
-    const configurationMapper = useConfigurationPropertyMapper();
-    const configurations = useConfigurationsByFeature({featurePrefix: feature?.featureConfigurationPrefix});
-    const {mutate: mutateConfigurations, isSuccess: mutateConfigurationsSuccess} = useConfigurations();
-    const [prefillFeatureConfig, setPrefillFeatureConfig] = useState<object | undefined>();
-    const [featureConfig, setFeatureConfig] = useState<object | undefined>();
-    const [isValid, setIsValid] = useState<boolean>(false);
-    const handleChange = (configuration: object | undefined) => {
-        setFeatureConfig(configuration)
-    };
+    const {parseProperties, toProperties} = useConfigurationPropertyMapper();
+    const {
+        data: featureConfigurations,
+        isLoading: featureConfigurationsLoading,
+        isError: featureConfigurationsError
+    } = useConfigurationsByFeature({featurePrefix: feature?.featureConfigurationPrefix});
+    const {
+        mutate: mutateConfigurations,
+        isSuccess: mutateConfigurationsSuccess,
+        isError: mutateConfigurationsError
+    } = useConfigurationsMutation();
+    const [prefilledConfig, setPrefilledConfig] = useState<object>({});
+    const [modifiedConfig, setModifiedConfig] = useState<object>({});
+    const [isDirty, setIsDirty] = useState<boolean>(false);
+    const [isValid, setIsValid] = useState<boolean>(true);
+
+    const handleChange = useCallback((configuration: object) => {
+        const configHasChanged = !_.isEqual(prefilledConfig, configuration)
+        if (configHasChanged) {
+            setModifiedConfig(configuration)
+            setIsDirty(true)
+        }
+    }, [prefilledConfig]);
+
     const handleValid = (isValid: boolean) => {
-        setIsValid(prefillFeatureConfig != featureConfig ? isValid : false);
+        setIsValid(isValid)
     };
-    const saveFeatureConfiguration = () => {
-        if (featureConfig) {
+
+    const handleSubmit = () => {
+        if (isDirty) {
+            setIsDirty(false)
             const configurationProperties =
-                configurationMapper.toProperties(featureConfig, feature?.featureConfigurationPrefix);
+                toProperties(modifiedConfig, feature?.featureConfigurationPrefix);
             if (configurationProperties.length > 0) {
                 mutateConfigurations(configurationProperties);
             }
@@ -56,19 +76,30 @@ const FeatureConfigurationPage = () => {
 
     useEffect(() => {
         if (mutateConfigurationsSuccess) {
-            setPrefillFeatureConfig(featureConfig)
+            toast(
+                <>
+                    <Heading4>
+                        <FormattedMessage id={"api.save.success"}/>
+                    </Heading4>
+                </>
+            )
+            setPrefilledConfig(modifiedConfig)
         }
-    }, [mutateConfigurationsSuccess])
+        if (mutateConfigurationsError) {
+            toast(<FormattedMessage id={"api.save.error"}/>)
+            setIsDirty(true)
+        }
+    }, [mutateConfigurationsSuccess, mutateConfigurationsError])
 
     useEffect(() => {
-        if (configurations.data) {
-            const config: object =
-                configurationMapper.parseProperties(configurations.data, feature?.featureConfigurationPrefix);
-            setPrefillFeatureConfig(config);
+        if (featureConfigurations) {
+            const prefillData
+                = parseProperties(featureConfigurations, feature?.featureConfigurationPrefix)
+            setPrefilledConfig(prefillData);
         }
-    }, [configurations.data])
+    }, [featureConfigurations])
 
-    if (configurations.isLoading) {
+    if (featureConfigurationsLoading) {
         return (
             <section>
                 <Skeleton height={60}/>
@@ -76,12 +107,12 @@ const FeatureConfigurationPage = () => {
         );
     }
 
-    if (configurations.isError)
+    if (featureConfigurationsError)
         return (
             <section>
                 <Heading3>
                     <FormattedMessage
-                        id={"features.config.configurationsError"}
+                        id={"features.config.configurations-error"}
                         values={{featureId: feature?.featureId}}
                     />
                 </Heading3>
@@ -96,11 +127,14 @@ const FeatureConfigurationPage = () => {
             <div className={styles["feature-config__content"]}>
                 {(
                     feature?.featureComponent &&
-                    configurations &&
+                    featureConfigurations &&
                     createElement(feature?.featureComponent, {
-                        featureConfiguration: prefillFeatureConfig,
-                        onValid: handleValid,
-                        onChange: handleChange
+                        prefillConfiguration: prefilledConfig,
+                        onChange: (formData: object) => {
+                            handleChange(formData)
+                        },
+                        onValid: (isValid) => handleValid(isValid),
+                        onSubmit: () => handleSubmit()
                     })
                 )}
             </div>
@@ -108,8 +142,12 @@ const FeatureConfigurationPage = () => {
                 <div className={styles["feature-config__buttons"]}>
                     <Button
                         className={styles["feature-config__button"]}
-                        onClick={saveFeatureConfiguration}
-                        disabled={!isValid}
+                        onClick={() => {
+                            handleSubmit()
+                        }}
+                        disabled={!isDirty || !isValid}
+                        type={"submit"}
+                        form={"configuration-form"}
                     >
                         <FormattedMessage id={"features.config.save"}></FormattedMessage>
                     </Button>
@@ -119,9 +157,9 @@ const FeatureConfigurationPage = () => {
                         onClick={() => navigate(paths.features)}
                         disabled={false}
                     >
-                        <FormattedMessage id={isValid
-                          ? "features.config.cancel"
-                          : "features.config.back"}></FormattedMessage>
+                        <FormattedMessage id={isDirty
+                            ? "features.config.cancel"
+                            : "features.config.back"}></FormattedMessage>
                     </Button>
                 </div>
             </div>

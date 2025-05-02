@@ -21,6 +21,7 @@ import ResponsiveContent from "@gemeente-denhaag/responsive-content";
 import Header from "./Header";
 import {ConfigPanelPaths} from "../constants/paths.ts";
 import styles from "./Layout.module.scss"
+import {ToastContainer} from "react-toastify";
 
 interface LayoutComponentProps {
     paths: ConfigPanelPaths;
@@ -34,6 +35,12 @@ const LayoutComponent: FC<LayoutComponentProps> = ({
 
     return (
         <PageWrapper>
+            <ToastContainer
+                position={"bottom-center"}
+                hideProgressBar={true}
+                autoClose={3000}
+                closeOnClick={true}
+            />
             <ResponsiveContent className="denhaag-page-content denhaag-responsive-content--sidebar">
                 <Header
                     logo={headerLogo}

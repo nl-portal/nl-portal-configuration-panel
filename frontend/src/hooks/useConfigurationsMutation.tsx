@@ -20,8 +20,8 @@ import ConfigurationProperty from "../interfaces/ConfigurationProperty.ts";
 
 export const useConfigurationsMutation = () => {
     const auth = useAuth();
-    const mutateConfigurations = useMutation({
-        mutationKey: ['configurations'],
+    return useMutation({
+        mutationKey: ['mutateConfigurations'],
         retryDelay: 500,
         mutationFn: async (
             configurations: ConfigurationProperty[] = []
@@ -38,11 +38,10 @@ export const useConfigurationsMutation = () => {
                     body: JSON.stringify(configurations)
                 }
             )
+
             return await response.json()
         }
     })
-
-    return mutateConfigurations
 }
 
 export default useConfigurationsMutation

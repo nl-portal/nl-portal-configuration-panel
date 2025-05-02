@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {PageGrid} from "@nl-portal/nl-portal-user-interface";
 import {PageHeader} from "@gemeente-denhaag/page";
 import {FormattedMessage} from "react-intl";
 import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
 import styles from "./FeaturesPage.module.scss"
 import FeaturesList from "../components/FeaturesList.tsx";
 import {features} from "../constants/features.tsx";
+import PageGrid from "../components/PageGrid.tsx";
 
 const FeaturesPage = () => {
 

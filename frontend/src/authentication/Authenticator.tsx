@@ -28,7 +28,7 @@ const Authenticator: FC<{ children?: ReactNode }> = ({children}) => {
     }, [auth])
 
     useEffect(() => {
-        const handleTokenExpired = () => auth.signoutRedirect();
+        const handleTokenExpired = () => auth.startSilentRenew();
 
         auth.events.addAccessTokenExpired(handleTokenExpired);
     }, [auth]);

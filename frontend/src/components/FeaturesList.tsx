@@ -17,8 +17,9 @@ import {FormattedMessage} from "react-intl";
 import styles from "./FeaturesList.module.scss";
 import {Link} from "@gemeente-denhaag/link";
 import {Paragraph} from "@gemeente-denhaag/typography";
-import {CellObject, PortalLink, Table} from "@nl-portal/nl-portal-user-interface";
 import {SettingsIcon} from "@gemeente-denhaag/icons";
+import Table, {CellObject} from "./Table.tsx";
+import PortalLink from "./PortalLink.tsx";
 
 interface FeaturesListProps {
     features: string[]
@@ -27,7 +28,7 @@ interface FeaturesListProps {
 const FeaturesList = ({features}: FeaturesListProps) => {
     return (
       <Table
-          headers={[ 
+          headers={[
               {
                   key: "features",
                   head: true,
