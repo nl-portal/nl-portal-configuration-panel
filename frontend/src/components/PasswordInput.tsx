@@ -19,8 +19,12 @@ import TextInput, {TextInputProps} from "@gemeente-denhaag/text-input";
 import IconButton from "@gemeente-denhaag/iconbutton";
 import {HideIcon, ShowIcon} from "@gemeente-denhaag/icons";
 
-const PasswordInput: React.ForwardRefExoticComponent<TextInputProps & React.RefAttributes<HTMLInputElement>> = forwardRef(
-    (defaultProps: TextInputProps, ref: ForwardedRef<HTMLInputElement>) => {
+interface PasswordInputProps extends TextInputProps {
+    id: string
+}
+
+const PasswordInput: React.ForwardRefExoticComponent<PasswordInputProps & React.RefAttributes<HTMLInputElement>> = forwardRef(
+    (defaultProps: PasswordInputProps, ref: ForwardedRef<HTMLInputElement>) => {
         const [showValue, setShowValue] = useState(false)
 
         return (
