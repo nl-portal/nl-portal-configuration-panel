@@ -21,6 +21,7 @@ import ProductFeatureConfiguration from "../components/features/ProductFeatureCo
 import DmnFeatureConfiguration from "../components/features/DmnFeatureConfiguration.tsx";
 import PrefillFeatureConfiguration from "../components/features/PrefillFeatureConfiguration.tsx";
 import BesluitenApiFeatureConfiguration from "../components/features/BesluitenApiFeatureConfiguration.tsx";
+import OpenKlant2FeatureConfiguration from "../components/features/OpenKlant2FeatureConfiguration.tsx";
 import FeatureConfiguration from "../interfaces/FeatureConfiguration.ts";
 
 export const features: FeatureConfiguration[] = [
@@ -38,6 +39,11 @@ export const features: FeatureConfiguration[] = [
         featureId: "objectsapi",
         featureConfigurationPrefix: "nl-portal.config.objectsapi",
         featureComponent: ObjectsApiFeatureConfiguration
+    },
+    {
+        featureId: "openklant2",
+        featureConfigurationPrefix: "nl-portal.config.openklant2",
+        featureComponent: OpenKlant2FeatureConfiguration
     },
     {
         featureId: "taak",
