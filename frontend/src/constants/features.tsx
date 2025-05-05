@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import FeatureConfiguration from "../interfaces/FeatureConfiguration.ts";
 import BerichtenFeatureConfiguration from "../components/features/BerichtenFeatureConfiguration.tsx";
 import TaakFeatureConfiguration from "../components/features/TaakFeatureConfiguration.tsx";
 import ObjectsApiFeatureConfiguration from "../components/features/ObjectsApiFeatureConfiguration.tsx";
@@ -22,7 +23,9 @@ import DmnFeatureConfiguration from "../components/features/DmnFeatureConfigurat
 import PrefillFeatureConfiguration from "../components/features/PrefillFeatureConfiguration.tsx";
 import BesluitenApiFeatureConfiguration from "../components/features/BesluitenApiFeatureConfiguration.tsx";
 import OpenKlant2FeatureConfiguration from "../components/features/OpenKlant2FeatureConfiguration.tsx";
-import FeatureConfiguration from "../interfaces/FeatureConfiguration.ts";
+import OpenKlantFeatureConfiguration from "../components/features/OpenKlantFeatureConfiguration.tsx";
+import HaalCentraalBrpFeatureConfiguration from "../components/features/HaalCentraalBrpFeatureConfiguration.tsx";
+import HaalCentraalHrFeatureConfiguration from "../components/features/HaalCentraalHrFeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
     {
@@ -41,9 +44,24 @@ export const features: FeatureConfiguration[] = [
         featureComponent: ObjectsApiFeatureConfiguration
     },
     {
+        featureId: "openklant",
+        featureConfigurationPrefix: "nl-portal.config.openklant",
+        featureComponent: OpenKlantFeatureConfiguration
+    },
+    {
         featureId: "openklant2",
         featureConfigurationPrefix: "nl-portal.config.openklant2",
         featureComponent: OpenKlant2FeatureConfiguration
+    },
+    {
+        featureId: "haalcentraal-brp",
+        featureConfigurationPrefix: "nl-portal.config.haalcentraal.brp",
+        featureComponent: HaalCentraalBrpFeatureConfiguration
+    },
+    {
+        featureId: "haalcentraal-hr",
+        featureConfigurationPrefix: "nl-portal.config.haalcentraal.hr",
+        featureComponent: HaalCentraalHrFeatureConfiguration
     },
     {
         featureId: "taak",
