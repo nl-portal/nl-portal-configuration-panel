@@ -12,7 +12,7 @@ import ConfigurationForm from "../ConfigurationForm.tsx";
 import {RadioButton} from "@gemeente-denhaag/radio-button";
 import PasswordInput from "../PasswordInput.tsx";
 
-interface OpenKlant2FeatureConfiguration {
+interface OpenKlant2Configuration {
   enabled?: string;
   properties?: {
       "klantinteracties-api-url"?: string,
@@ -22,7 +22,7 @@ interface OpenKlant2FeatureConfiguration {
 }
 
 interface OpenKlant2FeatureConfigurationProps extends FeatureConfigurationProps {
-  prefillConfiguration?: OpenKlant2FeatureConfiguration
+  prefillConfiguration?: OpenKlant2Configuration
 }
 
 const OpenKlant2FeatureConfiguration = ({
@@ -30,7 +30,7 @@ const OpenKlant2FeatureConfiguration = ({
   onSubmit,
   onChange
 }: OpenKlant2FeatureConfigurationProps) => {
-  const [currentConfiguration, setCurrentConfiguration] = useState<OpenKlant2FeatureConfiguration>(prefillConfiguration || {})
+  const [currentConfiguration, setCurrentConfiguration] = useState<OpenKlant2Configuration>(prefillConfiguration || {})
   const {
     register,
     watch,
@@ -38,7 +38,7 @@ const OpenKlant2FeatureConfiguration = ({
     formState,
     handleSubmit,
     getValues: getFormValue
-  } = useForm<OpenKlant2FeatureConfiguration>({
+  } = useForm<OpenKlant2Configuration>({
     defaultValues: {...prefillConfiguration, enabled: "false"},
   })
 
