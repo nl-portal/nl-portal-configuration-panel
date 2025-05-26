@@ -37,18 +37,31 @@ const useConfigurationPropertyMapperHook = () => {
         application: string = 'nl-portal-backend-libraries',
     ): ConfigurationProperty[] => {
         const configurationProperties: ConfigurationProperty[] = []
-        const flattenedProperties: object = flatten(configuration);
+        const flattenedProperties: object = flatten(configuration, {safe: true});
+
+        console.log("parsing object: ", configuration)
+        console.log("parsed object: ", flattenedProperties)
 
         Object.entries(flattenedProperties).map(([key, value]) => {
-            if (value !== undefined || typeof value !== "object") {
-                configurationProperties.push(
-                    {
-                        propertyKey: prefix ? `${prefix}.${key}` : key,
-                        propertyValue: value.toString(),
-                        application: application
-                    }
-                )
-            }
+                if (value !== undefined && Array.isArray(value)) {
+                    console.log("Array value: ",value)
+                    configurationProperties.push(
+                        {
+                            propertyKey: prefix ? `${prefix}.${key}` : key,
+                            propertyValue: value.join(", "),
+                            application: application
+                        }
+                    )
+                }
+                else if (value !== undefined && typeof value !== "object") {
+                    configurationProperties.push(
+                        {
+                            propertyKey: prefix ? `${prefix}.${key}` : key,
+                            propertyValue: value.toString(),
+                            application: application
+                        }
+                    )
+                }
             }
         )
 

@@ -46,7 +46,7 @@ const FeatureConfigurationPage = () => {
         isSuccess: mutateConfigurationsSuccess,
         isError: mutateConfigurationsError
     } = useConfigurationsMutation();
-    const [prefilledConfig, setPrefilledConfig] = useState<object>({});
+    const [prefilledConfig, setPrefilledConfig] = useState<object|undefined>(undefined);
     const [modifiedConfig, setModifiedConfig] = useState<object>({});
     const [isDirty, setIsDirty] = useState<boolean>(false);
     const [isValid, setIsValid] = useState<boolean>(true);

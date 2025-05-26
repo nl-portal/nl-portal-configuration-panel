@@ -50,10 +50,12 @@
 
   --primary-color: var(--rijkshuisstijl-lintblauw);
   --secondary-color: var(--rijkshuisstijl-donkerblauw);
-  --tetriary-color: var(--rijkshuisstijl-donkerblauw);
-  --quarternary-color: var(--rijkshuisstijl-donkerblauw);
+  --tetriary-color: var(--rijkshuisstijl-hemelblauw);
+  --quarternary-color: var(--rijkshuisstijl-lichtblauw);
   --senary-color: var(--rijkshuisstijl-grijs);
 
+  --denhaag-color-green-1: var(--secondary-color);
+  --denhaag-color-green-2: var(--secondary-color);
   --denhaag-color-green-3: var(--secondary-color);
   --denhaag-color-green-4: var(--primary-color);
   --denhaag-color-blue-1: var(--secondary-color);
@@ -94,7 +96,7 @@
 
   --utrecht-heading-color: var(--rijkshuisstijl-donkerblauw);
 
-  --denhaag-page-content-main-md-margin-block-start: 5em;
+  --denhaag-page-content-main-md-margin-block-start: 3em;
   --denhaag-menu-button-font-size: var(--denhaag-typography-scale-lg-font-size);
   --denhaag-menu-button-line-height: var(
     --denhaag-typography-scale-xl-font-size

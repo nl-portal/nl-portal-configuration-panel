@@ -120,5 +120,9 @@ export const NL_NL_MESSAGES: Messages = {
     "features.prefill.type-url.description":"De url naar het Prefill objecttype binnen Objecttypen API",
     "features.prefill.prefill-sha-version":"Prefill object SHA hash versie",
     "features.prefill.prefill-sha-version.description":"De SHA hash versie met die het prefill object is gehashed",
+    "features.zakenapi": "Zaken API",
+    "features.zakenapi.configuration": "Configuratie",
+    "features.documentenapi": "Documenten API",
+    "features.documentenapi.configuration": "Configuratie",
   },
 };

@@ -18,7 +18,7 @@ val ehcacheVersion = "3.10.8"
 val hypersistenceVersion = "3.8.3"
 val postgresVersion = "42.7.4"
 val guavaVersion = "33.4.0-jre"
-val springCloudServerVersion = "4.2.0"
+val springCloudServerVersion = "4.2.1"
 val springSecurityOauth2Version = "6.4.2"
 val kotlinLoggingVersion = "7.0.3"
 val mockitoAgent = configurations.create("mockitoAgent")
@@ -28,6 +28,7 @@ plugins {
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
+    id("com.github.jk1.dependency-license-report") version "2.9"
 }
 
 group = "nl.nlportal"
