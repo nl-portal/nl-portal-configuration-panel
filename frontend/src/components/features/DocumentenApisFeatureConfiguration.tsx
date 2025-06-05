@@ -1,8 +1,8 @@
-import {Fragment, useEffect, useState} from "react";
+import {Fragment, useEffect, useMemo, useRef, useState} from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
 import {FormattedMessage} from "react-intl";
-import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
+import {Heading3, Heading4, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
 import styles from "../ConfigurationForm.module.scss"
@@ -12,6 +12,10 @@ import {useForm} from "react-hook-form";
 import {Select, SelectOption} from "@utrecht/component-library-react";
 import TextInput from "@gemeente-denhaag/text-input";
 import PasswordInput from "../PasswordInput.tsx";
+import IconButton from "@gemeente-denhaag/iconbutton";
+import {ArrowRightIcon, TrashIcon} from "@gemeente-denhaag/icons";
+import _ from "lodash";
+import ActionField from "../ActionField.tsx";
 
 interface DocumentenApisConfiguration {
     enabled?: string;
@@ -41,43 +45,38 @@ const DocumentenApisFeatureConfiguration = ({
                                                 onSubmit
                                             }: DocumentenApiFeatureConfigurationProps) => {
     const [currentConfiguration, setCurrentConfiguration] = useState<DocumentenApisConfiguration | undefined>(prefillConfiguration)
+    const configurationEntries = useMemo(() => Object.keys(currentConfiguration?.properties?.configurations || {}), [currentConfiguration])
     const {
         register,
         watch,
         reset,
-        // formState,
         handleSubmit,
-        getValues: getFormValue
+        getValues: getFormValue,
     } = useForm<DocumentenApisConfiguration>({
         defaultValues: {
             enabled: "false",
-            // properties: {
-            //     configurations: {
-            //         openzaak: {
-            //             url: "http://localhost:8001/documenten/api/v1",
-            //             "client-id": "valtimo_client",
-            //             secret: "e09b8bc5-5831-4618-ab28-41411304309d",
-            //             rsin: "051845623",
-            //             "document-type-url": "http://localhost:8001/catalogi/api/v1/informatieobjecttypen/efc332f2-be3b-4bad-9e3c-49a6219c92ad"
-            //         },
-            //         dummydoc: {
-            //             url: "http://example:8001/documenten/api/v1",
-            //             "client-id": "example_client",
-            //             secret: "VerySuperSecretHaHa",
-            //             rsin: "081111111",
-            //             "document-type-url": "http://example:8001/catalogi/api/v1/informatieobjecttypen/efc332f2-be3b-4bad-9e3c-49a6219c92ad"
-            //         }
-            //     }
-            // },
-            ...!!prefillConfiguration && prefillConfiguration,
+            properties: {
+                configurations: {}
+            },
+            ...prefillConfiguration,
         }
     })
-    const [configurations, setConfigurations] = useState<Array<string>>([])
+    const addConfigurationRef = useRef<HTMLInputElement>(null)
+    const addConfiguration = (key: string) => {
+        setCurrentConfiguration(_.set({...currentConfiguration}, `properties.configurations.${key}`, {}))
+    }
+    const addAnotherValid = () => {
+        return !!addConfigurationRef &&
+            addConfigurationRef.current?.value !== "" &&
+            !addConfigurationRef.current?.value.includes(" ") &&
+            !configurationEntries.find(key => addConfigurationRef.current?.value === key) ||
+            false;
+    };
 
     useEffect(() => {
         console.log("prefill was updated: ", prefillConfiguration)
         if (prefillConfiguration) {
-            setConfigurations(Object.keys(watch("properties.configurations")))
+            setCurrentConfiguration(prefillConfiguration)
             reset(prefillConfiguration)
         }
 
@@ -87,6 +86,7 @@ const DocumentenApisFeatureConfiguration = ({
         console.log("FORM DATA: ", currentConfiguration)
         if (onChange && currentConfiguration) {
             onChange(currentConfiguration)
+            reset(currentConfiguration)
         }
     }, [currentConfiguration])
 
@@ -139,27 +139,49 @@ const DocumentenApisFeatureConfiguration = ({
                                        <Fragment>
                                            {
                                                (
-                                                   configurations.map((key, index) =>
+                                                   configurationEntries.map((key, index) =>
                                                        <section
                                                            className={styles["form-field__section"]}
-                                                           key={key+"-"+index}
+                                                           key={key + "-" + index}
                                                        >
+                                                           <FormField className={styles["form-field__section__header"]}>
+                                                               <ActionField
+                                                                   field={
+                                                                       <Heading4>
+                                                                           {key}
+                                                                       </Heading4>
+                                                                   }
+                                                                   button={
+                                                                       <IconButton
+                                                                           onClick={() => {
+                                                                               console.log("removing ", key)
+                                                                               setCurrentConfiguration(_.omit(getFormValue(), `properties.configurations.${key}`))
+                                                                           }}>
+                                                                           <TrashIcon></TrashIcon>
+                                                                       </IconButton>
+                                                                   }
+                                                               >
+
+                                                               </ActionField>
+                                                           </FormField>
                                                            <FormField
                                                                label={
                                                                    <FormLabel htmlFor={key + ".url"}>
-                                                                       <FormattedMessage id={"features.zakenapi.url"}/>
+                                                                       <FormattedMessage
+                                                                           id={"features.documentenapis.url"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.zakenapi.url.description"}/>
+                                                                           id={"features.documentenapis.url.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
                                                                <TextInput
                                                                    {...register(`properties.configurations.${key}.url`)}
                                                                    id={key + ".url"}
+                                                                   placeholder={"https://example.com/documenten/api/v1/"}
                                                                    type="url"
                                                                />
                                                            </FormField>
@@ -167,13 +189,13 @@ const DocumentenApisFeatureConfiguration = ({
                                                                label={
                                                                    <FormLabel htmlFor={key + ".client-id"}>
                                                                        <FormattedMessage
-                                                                           id={"features.documentenapi.client-id"}/>
+                                                                           id={"features.documentenapis.client-id"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.documentenapi.client-id.description"}/>
+                                                                           id={"features.documentenapis.client-id.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
@@ -186,13 +208,13 @@ const DocumentenApisFeatureConfiguration = ({
                                                                label={
                                                                    <FormLabel htmlFor={"secret"}>
                                                                        <FormattedMessage
-                                                                           id={"features.zakenapi.secret"}/>
+                                                                           id={"features.documentenapis.secret"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.zakenapi.secret.description"}/>
+                                                                           id={"features.documentenapis.secret.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
@@ -205,13 +227,13 @@ const DocumentenApisFeatureConfiguration = ({
                                                                label={
                                                                    <FormLabel htmlFor={key + ".rsin"}>
                                                                        <FormattedMessage
-                                                                           id={"features.documentenapi.rsin"}/>
+                                                                           id={"features.documentenapis.rsin"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.documentenapi.rsin.description"}/>
+                                                                           id={"features.documentenapis.rsin.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
@@ -224,19 +246,20 @@ const DocumentenApisFeatureConfiguration = ({
                                                                label={
                                                                    <FormLabel htmlFor={key + ".document-type-url"}>
                                                                        <FormattedMessage
-                                                                           id={"features.documentenapi.document-type-url"}/>
+                                                                           id={"features.documentenapis.document-type-url"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.documentenapi.document-type-url.description"}/>
+                                                                           id={"features.documentenapis.document-type-url.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
                                                                <TextInput
                                                                    {...register(`properties.configurations.${key}.document-type-url`)}
                                                                    id={key + ".document-type-url"}
+                                                                   placeholder={"https://example.com/catalogi/api/v1/informatieobjecttypen/00000000"}
                                                                    type="url"
                                                                />
                                                            </FormField>
@@ -244,8 +267,47 @@ const DocumentenApisFeatureConfiguration = ({
                                                    )
                                                )
                                            }
+                                           <section
+                                               className={styles["form-field__section"]}
+                                               key={"add-another-section"}
+                                           >
+                                               <ActionField
+                                                   label={
+                                                       <FormLabel htmlFor={"add-another"}>
+                                                           <FormattedMessage
+                                                               id={"features.documentenapis.configurations.add-another"}/>
+                                                       </FormLabel>
+                                                   }
+                                                   description={
+                                                       <Paragraph>
+                                                           <FormattedMessage
+                                                               id={"features.documentenapis.configurations.add-another.description"}/>
+                                                       </Paragraph>
+                                                   }
+                                                   field={
+                                                       <TextInput
+                                                           id={"add-another"}
+                                                           ref={addConfigurationRef}
+                                                           placeholder={"configuration-name"}
+                                                       />
+                                                   }
+                                                   button={
+                                                       <IconButton
+                                                           onClick={() => {
+                                                               if (addConfigurationRef.current) {
+                                                                   addConfiguration(addConfigurationRef.current.value)
+                                                                   addConfigurationRef.current.value = ""
+                                                               }
+                                                           }}
+                                                           disabled={!addAnotherValid()}>
+                                                           <ArrowRightIcon></ArrowRightIcon>
+                                                       </IconButton>
+                                                   }
+                                               >
+                                               </ActionField>
+                                           </section>
                                            {
-                                               configurations.length > 0 &&
+                                               configurationEntries.length > 0 &&
                                                <FormField
                                                    label={
                                                        <FormLabel htmlFor={"default-document-api"}>
@@ -262,8 +324,6 @@ const DocumentenApisFeatureConfiguration = ({
                                                    <Select className={styles["form-field__select"]}
                                                            {...register("properties.default-document-api")}
                                                            id="default-document-api"
-                                                           required={true}
-                                                           disabled={!watch("properties.configurations")}
                                                    >
                                                        {
                                                            Object.keys(watch("properties.configurations") || {})
@@ -280,20 +340,6 @@ const DocumentenApisFeatureConfiguration = ({
                                                    </Select>
                                                </FormField>
                                            }
-                                           <FormField
-                                               label={
-                                                   <FormLabel>
-                                                       SUBMISSION
-                                                   </FormLabel>
-                                               }
-                                               key={"submission"}
-                                           >
-                                                               <pre
-                                                                   {...register(`properties`)}
-                                                               >
-                                                                   {JSON.stringify(watch("properties"), null, 2)}
-                                                               </pre>
-                                           </FormField>
                                        </Fragment>
                                    )}
                                </Fragment>

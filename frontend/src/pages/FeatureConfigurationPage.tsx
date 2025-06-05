@@ -30,6 +30,7 @@ import PageGrid from "../components/PageGrid.tsx";
 import useConfigurationsMutation from "../hooks/useConfigurationsMutation.tsx";
 import {toast} from "react-toastify";
 import _ from "lodash";
+import useDeleteConfigurationsByFeatureMutation from "../hooks/useDeleteConfigurationsByFeatureMutation.tsx";
 
 const FeatureConfigurationPage = () => {
     const {featureId} = useParams();
@@ -46,7 +47,11 @@ const FeatureConfigurationPage = () => {
         isSuccess: mutateConfigurationsSuccess,
         isError: mutateConfigurationsError
     } = useConfigurationsMutation();
-    const [prefilledConfig, setPrefilledConfig] = useState<object|undefined>(undefined);
+    const {
+        mutate: deleteConfigurations,
+        isError: deleteConfigurationsError
+    } = useDeleteConfigurationsByFeatureMutation({featurePrefix: feature?.featureConfigurationPrefix});
+    const [prefilledConfig, setPrefilledConfig] = useState<object | undefined>(undefined);
     const [modifiedConfig, setModifiedConfig] = useState<object>({});
     const [isDirty, setIsDirty] = useState<boolean>(false);
     const [isValid, setIsValid] = useState<boolean>(true);
@@ -69,7 +74,11 @@ const FeatureConfigurationPage = () => {
             const configurationProperties =
                 toProperties(modifiedConfig, feature?.featureConfigurationPrefix);
             if (configurationProperties.length > 0) {
-                mutateConfigurations(configurationProperties);
+                deleteConfigurations(undefined, {
+                    onSuccess: () => {
+                        mutateConfigurations(configurationProperties);
+                    }
+                });
             }
         }
     };
@@ -85,11 +94,11 @@ const FeatureConfigurationPage = () => {
             )
             setPrefilledConfig(modifiedConfig)
         }
-        if (mutateConfigurationsError) {
+        if (mutateConfigurationsError || deleteConfigurationsError) {
             toast(<FormattedMessage id={"api.save.error"}/>)
             setIsDirty(true)
         }
-    }, [mutateConfigurationsSuccess, mutateConfigurationsError])
+    }, [mutateConfigurationsSuccess, mutateConfigurationsError, deleteConfigurationsError])
 
     useEffect(() => {
         if (featureConfigurations) {
