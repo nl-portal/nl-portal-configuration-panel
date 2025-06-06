@@ -48,7 +48,6 @@ const PrefillFeatureConfiguration = ({
 
     useEffect(() => {
         if (onChange && currentConfiguration && formState.isDirty && formState.isValid) {
-            console.log("data: ", currentConfiguration)
             onChange(currentConfiguration)
         }
     }, [currentConfiguration, formState.isDirty, formState.isValid, onChange])

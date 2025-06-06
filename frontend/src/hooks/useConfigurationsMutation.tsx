@@ -26,7 +26,6 @@ export const useConfigurationsMutation = () => {
         mutationFn: async (
             configurations: ConfigurationProperty[] = []
         ) => {
-            console.log("payload", configurations)
             const response = await fetch(
                 `/api/v1/configurations`,
                 {

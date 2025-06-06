@@ -39,12 +39,8 @@ const useConfigurationPropertyMapperHook = () => {
         const configurationProperties: ConfigurationProperty[] = []
         const flattenedProperties: object = flatten(configuration, {safe: true});
 
-        console.log("parsing object: ", configuration)
-        console.log("parsed object: ", flattenedProperties)
-
         Object.entries(flattenedProperties).map(([key, value]) => {
                 if (value !== undefined && Array.isArray(value)) {
-                    console.log("Array value: ",value)
                     configurationProperties.push(
                         {
                             propertyKey: prefix ? `${prefix}.${key}` : key,

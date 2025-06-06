@@ -74,7 +74,6 @@ const DocumentenApisFeatureConfiguration = ({
     };
 
     useEffect(() => {
-        console.log("prefill was updated: ", prefillConfiguration)
         if (prefillConfiguration) {
             setCurrentConfiguration(prefillConfiguration)
             reset(prefillConfiguration)
@@ -83,7 +82,6 @@ const DocumentenApisFeatureConfiguration = ({
     }, [prefillConfiguration])
 
     useEffect(() => {
-        console.log("FORM DATA: ", currentConfiguration)
         if (onChange && currentConfiguration) {
             onChange(currentConfiguration)
             reset(currentConfiguration)
@@ -154,7 +152,6 @@ const DocumentenApisFeatureConfiguration = ({
                                                                    button={
                                                                        <IconButton
                                                                            onClick={() => {
-                                                                               console.log("removing ", key)
                                                                                setCurrentConfiguration(_.omit(getFormValue(), `properties.configurations.${key}`))
                                                                            }}>
                                                                            <TrashIcon></TrashIcon>
