@@ -1,7 +1,7 @@
 import {Fragment, useEffect, useMemo, useRef, useState} from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import Fieldset, {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, useIntl} from "react-intl";
 import {Heading3, Heading4, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
@@ -44,6 +44,7 @@ const DocumentenApisFeatureConfiguration = ({
                                                 onChange,
                                                 onSubmit
                                             }: DocumentenApiFeatureConfigurationProps) => {
+    const intl = useIntl()
     const [currentConfiguration, setCurrentConfiguration] = useState<DocumentenApisConfiguration | undefined>(prefillConfiguration)
     const configurationEntries = useMemo(() => Object.keys(currentConfiguration?.properties?.configurations || {}), [currentConfiguration])
     const {
@@ -67,8 +68,7 @@ const DocumentenApisFeatureConfiguration = ({
     }
     const addAnotherValid = () => {
         return !!addConfigurationRef &&
-            addConfigurationRef.current?.value !== "" &&
-            !addConfigurationRef.current?.value.includes(" ") &&
+            addConfigurationRef.current?.value.match(/^[0-9a-z/-]+$/) &&
             !configurationEntries.find(key => addConfigurationRef.current?.value === key) ||
             false;
     };
@@ -288,7 +288,9 @@ const DocumentenApisFeatureConfiguration = ({
                                                        <TextInput
                                                            id={"add-another"}
                                                            ref={addConfigurationRef}
-                                                           placeholder={"configuration-name"}
+                                                           placeholder={
+                                                               intl.formatMessage({id: "features.documentenapis.configurations.configuration-name"})
+                                                           }
                                                        />
                                                    }
                                                    button={

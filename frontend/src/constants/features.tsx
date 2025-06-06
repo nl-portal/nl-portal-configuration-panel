@@ -41,7 +41,7 @@ export const features: FeatureConfiguration[] = [
         featureComponent: CatalogiApiFeatureConfiguration,
     },
     {
-        featureId: 'documentenapi',
+        featureId: 'documentenapis',
         featureConfigurationPrefix: "nl-portal.config.documentenapis",
         featureComponent: DocumentenApisFeatureConfiguration,
     },

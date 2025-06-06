@@ -195,13 +195,13 @@ const ZakenApiFeatureConfiguration = ({
                                                label={
                                                    <FormLabel htmlFor={"vertrouwelijkheidsaanduiding-whitelist"}>
                                                        <FormattedMessage
-                                                           id={"features.zakenapi.vertrouwelijkheidsaanduiding-whitelist"}/>
+                                                           id={"features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.zakenapi.vertrouwelijkheidsaanduiding-whitelist.description"}/>
+                                                           id={"features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist.description"}/>
                                                    </Paragraph>
                                                }>
                                                <Select className={styles["form-field__select"]}
@@ -228,13 +228,13 @@ const ZakenApiFeatureConfiguration = ({
                                                label={
                                                    <FormLabel htmlFor={"status-whitelist"}>
                                                        <FormattedMessage
-                                                           id={"features.zakenapi.status-whitelist"}/>
+                                                           id={"features.zakenapi.zaak-documenten-config.status-whitelist"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.zakenapi.status-whitelist.description"}/>
+                                                           id={"features.zakenapi.zaak-documenten-config.status-whitelist.description"}/>
                                                    </Paragraph>
                                                }>
                                                <Select className={styles["form-field__select"]}
