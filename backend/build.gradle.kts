@@ -18,7 +18,8 @@ val ehcacheVersion = "3.10.8"
 val hypersistenceVersion = "3.8.3"
 val postgresVersion = "42.7.4"
 val guavaVersion = "33.4.0-jre"
-val springCloudServerVersion = "4.2.0"
+val springCloudServerVersion = "4.2.2"
+val springCloudBootstrapVersion = "4.2.1"
 val springSecurityOauth2Version = "6.4.2"
 val kotlinLoggingVersion = "7.0.3"
 val mockitoAgent = configurations.create("mockitoAgent")
@@ -26,7 +27,7 @@ val mockitoAgent = configurations.create("mockitoAgent")
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.4.2"
+    id("org.springframework.boot") version "3.4.6"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -51,7 +52,7 @@ dependencies {
     implementation("org.springframework.security:spring-security-oauth2-jose:$springSecurityOauth2Version")
     implementation("org.springframework.security:spring-security-oauth2-resource-server:$springSecurityOauth2Version")
     implementation("org.springframework.cloud:spring-cloud-config-server:$springCloudServerVersion")
-    implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:$springCloudServerVersion")
+    implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:$springCloudBootstrapVersion")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -86,7 +87,7 @@ tasks.bootRun {
             "DATABASE_URL" to "jdbc:postgresql://localhost:54322/nl-portal-config",
             "DATABASE_USERNAME" to "config",
             "DATABASE_PASSWORD" to "password",
-            "logging.level.root" to "DEBUG",
+            "logging.level.root" to "INFO",
             "JWKS_URI" to "http://localhost:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs",
             "CONFIG_CACHE_TTL" to "30000",
             "CONFIG_SERVER_PREFIX" to "/configuration",

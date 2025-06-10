@@ -26,12 +26,24 @@ import OpenKlant2FeatureConfiguration from "../components/features/OpenKlant2Fea
 import OpenKlantFeatureConfiguration from "../components/features/OpenKlantFeatureConfiguration.tsx";
 import HaalCentraalBrpFeatureConfiguration from "../components/features/HaalCentraalBrpFeatureConfiguration.tsx";
 import HaalCentraalHrFeatureConfiguration from "../components/features/HaalCentraalHrFeatureConfiguration.tsx";
+import ZakenApiFeatureConfiguration from "../components/features/ZakenApiFeatureConfiguration.tsx";
+import DocumentenApisFeatureConfiguration from "../components/features/DocumentenApisFeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
+    {
+        featureId: 'zakenapi',
+        featureConfigurationPrefix: "nl-portal.config.zakenapi",
+        featureComponent: ZakenApiFeatureConfiguration,
+    },
     {
         featureId: 'catalogiapi',
         featureConfigurationPrefix: "nl-portal.config.catalogiapi",
         featureComponent: CatalogiApiFeatureConfiguration,
+    },
+    {
+        featureId: 'documentenapis',
+        featureConfigurationPrefix: "nl-portal.config.documentenapis",
+        featureComponent: DocumentenApisFeatureConfiguration,
     },
     {
         featureId: 'besluitenapi',

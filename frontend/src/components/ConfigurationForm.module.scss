@@ -41,7 +41,7 @@
   }
 
   > :not(:last-child) {
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
   }
 }
 
@@ -55,9 +55,31 @@
   }
 
   &__select {
-    --utrecht-select-max-inline-size: 200px;
+    display: flex;
+    inline-size: 100%;
+    max-inline-size: var(--utrecht-textbox-max-inline-size);
+    height: fit-content;
 
-    flex: 1 0 auto;
+    option {
+      padding-top: var(--utrecht-space-around, .25em);
+      padding-bottom: var(--utrecht-space-around, .25em);
+
+      &:checked {
+        color: var(--senary-color);
+        background-color: var(--secondary-color);
+      }
+    }
+  }
+
+  &__section {
+    background-color: var(--rijkshuisstijl-grijs);
+    padding: 2rem;
+    box-shadow: 0 5px 6px rgba(0, 0, 0, .05);
+    border-radius: 10px;
+
+    > :not(:last-child) {
+      margin-bottom: 1.5em;
+    }
   }
 }
 

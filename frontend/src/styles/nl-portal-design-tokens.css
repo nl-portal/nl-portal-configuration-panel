@@ -16,88 +16,96 @@
 
 :root {
 
-  /* COLOR TOKENS */
-  /* TODO: get actual colors from designer. Temporary colors analogous based on primary */
-  --rijkshuisstijl-wit: #ffffff;
-  --rijkshuisstijl-zwart: #000000;
-  --rijkshuisstijl-lintblauw: #154273;
-  --rijkshuisstijl-paars: #42145f;
-  --rijkshuisstijl-violet: #a90061;
-  --rijkshuisstijl-robijnrood: #ca005d;
-  --rijkshuisstijl-roze: #f092cd;
-  --rijkshuisstijl-rood: #d52b1e;
-  --rijkshuisstijl-oranje: #e17000;
-  --rijkshuisstijl-donkergeel: #ffb612;
-  --rijkshuisstijl-geel: #f9e11e;
-  --rijkshuisstijl-donkerbruin: #673327;
-  --rijkshuisstijl-bruin: #94710a;
-  --rijkshuisstijl-donkergroen: #275937;
-  --rijkshuisstijl-groen: #39870c;
-  --rijkshuisstijl-mosgroen: #777b00;
-  --rijkshuisstijl-mintgroen: #76d2b6;
-  --rijkshuisstijl-donkerblauw: #01689b;
-  --rijkshuisstijl-hemelblauw: #007bc7;
-  --rijkshuisstijl-lichtblauw: #8fcae7;
-  --rijkshuisstijl-grijs: #fbfbfb;
-  --rijkshuisstijl-donkergrijs: #383838;
-  --rijkshuisstijl-grijs-1: #f3f3f3;
-  --rijkshuisstijl-grijs-2: #e6e6e6;
-  --rijkshuisstijl-grijs-3: #cccccc;
-  --rijkshuisstijl-grijs-4: #b4b4b4;
-  --rijkshuisstijl-grijs-5: #999999;
-  --rijkshuisstijl-grijs-6: #696969;
-  --rijkshuisstijl-grijs-7: #535353;
+    /* COLOR TOKENS */
+    /* TODO: get actual colors from designer. Temporary colors analogous based on primary */
+    --rijkshuisstijl-wit: #ffffff;
+    --rijkshuisstijl-zwart: #000000;
+    --rijkshuisstijl-lintblauw: #154273;
+    --rijkshuisstijl-paars: #42145f;
+    --rijkshuisstijl-violet: #a90061;
+    --rijkshuisstijl-robijnrood: #ca005d;
+    --rijkshuisstijl-roze: #f092cd;
+    --rijkshuisstijl-rood: #d52b1e;
+    --rijkshuisstijl-oranje: #e17000;
+    --rijkshuisstijl-donkergeel: #ffb612;
+    --rijkshuisstijl-geel: #f9e11e;
+    --rijkshuisstijl-donkerbruin: #673327;
+    --rijkshuisstijl-bruin: #94710a;
+    --rijkshuisstijl-donkergroen: #275937;
+    --rijkshuisstijl-groen: #39870c;
+    --rijkshuisstijl-mosgroen: #777b00;
+    --rijkshuisstijl-mintgroen: #76d2b6;
+    --rijkshuisstijl-donkerblauw: #01689b;
+    --rijkshuisstijl-hemelblauw: #007bc7;
+    --rijkshuisstijl-lichtblauw: #8fcae7;
+    --rijkshuisstijl-grijs: #fbfbfb;
+    --rijkshuisstijl-donkergrijs: #383838;
+    --rijkshuisstijl-grijs-1: #f3f3f3;
+    --rijkshuisstijl-grijs-2: #e6e6e6;
+    --rijkshuisstijl-grijs-3: #cccccc;
+    --rijkshuisstijl-grijs-4: #b4b4b4;
+    --rijkshuisstijl-grijs-5: #999999;
+    --rijkshuisstijl-grijs-6: #696969;
+    --rijkshuisstijl-grijs-7: #535353;
 
-  --primary-color: var(--rijkshuisstijl-lintblauw);
-  --secondary-color: var(--rijkshuisstijl-donkerblauw);
-  --tetriary-color: var(--rijkshuisstijl-donkerblauw);
-  --quarternary-color: var(--rijkshuisstijl-donkerblauw);
-  --senary-color: var(--rijkshuisstijl-grijs);
+    --primary-color: var(--rijkshuisstijl-lintblauw);
+    --secondary-color: var(--rijkshuisstijl-donkerblauw);
+    --tetriary-color: var(--rijkshuisstijl-hemelblauw);
+    --quarternary-color: var(--rijkshuisstijl-lichtblauw);
+    --senary-color: var(--rijkshuisstijl-grijs);
 
-  --denhaag-color-green-3: var(--secondary-color);
-  --denhaag-color-green-4: var(--primary-color);
-  --denhaag-color-blue-1: var(--secondary-color);
-  --denhaag-color-blue-2: var(--primary-color);
-  --denhaag-color-blue-3: var(--secondary-color);
-  --denhaag-color-blue-4: var(--primary-color);
-  --denhaag-color-grey-1: var(--rijkshuisstijl-wit);
+    --denhaag-color-green-1: var(--secondary-color);
+    --denhaag-color-green-2: var(--secondary-color);
+    --denhaag-color-green-3: var(--secondary-color);
+    --denhaag-color-green-4: var(--primary-color);
+    --denhaag-color-blue-1: var(--secondary-color);
+    --denhaag-color-blue-2: var(--primary-color);
+    --denhaag-color-blue-3: var(--secondary-color);
+    --denhaag-color-blue-4: var(--primary-color);
+    --denhaag-color-grey-1: var(--rijkshuisstijl-wit);
 
-  /* CLASS OVERRIDES*/
-  --denhaag-space-block-5xl: 2.5rem; /* Extra Large 5 */
-  --denhaag-space-block-4xl: 2.25rem; /* Extra Large 4 */
-  --denhaag-space-block-3xl: 2rem; /* Extra Large 3 */
-  --denhaag-space-block-2xl: 1.75rem; /* Extra Large 2 */
-  --denhaag-space-block-xl: 1.5rem; /* Extra Large */
+    /* CLASS OVERRIDES*/
+    --denhaag-space-block-5xl: 2.5rem; /* Extra Large 5 */
+    --denhaag-space-block-4xl: 2.25rem; /* Extra Large 4 */
+    --denhaag-space-block-3xl: 2rem; /* Extra Large 3 */
+    --denhaag-space-block-2xl: 1.75rem; /* Extra Large 2 */
+    --denhaag-space-block-xl: 1.5rem; /* Extra Large */
 
-  .btn-primary {
-    background-color: var(--secondary-color);
-  }
+    .btn-primary {
+        background-color: var(--secondary-color);
+    }
 
-  .btn-primary:hover {
-    background-color: var(--primary-color);
-  }
+    .btn-primary:hover {
+        background-color: var(--primary-color);
+    }
 
-  div[class*="_header-wrapper"] {
-    border-bottom: 2px solid var(--rijkshuisstijl-donkerblauw);
-    box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
-  }
+    div[class*="_header-wrapper"] {
+        border-bottom: 2px solid var(--rijkshuisstijl-donkerblauw);
+        box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+    }
 
-  div[class*="_header__mobile-menu"] {
-    margin-top: 1rem;
-    border-top: 2px solid var(--rijkshuisstijl-donkerblauw);
-  }
+    div[class*="_header__mobile-menu"] {
+        margin-top: 1rem;
+        border-top: 2px solid var(--rijkshuisstijl-donkerblauw);
+    }
 
-  div[class*="_features-list"] {
-    padding: 0;
-    margin: 0;
-  }
+    div[class*="_features-list"] {
+        padding: 0;
+        margin: 0;
+    }
 
-  --utrecht-heading-color: var(--rijkshuisstijl-donkerblauw);
+    input {
+        &::placeholder {
+            opacity: 0.4;
+        }
+    }
 
-  --denhaag-page-content-main-md-margin-block-start: 5em;
-  --denhaag-menu-button-font-size: var(--denhaag-typography-scale-lg-font-size);
-  --denhaag-menu-button-line-height: var(
-    --denhaag-typography-scale-xl-font-size
-  );
+    --utrecht-heading-color: var(--rijkshuisstijl-donkerblauw);
+
+    --denhaag-page-content-main-md-margin-block-start: 3em;
+    --denhaag-menu-button-font-size: var(--denhaag-typography-scale-lg-font-size);
+    --denhaag-menu-button-line-height: var(
+            --denhaag-typography-scale-xl-font-size
+    );
 
 }
