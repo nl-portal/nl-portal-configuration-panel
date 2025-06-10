@@ -207,11 +207,10 @@ const ZakenApiFeatureConfiguration = ({
                                                <Select className={styles["form-field__select"]}
                                                        {...register("properties.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist")}
                                                        id="vertrouwelijkheidsaanduiding-whitelist"
-                                                   // size={8}
                                                        multiple
                                                >
                                                    {
-                                                       documentVertrouwelijkheidsaanduidingen.map( aanduiding =>
+                                                       documentVertrouwelijkheidsaanduidingen.map(aanduiding =>
                                                            <SelectOption
                                                                key={aanduiding}
                                                                value={aanduiding}
