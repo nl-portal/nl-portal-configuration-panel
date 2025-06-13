@@ -29,6 +29,7 @@ import HaalCentraalHrFeatureConfiguration from "../components/features/HaalCentr
 import ZakenApiFeatureConfiguration from "../components/features/ZakenApiFeatureConfiguration.tsx";
 import DocumentenApisFeatureConfiguration from "../components/features/DocumentenApisFeatureConfiguration.tsx";
 import OgonePaymentFeatureConfiguration from "../components/features/OgonePaymentFeatureConfiguration.tsx";
+import ClamAVFeatureConfiguration from "../components/features/ClamAVFeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
     {
@@ -105,5 +106,10 @@ export const features: FeatureConfiguration[] = [
         featureId: "payment-ogone",
         featureConfigurationPrefix: "nl-portal.config.payment.ogone",
         featureComponent: OgonePaymentFeatureConfiguration
+    },
+    {
+        featureId: "virusscan-clamav",
+        featureConfigurationPrefix: "nl-portal.config.virusscan.clamav",
+        featureComponent: ClamAVFeatureConfiguration
     }
 ]
