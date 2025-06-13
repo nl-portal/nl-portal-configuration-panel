@@ -28,6 +28,7 @@ import HaalCentraalBrpFeatureConfiguration from "../components/features/HaalCent
 import HaalCentraalHrFeatureConfiguration from "../components/features/HaalCentraalHrFeatureConfiguration.tsx";
 import ZakenApiFeatureConfiguration from "../components/features/ZakenApiFeatureConfiguration.tsx";
 import DocumentenApisFeatureConfiguration from "../components/features/DocumentenApisFeatureConfiguration.tsx";
+import OgonePaymentFeatureConfiguration from "../components/features/OgonePaymentFeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
     {
@@ -99,5 +100,10 @@ export const features: FeatureConfiguration[] = [
         featureId: "prefill",
         featureConfigurationPrefix: "nl-portal.config.prefill",
         featureComponent: PrefillFeatureConfiguration
+    },
+    {
+        featureId: "payment-ogone",
+        featureConfigurationPrefix: "nl-portal.config.payment.ogone",
+        featureComponent: OgonePaymentFeatureConfiguration
     }
 ]
