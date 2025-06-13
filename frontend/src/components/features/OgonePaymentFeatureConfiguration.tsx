@@ -110,7 +110,6 @@ const OgonePaymentFeatureConfiguration = ({
 
     useEffect(() => {
         if (onChange && currentConfiguration) {
-            console.log("config: ", currentConfiguration)
             onChange(currentConfiguration)
             reset(currentConfiguration)
         }
