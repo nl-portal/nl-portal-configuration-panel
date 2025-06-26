@@ -28,7 +28,7 @@ export const NL_NL_MESSAGES: Messages = {
     "features.feature.enabled.true": "Geactiveerd",
     "features.feature.enabled.false": "Deactiveerd",
     "features.configure": "Configureer",
-    "features.config.configurations-error": "Failed to load {featureId} configuration.",
+    "features.config.configurations-error": "Het laden van de {featureId} configuratie is mislukt.",
     "features.config.save": "Opslaan",
     "features.config.cancel": "Annuleren",
     "features.config.back": "Terug",

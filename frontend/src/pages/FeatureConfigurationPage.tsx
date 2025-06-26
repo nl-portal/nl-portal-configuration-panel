@@ -120,6 +120,12 @@ const FeatureConfigurationPage = () => {
     if (featureConfigurationsError)
         return (
             <section>
+                <BackLink href={paths.features} children={
+                    <Heading4>
+                        <FormattedMessage id={"features.config.back"}></FormattedMessage>
+                    </Heading4>
+                }>
+                </BackLink>
                 <Heading3>
                     <FormattedMessage
                         id={"features.config.configurations-error"}
