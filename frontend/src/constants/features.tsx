@@ -30,6 +30,7 @@ import ZakenApiFeatureConfiguration from "../components/features/ZakenApiFeature
 import DocumentenApisFeatureConfiguration from "../components/features/DocumentenApisFeatureConfiguration.tsx";
 import OgonePaymentFeatureConfiguration from "../components/features/OgonePaymentFeatureConfiguration.tsx";
 import ClamAVFeatureConfiguration from "../components/features/ClamAVFeatureConfiguration.tsx";
+import DirectPaymentFeatureConfiguration from "../components/features/DirectPaymentFeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
     {
@@ -106,6 +107,11 @@ export const features: FeatureConfiguration[] = [
         featureId: "payment-ogone",
         featureConfigurationPrefix: "nl-portal.config.payment.ogone",
         featureComponent: OgonePaymentFeatureConfiguration
+    },
+    {
+        featureId: "payment-direct",
+        featureConfigurationPrefix: "nl-portal.config.payment.direct",
+        featureComponent: DirectPaymentFeatureConfiguration
     },
     {
         featureId: "virusscan-clamav",

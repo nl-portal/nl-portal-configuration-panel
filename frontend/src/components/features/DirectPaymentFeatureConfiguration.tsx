@@ -33,27 +33,27 @@ import {ArrowRightIcon, TrashIcon} from "@gemeente-denhaag/icons";
 import _ from "lodash";
 import ActionField from "../ActionField.tsx";
 
-interface OgonePaymentConfiguration {
+interface DirectPaymentConfiguration {
     enabled?: string;
     properties?: {
         url: string,
         "sha-out-parameters": SHAOutParameter[],
-        "configurations": {
-            [name: string]: OgonePaymentProfile
+        "webhook-url": string,
+        configurations: {
+            [name: string]: DirectPaymentProfile
         }
     }
 }
 
-interface OgonePaymentProfile {
+interface DirectPaymentProfile {
     "psp-id": string,
     "language": string,
     "currency": string,
-    "title": string,
-    "sha-in-key": string,
-    "sha-out-key": string,
-    "sha-version": string,
-    "failure-url": string,
-    "success-url": string,
+    "api-key": string,
+    "api-secret": string,
+    "return-url": string,
+    "webhook-api-key": string,
+    "webhook-api-secret": string
 }
 
 // based on https://shared.ecom-psp.com/v2/docs/guides/e-Commerce/SHA-OUT_params.txt
@@ -131,17 +131,17 @@ enum language {
 }
 
 interface OgonePaymentFeatureConfigurationProps extends FeatureConfigurationProps {
-    prefillConfiguration?: OgonePaymentConfiguration
+    prefillConfiguration?: DirectPaymentConfiguration
 }
 
-const OgonePaymentFeatureConfiguration = ({
+const DirectPaymentFeatureConfiguration = ({
                                               prefillConfiguration,
                                               onChange,
                                               onSubmit
                                           }: OgonePaymentFeatureConfigurationProps) => {
     const intl = useIntl()
     const shaOutParameters = Object.values(SHAOutParameter)
-    const [currentConfiguration, setCurrentConfiguration] = useState<OgonePaymentConfiguration | undefined>(prefillConfiguration)
+    const [currentConfiguration, setCurrentConfiguration] = useState<DirectPaymentConfiguration | undefined>(prefillConfiguration)
     const paymentProfiles = useMemo(() => Object.keys(currentConfiguration?.properties?.configurations || {}), [currentConfiguration])
     const {
         register,
@@ -149,7 +149,7 @@ const OgonePaymentFeatureConfiguration = ({
         reset,
         handleSubmit,
         getValues: getFormValue,
-    } = useForm<OgonePaymentConfiguration>({
+    } = useForm<DirectPaymentConfiguration>({
         defaultValues: {
             enabled: "false",
             properties: {
@@ -196,7 +196,7 @@ const OgonePaymentFeatureConfiguration = ({
                                <Fragment>
                                    <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
                                        <Heading3><FormattedMessage
-                                           id={"features.payment.ogone.configuration"}></FormattedMessage></Heading3>
+                                           id={"features.payment.direct.configuration"}></FormattedMessage></Heading3>
                                    </FieldsetLegend>
                                    <Fieldset role={"radiogroup"}>
                                        <FormField className={styles["form-field__radio-option"]}
@@ -236,13 +236,13 @@ const OgonePaymentFeatureConfiguration = ({
                                            <FormField
                                                label={
                                                    <FormLabel htmlFor={"url"}>
-                                                       <FormattedMessage id={"features.payment.ogone.url"}/>
+                                                       <FormattedMessage id={"features.payment.direct.url"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.payment.ogone.url.description"}/>
+                                                           id={"features.payment.direct.url.description"}/>
                                                    </Paragraph>
                                                }
                                            >
@@ -256,13 +256,13 @@ const OgonePaymentFeatureConfiguration = ({
                                                label={
                                                    <FormLabel htmlFor={"sha-out-parameters"}>
                                                        <FormattedMessage
-                                                           id={"features.payment.ogone.sha-out-parameters"}/>
+                                                           id={"features.payment.direct.sha-out-parameters"}/>
                                                    </FormLabel>
                                                }
                                                description={
                                                    <Paragraph>
                                                        <FormattedMessage
-                                                           id={"features.payment.ogone.sha-out-parameters.description"}/>
+                                                           id={"features.payment.direct.sha-out-parameters.description"}/>
                                                    </Paragraph>
                                                }>
                                                <Select className={styles["form-field__select"]}
@@ -283,6 +283,25 @@ const OgonePaymentFeatureConfiguration = ({
                                                    }
                                                </Select>
                                            </FormField>
+                                           <FormField
+                                               label={
+                                                   <FormLabel htmlFor={"webhook-url"}>
+                                                       <FormattedMessage id={"features.payment.direct.webhook-url"}/>
+                                                   </FormLabel>
+                                               }
+                                               description={
+                                                   <Paragraph>
+                                                       <FormattedMessage
+                                                           id={"features.payment.direct.webhook-url.description"}/>
+                                                   </Paragraph>
+                                               }
+                                           >
+                                               <TextInput
+                                                   {...register("properties.webhook-url")}
+                                                   id="webhook-url"
+                                                   type="url"
+                                               />
+                                           </FormField>
                                            {
                                                (
                                                    paymentProfiles.map((key, index) =>
@@ -294,7 +313,7 @@ const OgonePaymentFeatureConfiguration = ({
                                                                <ActionField
                                                                    field={
                                                                        <Heading4>
-                                                                           {intl.formatMessage({id: "features.payment.ogone.profile"}) + ": "+ key}
+                                                                           {intl.formatMessage({id: "features.payment.direct.profile"}) + ": "+ key}
                                                                        </Heading4>
                                                                    }
                                                                    button={
@@ -311,34 +330,15 @@ const OgonePaymentFeatureConfiguration = ({
                                                            </FormField>
                                                            <FormField
                                                                label={
-                                                                   <FormLabel htmlFor={key + ".title"}>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.title"}/>
-                                                                   </FormLabel>
-                                                               }
-                                                               description={
-                                                                   <Paragraph>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.title.description"}/>
-                                                                   </Paragraph>
-                                                               }
-                                                           >
-                                                               <TextInput
-                                                                   {...register(`properties.configurations.${key}.title`)}
-                                                                   id={key + ".title"}
-                                                               />
-                                                           </FormField>
-                                                           <FormField
-                                                               label={
                                                                    <FormLabel htmlFor={key + ".psp-id"}>
                                                                        <FormattedMessage
-                                                                           id={"features.payment.ogone.psp-id"}/>
+                                                                           id={"features.payment.direct.psp-id"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.payment.ogone.psp-id.description"}/>
+                                                                           id={"features.payment.direct.psp-id.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
@@ -351,13 +351,13 @@ const OgonePaymentFeatureConfiguration = ({
                                                                label={
                                                                    <FormLabel htmlFor={"language"}>
                                                                        <FormattedMessage
-                                                                           id={"features.payment.ogone.language"}/>
+                                                                           id={"features.payment.direct.language"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.payment.ogone.language.description"}/>
+                                                                           id={"features.payment.direct.language.description"}/>
                                                                    </Paragraph>
                                                                }>
                                                                <Select className={styles["form-field__select"]}
@@ -380,117 +380,120 @@ const OgonePaymentFeatureConfiguration = ({
                                                            </FormField>
                                                            <FormField
                                                                label={
-                                                                   <FormLabel htmlFor={key + ".sha-in-key"}>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.sha-in-key"}/>
+                                                                   <FormLabel htmlFor={"currency"}>
+                                                                       <FormattedMessage id={"features.payment.direct.currency"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.payment.ogone.sha-in-key.description"}/>
-                                                                   </Paragraph>
-                                                               }
-                                                           >
-                                                               <PasswordInput
-                                                                   {...register(`properties.configurations.${key}.sha-in-key`)}
-                                                                   id={key + ".sha-in-key"}
-                                                               />
-                                                           </FormField>
-                                                           <FormField
-                                                               label={
-                                                                   <FormLabel htmlFor={key + ".sha-out-key"}>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.sha-out-key"}/>
-                                                                   </FormLabel>
-                                                               }
-                                                               description={
-                                                                   <Paragraph>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.sha-out-key.description"}/>
-                                                                   </Paragraph>
-                                                               }
-                                                           >
-                                                               <PasswordInput
-                                                                   {...register(`properties.configurations.${key}.sha-out-key`)}
-                                                                   id={key + ".sha-out-key"}
-                                                               />
-                                                           </FormField>
-                                                           <FormField
-                                                               label={
-                                                                   <FormLabel htmlFor={"sha-version"}>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.sha-version"}/>
-                                                                   </FormLabel>
-                                                               }
-                                                               description={
-                                                                   <Paragraph>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.sha-version.description"}/>
-                                                                   </Paragraph>
-                                                               }>
-                                                               <Select className={styles["form-field__select"]}
-                                                                       {...register(`properties.configurations.${key}.sha-version`)}
-                                                                       id="sha-version"
-                                                               >
-                                                                   <SelectOption
-                                                                       key={"SHA1"}
-                                                                       value={"SHA1"}
-                                                                   >
-                                                                       SHA1
-                                                                   </SelectOption>
-                                                                   <SelectOption
-                                                                       key={"SHA256"}
-                                                                       value={"SHA256"}
-                                                                   >
-                                                                       SHA256
-                                                                   </SelectOption>
-                                                                   <SelectOption
-                                                                       key={"SHA512"}
-                                                                       value={"SHA512"}
-                                                                   >
-                                                                       SHA512
-                                                                   </SelectOption>
-                                                               </Select>
-                                                           </FormField>
-                                                           <FormField
-                                                               label={
-                                                                   <FormLabel htmlFor={"failure-url"}>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.failure-url"}/>
-                                                                   </FormLabel>
-                                                               }
-                                                               description={
-                                                                   <Paragraph>
-                                                                       <FormattedMessage
-                                                                           id={"features.payment.ogone.failure-url.description"}/>
+                                                                           id={"features.payment.direct.currency.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
                                                                <TextInput
-                                                                   {...register(`properties.configurations.${key}.failure-url`)}
-                                                                   id="url"
+                                                                   {...register(`properties.configurations.${key}.currency`)}
+                                                                   id="currency"
+                                                                   maxLength={3}
+                                                                   onInput={(e) => {
+                                                                       // @ts-expect-error input event always has a value
+                                                                       e.target.value = e.target.value.toUpperCase()}}
+                                                               />
+                                                           </FormField>
+                                                           <FormField
+                                                               label={
+                                                                   <FormLabel htmlFor={"api-key"}>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.api-key"}/>
+                                                                   </FormLabel>
+                                                               }
+                                                               description={
+                                                                   <Paragraph>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.api-key.description"}/>
+                                                                   </Paragraph>
+                                                               }
+                                                           >
+                                                               <PasswordInput
+                                                                   {...register(`properties.configurations.${key}.api-key`)}
+                                                                   id="api-key"
+                                                               />
+                                                           </FormField>
+                                                           <FormField
+                                                               label={
+                                                                   <FormLabel htmlFor={"api-secret"}>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.api-secret"}/>
+                                                                   </FormLabel>
+                                                               }
+                                                               description={
+                                                                   <Paragraph>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.api-secret.description"}/>
+                                                                   </Paragraph>
+                                                               }
+                                                           >
+                                                               <PasswordInput
+                                                                   {...register(`properties.configurations.${key}.api-secret`)}
+                                                                   id="api-secret"
+                                                               />
+                                                           </FormField>
+                                                           <FormField
+                                                               label={
+                                                                   <FormLabel htmlFor={"return-url"}>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.return-url"}/>
+                                                                   </FormLabel>
+                                                               }
+                                                               description={
+                                                                   <Paragraph>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.return-url.description"}/>
+                                                                   </Paragraph>
+                                                               }
+                                                           >
+                                                               <TextInput
+                                                                   {...register(`properties.configurations.${key}.return-url`)}
+                                                                   id="return-url"
                                                                    type="url"
                                                                />
                                                            </FormField>
                                                            <FormField
                                                                label={
-                                                                   <FormLabel htmlFor={"success-url"}>
+                                                                   <FormLabel htmlFor={"webhook-api-key"}>
                                                                        <FormattedMessage
-                                                                           id={"features.payment.ogone.success-url"}/>
+                                                                           id={"features.payment.direct.webhook-api-key"}/>
                                                                    </FormLabel>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"features.payment.ogone.success-url.description"}/>
+                                                                           id={"features.payment.direct.webhook-api-key.description"}/>
                                                                    </Paragraph>
                                                                }
                                                            >
                                                                <TextInput
-                                                                   {...register(`properties.configurations.${key}.success-url`)}
-                                                                   id="url"
-                                                                   type="url"
+                                                                   {...register(`properties.configurations.${key}.webhook-api-key`)}
+                                                                   id="webhook-api-key"
+                                                               />
+                                                           </FormField>
+                                                           <FormField
+                                                               label={
+                                                                   <FormLabel htmlFor={"webhook-api-secret"}>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.webhook-api-secret"}/>
+                                                                   </FormLabel>
+                                                               }
+                                                               description={
+                                                                   <Paragraph>
+                                                                       <FormattedMessage
+                                                                           id={"features.payment.direct.webhook-api-secret.description"}/>
+                                                                   </Paragraph>
+                                                               }
+                                                           >
+                                                               <PasswordInput
+                                                                   {...register(`properties.configurations.${key}.webhook-api-secret`)}
+                                                                   id="webhook-api-secret"
                                                                />
                                                            </FormField>
                                                        </section>
@@ -505,13 +508,13 @@ const OgonePaymentFeatureConfiguration = ({
                                                    label={
                                                        <FormLabel htmlFor={"add-another"}>
                                                            <FormattedMessage
-                                                               id={"features.payment.ogone.profiles.add-another"}/>
+                                                               id={"features.payment.direct.profiles.add-another"}/>
                                                        </FormLabel>
                                                    }
                                                    description={
                                                        <Paragraph>
                                                            <FormattedMessage
-                                                               id={"features.payment.ogone.profiles.add-another.description"}/>
+                                                               id={"features.payment.direct.profiles.add-another.description"}/>
                                                        </Paragraph>
                                                    }
                                                    field={
@@ -519,7 +522,7 @@ const OgonePaymentFeatureConfiguration = ({
                                                            id={"add-another"}
                                                            ref={addProfileRef}
                                                            placeholder={
-                                                               intl.formatMessage({id: "features.payment.ogone.profiles.profile-name"})
+                                                               intl.formatMessage({id: "features.payment.direct.profiles.profile-name"})
                                                            }
                                                        />
                                                    }
@@ -546,4 +549,4 @@ const OgonePaymentFeatureConfiguration = ({
     )
 }
 
-export default OgonePaymentFeatureConfiguration;
+export default DirectPaymentFeatureConfiguration;
