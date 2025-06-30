@@ -107,5 +107,6 @@
     --denhaag-menu-button-line-height: var(
             --denhaag-typography-scale-xl-font-size
     );
+    --nlportal-page-grid-gap-lg: 2em;
 
 }

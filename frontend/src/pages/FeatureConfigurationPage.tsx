@@ -31,6 +31,7 @@ import useConfigurationsMutation from "../hooks/useConfigurationsMutation.tsx";
 import {toast} from "react-toastify";
 import _ from "lodash";
 import useDeleteConfigurationsByFeatureMutation from "../hooks/useDeleteConfigurationsByFeatureMutation.tsx";
+import BackLink from "../components/BackLink.tsx";
 
 const FeatureConfigurationPage = () => {
     const {featureId} = useParams();
@@ -119,6 +120,12 @@ const FeatureConfigurationPage = () => {
     if (featureConfigurationsError)
         return (
             <section>
+                <BackLink href={paths.features} children={
+                    <Heading4>
+                        <FormattedMessage id={"features.config.back"}></FormattedMessage>
+                    </Heading4>
+                }>
+                </BackLink>
                 <Heading3>
                     <FormattedMessage
                         id={"features.config.configurations-error"}
@@ -131,6 +138,12 @@ const FeatureConfigurationPage = () => {
     return (
         <PageGrid>
             <PageHeader>
+                <BackLink href={paths.features} children={
+                    <Heading4>
+                        <FormattedMessage id={"features.config.back"}></FormattedMessage>
+                    </Heading4>
+                }>
+                </BackLink>
                 <Heading2><FormattedMessage id={"features." + featureId}/></Heading2>
             </PageHeader>
             <div className={styles["feature-config__content"]}>
