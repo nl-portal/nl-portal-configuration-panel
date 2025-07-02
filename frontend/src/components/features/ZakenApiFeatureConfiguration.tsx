@@ -207,7 +207,7 @@ const ZakenApiFeatureConfiguration = ({
                                                }>
                                                <TextInput
                                                    {...register("properties.zaak-types-ids-excluded")}
-                                                   id="client-id"
+                                                   id="zaak-types-ids-excluded"
                                                />
                                            </FormField>
                                            <FormField
