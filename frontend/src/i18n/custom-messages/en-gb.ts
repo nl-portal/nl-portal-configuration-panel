@@ -132,6 +132,8 @@ export const EN_GB_MESSAGES: Messages = {
         "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist.description": "Limit which information objects are allowed to be shown to the end user by their confidentiality indication. If none are selected, all information objects will be shown.",
         "features.zakenapi.zaak-documenten-config.status-whitelist": "Case information object status whitelist",
         "features.zakenapi.zaak-documenten-config.status-whitelist.description": "Limit which information objects are allowed to be shown to the end user by their status. If no statuses are whitelisted, all information objects will be shown.",
+        "features.zakenapi.zaak-types-ids-excluded": "Exclude zaaktype uuids",
+        "features.zakenapi.zaak-types-ids-excluded.description": "Exclude zaaktype uuid's as extra filter on the get zaken query",
         "features.documentenapis": "Documenten APIs",
         "features.documentenapis.configuration": "Configuration",
         "features.documentenapis.configurations.add-another": "Add another configuration",

@@ -19,6 +19,7 @@ interface ZakenApiConfiguration {
         "url"?: string,
         "client-id"?: string,
         "secret"?: string,
+        "zaak-types-ids-excluded"?: string[]
         "zaak-documenten-config"?: {
             "vertrouwelijkheidsaanduiding-whitelist"?: Vertrouwelijkheidsaanduiding[]
             "status-whitelist"?: DocumentStatus[]
@@ -189,6 +190,24 @@ const ZakenApiFeatureConfiguration = ({
                                                <PasswordInput
                                                    {...register("properties.secret")}
                                                    id="secret"
+                                               />
+                                           </FormField>
+                                           <FormField
+                                               label={
+                                                   <FormLabel htmlFor={"zaak-types-ids-excluded"}>
+                                                       <FormattedMessage
+                                                           id={"features.zakenapi.zaak-types-ids-excluded"}/>
+                                                   </FormLabel>
+                                               }
+                                               description={
+                                                   <Paragraph>
+                                                       <FormattedMessage
+                                                           id={"features.zakenapi.zaak-types-ids-excluded.description"}/>
+                                                   </Paragraph>
+                                               }>
+                                               <TextInput
+                                                   {...register("properties.zaak-types-ids-excluded")}
+                                                   id="client-id"
                                                />
                                            </FormField>
                                            <FormField
