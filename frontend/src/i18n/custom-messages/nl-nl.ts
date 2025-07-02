@@ -135,7 +135,7 @@ export const NL_NL_MESSAGES: Messages = {
     "features.zakenapi.zaak-documenten-config.status-whitelist": "Zaak informatieobject status whitelist",
     "features.zakenapi.zaak-documenten-config.status-whitelist.description": "Beperk welke informatieobjecten aan de eindgebruiker mogen worden getoond op basis van hun status. Als er geen statussen zijn geselecteerd, worden alle informatieobjecten weergegeven.",
     "features.zakenapi.zaak-types-ids-excluded": "Exclude zaaktype uuid's",
-    "features.zakenapi.zaak-types-ids-excluded.description": "Exclude zaaktype uuid's als extra filter om de zaken op te halen",
+    "features.zakenapi.zaak-types-ids-excluded.description": "Exclude zaaktype uuid's als extra filter om de zaken op te halen.",
     "features.documentenapis": "Documenten APIs",
     "features.documentenapis.configuration": "Configuration",
     "features.documentenapis.configurations.add-another": "Configuratie toevoegen",
