@@ -27,6 +27,8 @@ interface ConfigRepository : JpaRepository<ConfigurationProperty, String> {
 
     fun findByApplicationAndPropertyKey(application: String, propertyKey: String): ConfigurationProperty?
 
+    fun findByPropertyKeyContains(key: String): List<ConfigurationProperty>?
+
     fun findByApplicationAndPropertyKeyStartsWith(
         application: String,
         propertyKeyPrefix: String

@@ -16,6 +16,7 @@
 
 package nl.nlportal.configurationpanel.service
 
+import nl.nlportal.configurationpanel.domain.ConfigurationComponentStatus
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.repository.ConfigRepository
 import org.springframework.cache.annotation.Cacheable
@@ -65,5 +66,19 @@ class ConfigService(
             .also {
                 notifyService.restartNlPortalClients()
             }
+    }
+
+    fun getConfigurationComponentsStatus(): List<ConfigurationComponentStatus>? {
+        val componentsStatus = mutableListOf<ConfigurationComponentStatus>()
+        configRepository.findByPropertyKeyContains(".enabled")?.forEach {
+            componentsStatus.add(
+                ConfigurationComponentStatus(
+                    featureName = it.propertyKey.split(".")[2],
+                    isEnabled = it.propertyValue.toBoolean()
+                )
+            )
+        }
+
+        return componentsStatus
     }
 }

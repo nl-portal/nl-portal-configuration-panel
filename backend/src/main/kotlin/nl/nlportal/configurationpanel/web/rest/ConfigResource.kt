@@ -16,6 +16,7 @@
 
 package nl.nlportal.configurationpanel.web.rest
 
+import nl.nlportal.configurationpanel.domain.ConfigurationComponentStatus
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.service.ConfigService
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -58,5 +59,10 @@ class ConfigResource(
     @PostMapping("/v1/configurations")
     fun saveConfigurationProperties(@RequestBody configs: List<ConfigurationProperty>): List<ConfigurationProperty> {
         return configService.saveConfigurationProperties(configs)
+    }
+
+    @GetMapping("/v1/configurations/components/status")
+    fun getConfigurationComponentsStatus(): List<ConfigurationComponentStatus>? {
+        return configService.getConfigurationComponentsStatus()
     }
 }
