@@ -1,7 +1,7 @@
 package nl.nlportal.configurationpanel.service
 
 import nl.nlportal.configurationpanel.client.NlPortalClient
-import nl.nlportal.configurationpanel.configuration.NotifyConfigurationProperties
+import nl.nlportal.configurationpanel.configuration.ConfigurationPanelNotifyConfigurationProperties
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 class NotifyServiceTest {
 
     @Mock
-    private lateinit var notifyConfigurationProperties: NotifyConfigurationProperties
+    private lateinit var notifyConfigurationProperties: ConfigurationPanelNotifyConfigurationProperties
 
     @Mock
     private lateinit var nlPortalClient: NlPortalClient
@@ -27,7 +27,7 @@ class NotifyServiceTest {
     @BeforeEach
     fun setUp() {
         notifyConfigurationProperties =
-            NotifyConfigurationProperties(
+            ConfigurationPanelNotifyConfigurationProperties(
                 notifyOnChanges = true,
                 notifyList =
                     listOf(

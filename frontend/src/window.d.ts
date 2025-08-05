@@ -21,5 +21,6 @@ export declare global {
     OIDC_CLIENT_ID: string;
     OIDC_REDIRECT_URI: string;
     OIDC_POST_LOGOUT_REDIRECT_URI: string;
+    CLIENT_APPLICATION_NAME: string;
   }
 }

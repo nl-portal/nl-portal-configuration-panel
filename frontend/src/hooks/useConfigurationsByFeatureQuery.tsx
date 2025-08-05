@@ -17,6 +17,8 @@
 import {useQuery} from "@tanstack/react-query";
 import {useAuth} from "react-oidc-context";
 import ConfigurationProperty from "../interfaces/ConfigurationProperty.ts";
+import {useContext} from "react";
+import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsProvider.tsx";
 
 interface UseConfigurationsByFeatureQueryProps {
     applicationName?: string;
@@ -27,10 +29,11 @@ interface UseConfigurationsByFeatureQueryProps {
 export const useConfigurationsByFeatureQuery = (
     options: UseConfigurationsByFeatureQueryProps = {}
 ) => {
+    const {clientSettings} = useContext(ConfigPanelSettingsContext);
     const auth = useAuth();
     const defaultVariables: UseConfigurationsByFeatureQueryProps =
         {
-            applicationName: 'nl-portal-backend-libraries',
+            applicationName: clientSettings.applicationName,
             refetchInterval: false
         }
     const variables = {...defaultVariables, ...options}

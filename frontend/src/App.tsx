@@ -26,6 +26,7 @@ import {config} from "./constants/config.ts";
 import {LocalizationProvider} from "@nl-portal/nl-portal-localization";
 import {CUSTOM_MESSAGES} from "./i18n/custom-messages/custom-messages.ts";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import ConfigPanelSettingsContext from "./contexts/ConfigPanelSettingsProvider.tsx";
 
 
 function App() {
@@ -39,14 +40,22 @@ function App() {
                          post_logout_redirect_uri={config.OIDC_POST_LOGOUT_REDIRECT_URI}
             >
                 <QueryClientProvider client={queryClient}>
-                    <LocalizationProvider
-                        customMessages={CUSTOM_MESSAGES}
+                    <ConfigPanelSettingsContext.Provider
+                    value={{
+                        clientSettings: {
+                            applicationName: config.CLIENT_APPLICATION_NAME
+                        },
+                    }}
                     >
-                        <Layout
-                            headerLogo={<img src={HeaderLogo} alt="logo"/>}
-                            paths={paths}
-                        />
-                    </LocalizationProvider>
+                        <LocalizationProvider
+                            customMessages={CUSTOM_MESSAGES}
+                        >
+                            <Layout
+                                headerLogo={<img src={HeaderLogo} alt="logo"/>}
+                                paths={paths}
+                            />
+                        </LocalizationProvider>
+                    </ConfigPanelSettingsContext.Provider>
                 </QueryClientProvider>
             </OidcWrapper>
         </StrictMode>

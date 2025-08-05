@@ -7,10 +7,10 @@ services:
         depends_on:
             -   configuration-panel-database
         ports:
-            -   "8888:8888"
+            -   "8888:8080"
         environment: &configuration-panel-backend-env
-            LOGLEVEL: "DEBUG"
-            DATABASE_URL: "jdbc:postgresql://host.docker.internal:54322/nl-portal-config"
+            LOGLEVEL: "INFO"
+            DATABASE_URL: "jdbc:postgresql://configuration-panel-database:5432/nl-portal-config"
             DATABASE_USERNAME: "config"
             DATABASE_PASSWORD: "password"
             JWKS_URI: "http://host.docker.internal:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs"
@@ -18,7 +18,7 @@ services:
             CONFIG_SERVER_PREFIX: "/configuration"
             CONFIG_SERVER_TOKEN: "VerySecretToken"
             CONFIG_NOTIFY_ENABLED: true
-            CONFIG_NOTIFY_LIST: "http://host.docker.internal:8090"
+            CONFIG_NOTIFY_LIST: "http://host.docker.internal:8080"
 
     configuration-panel-frontend-local:
         profiles:
@@ -30,11 +30,14 @@ services:
         ports:
             -   "3333:8080"
         environment: &configuration-panel-frontend-env
+            SERVER_PORT: 8080
             OIDC_URL: "http://localhost:8082/auth/realms/nlportalconfig"
             OIDC_REALM: "nlportalconfig"
             OIDC_CLIENT_ID: "nl-portal-config"
             OIDC_REDIRECT_URI: "http://localhost:3333/keycloak/callback"
             OIDC_POST_LOGOUT_REDIRECT_URI: "http://localhost:3333"
+            CLIENT_APPLICATION_NAME: "nl-portal-app"
+            CONFIG_PANEL_BACKEND_BASE_URL: "http://host.docker.internal:8888"
 
     configuration-panel-backend-remote:
         image: ghcr.io/nl-portal/configuration-panel-backend
