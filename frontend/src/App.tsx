@@ -26,7 +26,7 @@ import {config} from "./constants/config.ts";
 import {LocalizationProvider} from "@nl-portal/nl-portal-localization";
 import {CUSTOM_MESSAGES} from "./i18n/custom-messages/custom-messages.ts";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import ConfigPanelSettingsContext from "./contexts/ConfigPanelSettingsProvider.tsx";
+import ConfigPanelSettingsContext from "./contexts/ConfigPanelSettingsContext.tsx";
 
 
 function App() {

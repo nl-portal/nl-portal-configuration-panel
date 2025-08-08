@@ -16,7 +16,7 @@
 
 import {useMutation} from "@tanstack/react-query";
 import {useAuth} from "react-oidc-context";
-import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsProvider.tsx";
+import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
 import {useContext} from "react";
 
 interface UseDeleteConfigurationsByFeatureMutationProps {

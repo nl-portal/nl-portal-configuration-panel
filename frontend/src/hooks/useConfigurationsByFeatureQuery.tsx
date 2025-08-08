@@ -18,7 +18,7 @@ import {useQuery} from "@tanstack/react-query";
 import {useAuth} from "react-oidc-context";
 import ConfigurationProperty from "../interfaces/ConfigurationProperty.ts";
 import {useContext} from "react";
-import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsProvider.tsx";
+import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
 
 interface UseConfigurationsByFeatureQueryProps {
     applicationName?: string;

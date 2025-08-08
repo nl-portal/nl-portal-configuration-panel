@@ -1,4 +1,19 @@
 services:
+    configuration-panel-router:
+        container_name: configuration-panel-router
+        image: nginx:stable-alpine-slim
+        profiles:
+            -   local
+            -   remote
+        ports:
+            -   "3001:8080"
+        volumes:
+            - "./imports/router/conf.d/:/etc/nginx/conf.d/"
+            - "./imports/router/templates/:/etc/nginx/templates/"
+        environment:
+            CONFIG_PANEL_BACKEND_HOST: http://host.docker.internal:8090
+            CONFIG_PANEL_FRONTEND_HOST: http://host.docker.internal:8091
+
     configuration-panel-backend-local:
         profiles:
             -   local
@@ -7,7 +22,7 @@ services:
         depends_on:
             -   configuration-panel-database
         ports:
-            -   "8888:8080"
+            -   "8090:8080"
         environment: &configuration-panel-backend-env
             LOGLEVEL: "INFO"
             DATABASE_URL: "jdbc:postgresql://configuration-panel-database:5432/nl-portal-config"
@@ -28,16 +43,15 @@ services:
         depends_on:
             -   configuration-panel-backend-local
         ports:
-            -   "3333:8080"
+            -   "8091:8080"
         environment: &configuration-panel-frontend-env
             SERVER_PORT: 8080
             OIDC_URL: "http://localhost:8082/auth/realms/nlportalconfig"
             OIDC_REALM: "nlportalconfig"
             OIDC_CLIENT_ID: "nl-portal-config"
-            OIDC_REDIRECT_URI: "http://localhost:3333/keycloak/callback"
-            OIDC_POST_LOGOUT_REDIRECT_URI: "http://localhost:3333"
+            OIDC_REDIRECT_URI: "http://localhost:3001"
+            OIDC_POST_LOGOUT_REDIRECT_URI: "http://localhost:3001"
             CLIENT_APPLICATION_NAME: "nl-portal-app"
-            CONFIG_PANEL_BACKEND_BASE_URL: "http://host.docker.internal:8888"
 
     configuration-panel-backend-remote:
         image: ghcr.io/nl-portal/configuration-panel-backend
@@ -48,7 +62,7 @@ services:
         depends_on:
             -   configuration-panel-database
         ports:
-            -   "8888:8888"
+            -   "8090:8080"
         environment: *configuration-panel-backend-env
 
     configuration-panel-frontend-remote:
@@ -60,14 +74,12 @@ services:
         depends_on:
             -   configuration-panel-backend-remote
         ports:
-            -   "3333:8080"
+            -   "8091:8080"
         environment: *configuration-panel-frontend-env
 
     configuration-panel-database:
         container_name: configuration-panel-database
         image: postgres:15
-        ports:
-            - "54322:5432"
         environment:
             POSTGRES_USER: config
             POSTGRES_PASSWORD: password
@@ -75,5 +87,28 @@ services:
         volumes:
             - configuration-panel-database-data:/var/lib/postgres # persist data even if container shuts down
 
+    configuration-panel-keycloak:
+        container_name: configuration-panel-keycloak
+        depends_on:
+            - configuration-panel-keycloak-database
+        image: quay.io/keycloak/keycloak:26.3
+        ports:
+            - "8082:8080"
+        environment:
+            KC_DB: postgres
+            KC_DB_URL: jdbc:postgresql://configuration-panel-keycloak-database/keycloak
+            KC_DB_USERNAME: keycloak
+            KC_DB_PASSWORD: keycloak
+            KC_HTTP_RELATIVE_PATH: /auth
+        volumes:
+            - ./imports/keycloak:/opt/keycloak/data/import
+        command: "start-dev --import-realm"
+
+    configuration-panel-keycloak-database:
+        container_name: configuration-panel-keycloak-database
+        image: postgres:15
+        environment:
+            POSTGRES_USER: keycloak
+            POSTGRES_PASSWORD: keycloak
 volumes:
     configuration-panel-database-data:

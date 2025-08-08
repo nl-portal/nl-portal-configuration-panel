@@ -23,22 +23,32 @@ const Authenticator: FC<{ children?: ReactNode }> = ({children}) => {
 
     useEffect(() => {
         if (!auth.isAuthenticated && !auth.isLoading) {
-            void auth.signinRedirect()
+            setTimeout(async () => {
+                void auth.signinRedirect()
+            }, 2000)
         }
-    }, [auth])
+    }, [auth.isLoading, auth.isAuthenticated])
 
     useEffect(() => {
-        const handleTokenExpired = () => auth.startSilentRenew();
+        if (auth.isAuthenticated) {
+            const handleTokenExpiring = () => auth.startSilentRenew();
+            const handleTokenExpired = () => auth.signoutRedirect();
 
-        auth.events.addAccessTokenExpired(handleTokenExpired);
-    }, [auth]);
+            auth.events.addAccessTokenExpiring(handleTokenExpiring)
+            auth.events.addAccessTokenExpired(handleTokenExpired);
+        }
+    }, [auth.isAuthenticated]);
 
-    if (auth.isLoading) {
-        return <Paragraph>Loading...</Paragraph>
+    if (auth.isLoading && !auth.isAuthenticated) {
+        return <Paragraph>Redirecting to Identity Provider...</Paragraph>
+    }
+
+    if (auth.isLoading && auth.isAuthenticated) {
+        return <Paragraph>Authenticated, loading page...</Paragraph>
     }
 
     if (auth.error) {
-        return <Paragraph>{auth.error.message}</Paragraph>
+        return <Paragraph>Failed to redirect to Identity Provider. Retrying in 2 seconds...</Paragraph>
     }
 
     if (auth.isAuthenticated) {

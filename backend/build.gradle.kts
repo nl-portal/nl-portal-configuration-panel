@@ -84,7 +84,7 @@ kotlin {
 tasks.bootRun {
     environment.putAll(
         mapOf(
-            "SERVER_PORT" to "8888",
+            "SERVER_PORT" to "8090",
             "DATABASE_URL" to "jdbc:postgresql://localhost:54322/nl-portal-config",
             "DATABASE_USERNAME" to "config",
             "DATABASE_PASSWORD" to "password",

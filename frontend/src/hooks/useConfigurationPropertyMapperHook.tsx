@@ -17,7 +17,7 @@ import ConfigurationProperty from "../interfaces/ConfigurationProperty.ts";
 import _ from "lodash";
 import {flatten} from "flat";
 import {useContext} from "react";
-import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsProvider.tsx";
+import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
 
 const useConfigurationPropertyMapperHook = () => {
     const {clientSettings} = useContext(ConfigPanelSettingsContext);
