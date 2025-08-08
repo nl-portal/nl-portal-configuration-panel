@@ -3,10 +3,10 @@ services:
         container_name: configuration-panel-router
         image: nginx:stable-alpine-slim
         profiles:
-            -   local
-            -   remote
+            - local
+            - remote
         ports:
-            -   "3001:8080"
+            - "3001:8080"
         volumes:
             - "./imports/router/conf.d/:/etc/nginx/conf.d/"
             - "./imports/router/templates/:/etc/nginx/templates/"
@@ -16,13 +16,13 @@ services:
 
     configuration-panel-backend-local:
         profiles:
-            -   local
+            - local
         container_name: configuration-panel-backend
         build: backend/
         depends_on:
-            -   configuration-panel-database
+            - configuration-panel-database
         ports:
-            -   "8090:8080"
+            - "8090:8080"
         environment: &configuration-panel-backend-env
             LOGLEVEL: "INFO"
             DATABASE_URL: "jdbc:postgresql://configuration-panel-database:5432/nl-portal-config"
@@ -37,15 +37,14 @@ services:
 
     configuration-panel-frontend-local:
         profiles:
-            -   local
+            - local
         container_name: configuration-panel-frontend
         build: frontend/
         depends_on:
-            -   configuration-panel-backend-local
+            - configuration-panel-backend-local
         ports:
-            -   "8091:8080"
+            - "8091:8080"
         environment: &configuration-panel-frontend-env
-            SERVER_PORT: 8080
             OIDC_URL: "http://localhost:8082/auth/realms/nlportalconfig"
             OIDC_REALM: "nlportalconfig"
             OIDC_CLIENT_ID: "nl-portal-config"
@@ -57,24 +56,24 @@ services:
         image: ghcr.io/nl-portal/configuration-panel-backend
         platform: linux/amd64
         profiles:
-            -   remote
+            - remote
         container_name: configuration-panel-backend
         depends_on:
-            -   configuration-panel-database
+            - configuration-panel-database
         ports:
-            -   "8090:8080"
+            - "8090:8080"
         environment: *configuration-panel-backend-env
 
     configuration-panel-frontend-remote:
         image: ghcr.io/nl-portal/configuration-panel-frontend
         platform: linux/amd64
         profiles:
-            -   remote
+            - remote
         container_name: configuration-panel-frontend
         depends_on:
-            -   configuration-panel-backend-remote
+            - configuration-panel-backend-remote
         ports:
-            -   "8091:8080"
+            - "8091:8080"
         environment: *configuration-panel-frontend-env
 
     configuration-panel-database:
