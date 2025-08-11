@@ -7,27 +7,23 @@ The following software has to be installed to be able to use this application
 | Run latest prebuilt app images | Build and run app images | Run from source |
 |--------------------------------|--------------------------|-----------------|
 | Docker Desktop                 | Docker Desktop           | Docker Desktop  |
-|                                | Gradle 8.*               | Gradle 8.*      |
 |                                | NodeJS 20                | NodeJS 20       |
 |                                | PNPM                     | PNPM            |
 
 ## Dependencies
 
-### NL Portal Docker Compose
 
-This application relies on the keycloak and keycloak-db services from the NL Portal Docker Compose project.
-Please make sure those are composed and running by following the instructions
-[here](https://github.com/nl-portal/nl-portal-docker-compose?tab=readme-ov-file#keycloak-and-database-only).
 
 ## Running the application
 
-Follow one of the following to start up the application:  
+Follow one of the following to start up the application:
+
 * [Run latest prebuilt app images](#by-pulling-and-running-latest-prebuilt-docker-images)
 * [Build and run app images](#by-building-and-running-docker-images)
 * [Run from source](#from-source)
 
-Once started, the application will become available at http://localhost:3333. The default user credentials
-for this application are `admin:admin` (if you're using the above-mentioned compose).
+Once started, the application will become available at http://localhost:3001. The default user credentials
+for this application are `admin:admin`.
 
 ### By pulling and running latest prebuilt docker images
 
@@ -59,11 +55,10 @@ instead of in a development environment by following these steps:
 
 ### From source
 
-Start up the backend and frontend from within their respective directories through an IDE
-or via the following shell commands:
+Start up the backend and frontend from within their respective directories through an IDE (only do step 1) or via the
+following shell commands:
 
-
-1. Compose the database
+1. Compose the database and keycloak services
    ```shell
    docker compose up -d
    ```

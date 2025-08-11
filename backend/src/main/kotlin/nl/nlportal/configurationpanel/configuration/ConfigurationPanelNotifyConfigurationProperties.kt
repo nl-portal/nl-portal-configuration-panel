@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationProperties(prefix = "configuration-panel.notify")
-data class NotifyConfigurationProperties(
+data class ConfigurationPanelNotifyConfigurationProperties(
     var notifyOnChanges: Boolean = false,
     var notifyList: List<String> = emptyList(),
 )

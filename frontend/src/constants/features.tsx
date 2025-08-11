@@ -31,6 +31,7 @@ import DocumentenApisFeatureConfiguration from "../components/features/Documente
 import OgonePaymentFeatureConfiguration from "../components/features/OgonePaymentFeatureConfiguration.tsx";
 import ClamAVFeatureConfiguration from "../components/features/ClamAVFeatureConfiguration.tsx";
 import DirectPaymentFeatureConfiguration from "../components/features/DirectPaymentFeatureConfiguration.tsx";
+import HaalCentraal2FeatureConfiguration from "../components/features/HaalCentraal2FeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
     {
@@ -77,6 +78,11 @@ export const features: FeatureConfiguration[] = [
         featureId: "haalcentraal-hr",
         featureConfigurationPrefix: "nl-portal.config.haalcentraal.hr",
         featureComponent: HaalCentraalHrFeatureConfiguration
+    },
+    {
+        featureId: "haalcentraal2",
+        featureConfigurationPrefix: "nl-portal.config.haalcentraal2",
+        featureComponent: HaalCentraal2FeatureConfiguration
     },
     {
         featureId: "taak",

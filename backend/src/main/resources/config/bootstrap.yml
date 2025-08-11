@@ -1,8 +1,8 @@
 server:
-    port: 8888
+    port: 8080
 spring:
     application:
-        name: configuration-panel
+        name: configuration-panel-backend
     profiles:
         default: jdbc
     cloud:

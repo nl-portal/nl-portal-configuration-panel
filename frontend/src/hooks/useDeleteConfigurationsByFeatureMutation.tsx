@@ -16,6 +16,8 @@
 
 import {useMutation} from "@tanstack/react-query";
 import {useAuth} from "react-oidc-context";
+import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
+import {useContext} from "react";
 
 interface UseDeleteConfigurationsByFeatureMutationProps {
     applicationName?: string;
@@ -25,9 +27,10 @@ interface UseDeleteConfigurationsByFeatureMutationProps {
 
 export const useDeleteConfigurationsByFeatureMutation = (options: UseDeleteConfigurationsByFeatureMutationProps) => {
     const auth = useAuth();
+    const {clientSettings} = useContext(ConfigPanelSettingsContext);
     const defaultVariables =
         {
-            applicationName: 'nl-portal-backend-libraries',
+            applicationName: clientSettings.applicationName,
             refetchInterval: false
         }
     const variables = {...defaultVariables, ...options}

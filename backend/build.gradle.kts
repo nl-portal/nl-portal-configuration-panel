@@ -18,8 +18,8 @@ val ehcacheVersion = "3.10.8"
 val hypersistenceVersion = "3.8.3"
 val postgresVersion = "42.7.4"
 val guavaVersion = "33.4.0-jre"
-val springCloudServerVersion = "4.2.2"
-val springCloudBootstrapVersion = "4.2.1"
+val springCloudServerVersion = "4.2.3"
+val springCloudBootstrapVersion = "4.2.2"
 val springSecurityOauth2Version = "6.4.2"
 val kotlinLoggingVersion = "7.0.3"
 val mockitoAgent = configurations.create("mockitoAgent")
@@ -84,16 +84,17 @@ kotlin {
 tasks.bootRun {
     environment.putAll(
         mapOf(
+            "SERVER_PORT" to "8090",
             "DATABASE_URL" to "jdbc:postgresql://localhost:54322/nl-portal-config",
             "DATABASE_USERNAME" to "config",
             "DATABASE_PASSWORD" to "password",
-            "logging.level.root" to "INFO",
+            "LOGLEVEL" to "INFO",
             "JWKS_URI" to "http://localhost:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs",
             "CONFIG_CACHE_TTL" to "30000",
             "CONFIG_SERVER_PREFIX" to "/configuration",
             "CONFIG_SERVER_TOKEN" to "VerySecretToken",
             "CONFIG_NOTIFY_ENABLED" to "true",
-            "CONFIG_NOTIFY_LIST" to "http://localhost:8090/",
+            "CONFIG_NOTIFY_LIST" to "http://localhost:8080/",
         )
     )
 }

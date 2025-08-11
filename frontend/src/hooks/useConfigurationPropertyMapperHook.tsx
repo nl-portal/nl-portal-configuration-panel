@@ -16,8 +16,11 @@
 import ConfigurationProperty from "../interfaces/ConfigurationProperty.ts";
 import _ from "lodash";
 import {flatten} from "flat";
+import {useContext} from "react";
+import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
 
 const useConfigurationPropertyMapperHook = () => {
+    const {clientSettings} = useContext(ConfigPanelSettingsContext);
     const parseProperties = (
         properties: ConfigurationProperty[],
         prefix?: string
@@ -34,7 +37,7 @@ const useConfigurationPropertyMapperHook = () => {
     const toProperties = (
         configuration: object = {},
         prefix?: string,
-        application: string = 'nl-portal-backend-libraries',
+        application: string = clientSettings.applicationName,
     ): ConfigurationProperty[] => {
         const configurationProperties: ConfigurationProperty[] = []
         const flattenedProperties: object = flatten(configuration, {safe: true});

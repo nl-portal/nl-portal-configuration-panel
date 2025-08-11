@@ -18,13 +18,13 @@ package nl.nlportal.configurationpanel.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.client.NlPortalClient
-import nl.nlportal.configurationpanel.configuration.NotifyConfigurationProperties
+import nl.nlportal.configurationpanel.configuration.ConfigurationPanelNotifyConfigurationProperties
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 
 @Service
 class NotifyService(
-    private val notifyConfigurationProperties: NotifyConfigurationProperties,
+    private val notifyConfigurationProperties: ConfigurationPanelNotifyConfigurationProperties,
     private val nlPortalClient: NlPortalClient,
 ) {
 
