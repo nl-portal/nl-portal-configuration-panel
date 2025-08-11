@@ -51,7 +51,7 @@ const Authenticator: FC<{ children?: ReactNode }> = ({children}) => {
         return <Paragraph>Failed to redirect to Identity Provider. Retrying in 2 seconds...</Paragraph>
     }
 
-    if (auth.isAuthenticated) {
+    if (!auth.isLoading && auth.isAuthenticated) {
         return (
             <Fragment>
                 {children}
