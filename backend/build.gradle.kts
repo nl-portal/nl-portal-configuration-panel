@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-val ehcacheVersion = "3.10.8"
-val hypersistenceVersion = "3.8.3"
-val postgresVersion = "42.7.4"
-val guavaVersion = "33.4.0-jre"
-val springCloudServerVersion = "4.2.3"
-val springCloudBootstrapVersion = "4.2.2"
-val springSecurityOauth2Version = "6.4.2"
-val kotlinLoggingVersion = "7.0.3"
+val ehcacheVersion by project.properties
+val hypersistenceVersion by project.properties
+val postgresVersion by project.properties
+val guavaVersion by project.properties
+val springCloudServerVersion by project.properties
+val springCloudBootstrapVersion by project.properties
+val springSecurityOauth2Version by project.properties
+val kotlinLoggingVersion by project.properties
 val mockitoAgent = configurations.create("mockitoAgent")
 
 plugins {
@@ -30,9 +30,6 @@ plugins {
     id("org.springframework.boot") version "3.4.6"
     id("io.spring.dependency-management") version "1.1.7"
 }
-
-group = "nl.nlportal"
-version = "0.1.0"
 
 java {
     toolchain {
