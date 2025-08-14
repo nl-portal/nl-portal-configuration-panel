@@ -2,8 +2,7 @@ name: Build and Push Docker Image
 on:
     push:
         branches:
-            - "next-minor"
-            - "next-major"
+            - "main"
             - "rc/*"
             - "release/*"
 env:
@@ -22,7 +21,7 @@ jobs:
         steps:
             -   name: Detect scope
                 id: detect-scope
-                run: echo "SCOPE=$(if ${{ github.ref_name == 'next-minor' || github.ref_name == 'next-major' }} ; then echo "SNAPSHOT" ; elif ${{ startsWith(github.ref_name, 'rc/') }} ; then echo "RC" ; elif ${{ startsWith(github.ref_name, 'release/') }} ; then echo "RELEASE" ; else echo "UNKNOWN" ; fi)" >> $GITHUB_OUTPUT
+                run: echo "SCOPE=$(if ${{ github.ref_name == 'main' }} ; then echo "SNAPSHOT" ; elif ${{ startsWith(github.ref_name, 'rc/') }} ; then echo "RC" ; elif ${{ startsWith(github.ref_name, 'release/') }} ; then echo "RELEASE" ; else echo "UNKNOWN" ; fi)" >> $GITHUB_OUTPUT
             -   name: Log Scope
                 run: echo "::notice::Using Scope - ${{ steps.detect-scope.outputs.SCOPE }}"
             -   name: Checkout
