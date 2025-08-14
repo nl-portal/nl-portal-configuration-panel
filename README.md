@@ -12,7 +12,13 @@ The following software has to be installed to be able to use this application
 
 ## Dependencies
 
+## Compatibility
 
+Refer to the following table for version compatibility between the Configuration Panel and NL Portal:
+
+|         | Configuration Panel | NL Portal (Libraries/App) |
+|---------|---------------------|---------------------------|
+| Version | 1.0.0               | 2.0.2                     |
 
 ## Running the application
 
