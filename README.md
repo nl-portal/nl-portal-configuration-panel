@@ -1,5 +1,7 @@
 # nl-portal-configuration-panel
 
+![Version 1.0.0](https://img.shields.io/badge/Version-1.0.0-blue)
+
 ## Requirements
 
 The following software has to be installed to be able to use this application
@@ -18,7 +20,7 @@ Refer to the following table for version compatibility between the Configuration
 
 |         | Configuration Panel | NL Portal (Libraries/App) |
 |---------|---------------------|---------------------------|
-| Version | 1.0.0               | 2.0.2                     |
+| Version | 1.0.0               | 2.0.x                     |
 
 ## Running the application
 
