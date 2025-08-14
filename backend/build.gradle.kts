@@ -17,7 +17,6 @@
 val ehcacheVersion by project.properties
 val hypersistenceVersion by project.properties
 val postgresVersion by project.properties
-val guavaVersion by project.properties
 val springCloudServerVersion by project.properties
 val springCloudBootstrapVersion by project.properties
 val springSecurityOauth2Version by project.properties
