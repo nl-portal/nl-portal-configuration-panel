@@ -1,6 +1,6 @@
-FROM eclipse-temurin:21.0.6_7-jre-alpine
+FROM eclipse-temurin:21-jre-ubi10-minimal
 
-ADD build/libs/backend-0.1.0.jar /opt/app.jar
+ADD build/libs/backend.jar /opt/app.jar
 
 EXPOSE 8080
 

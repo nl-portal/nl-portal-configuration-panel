@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 /*
  * Copyright 2025 Ritense BV, the Netherlands.
  *
@@ -98,4 +100,8 @@ tasks.bootRun {
 tasks.withType<Test> {
     useJUnitPlatform()
     jvmArgs("-javaagent:${mockitoAgent.asPath}")
+}
+
+tasks.named<BootJar>("bootJar") {
+    archiveFileName = "${project.name}.jar"
 }
