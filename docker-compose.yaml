@@ -53,7 +53,7 @@ services:
             CLIENT_APPLICATION_NAME: "nl-portal-app"
 
     configuration-panel-backend-remote:
-        image: ghcr.io/nl-portal/configuration-panel-backend
+        image: ghcr.io/nl-portal/configuration-panel-backend:1.0.0
         platform: linux/amd64
         profiles:
             - remote
@@ -65,7 +65,7 @@ services:
         environment: *configuration-panel-backend-env
 
     configuration-panel-frontend-remote:
-        image: ghcr.io/nl-portal/configuration-panel-frontend
+        image: ghcr.io/nl-portal/configuration-panel-frontend:1.0.0
         platform: linux/amd64
         profiles:
             - remote
