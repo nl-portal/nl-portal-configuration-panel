@@ -15,7 +15,6 @@ import kotlin.test.assertEquals
 
 @ExtendWith(MockitoExtension::class)
 class NotifyServiceTest {
-
     @Mock
     private lateinit var notifyConfigurationProperties: ConfigurationPanelNotifyConfigurationProperties
 
@@ -33,7 +32,7 @@ class NotifyServiceTest {
                     listOf(
                         "https://localhost:9001",
                         "https://localhost:9002",
-                    )
+                    ),
             )
         nlPortalClient = mock()
 

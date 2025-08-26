@@ -17,53 +17,44 @@
 package nl.nlportal.configurationpanel.service
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.repository.ConfigRepository
+import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 
 @Service
-class ConfigService(
-    private val configRepository: ConfigRepository,
-    private val notifyService: NotifyService
+class ConfigurationsService(
+    private val configRepository: ConfigurationsRepository,
+    private val notifyService: NotifyService,
 ) {
-
     @Cacheable("configCache")
     fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
         application: String,
-        propertyKey: String
-    ): ConfigurationProperty? {
-        return configRepository.findByApplicationAndPropertyKey(application, propertyKey)
-    }
+        propertyKey: String,
+    ): ConfigurationProperty? = configRepository.findByApplicationAndPropertyKey(application, propertyKey)
 
-    fun getConfigurationPropertiesByApplicationOrNull(application: String): List<ConfigurationProperty>? {
-        return configRepository.findByApplication(application)
-    }
+    fun getConfigurationPropertiesByApplicationOrNull(application: String): List<ConfigurationProperty>? =
+        configRepository.findByApplication(application)
 
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         application: String,
-        featureKey: String
-    ): List<ConfigurationProperty>? {
-        return configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
-    }
+        featureKey: String,
+    ): List<ConfigurationProperty>? = configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
 
     fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
         application: String,
-        featureKey: String
+        featureKey: String,
     ) {
         configRepository
             .findByApplicationAndPropertyKeyStartsWith(application, featureKey)
             ?.apply { configRepository.deleteAll(this) }
     }
 
-    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? {
-        return configRepository.save(config)
-    }
+    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? = configRepository.save(config)
 
-    fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> {
-        return configRepository
+    fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> =
+        configRepository
             .saveAll(configs)
             .also {
                 notifyService.restartNlPortalClients()
             }
-    }
 }

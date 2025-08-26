@@ -22,7 +22,6 @@ import org.springframework.web.client.RestClient
 
 @Component
 class NlPortalClient {
-
     fun restartNlPortalViaActuator(nlPortalBaseUrl: String) {
         val restClient = RestClient.create(nlPortalBaseUrl)
 
@@ -30,8 +29,7 @@ class NlPortalClient {
             .post()
             .uri { builder ->
                 builder.path("/actuator/restart").build()
-            }
-            .body(emptyMap<String, String>())
+            }.body(emptyMap<String, String>())
             .contentType(MediaType.APPLICATION_JSON)
             .retrieve()
             .toBodilessEntity()

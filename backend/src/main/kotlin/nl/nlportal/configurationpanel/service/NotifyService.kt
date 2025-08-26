@@ -27,7 +27,6 @@ class NotifyService(
     private val notifyConfigurationProperties: ConfigurationPanelNotifyConfigurationProperties,
     private val nlPortalClient: NlPortalClient,
 ) {
-
     fun restartNlPortalClients() {
         if (notifyConfigurationProperties.notifyOnChanges) {
             notifyConfigurationProperties.notifyList.forEach {

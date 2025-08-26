@@ -23,6 +23,7 @@ val springCloudServerVersion by project.properties
 val springCloudBootstrapVersion by project.properties
 val springSecurityOauth2Version by project.properties
 val kotlinLoggingVersion by project.properties
+val apacheTikaVersion by project.properties
 val mockitoAgent = configurations.create("mockitoAgent")
 
 plugins {
@@ -59,6 +60,7 @@ dependencies {
     implementation("io.hypersistence:hypersistence-utils-hibernate-62:$hypersistenceVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("org.apache.tika:tika-core:$apacheTikaVersion")
 
     implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
@@ -93,7 +95,7 @@ tasks.bootRun {
             "CONFIG_SERVER_TOKEN" to "VerySecretToken",
             "CONFIG_NOTIFY_ENABLED" to "true",
             "CONFIG_NOTIFY_LIST" to "http://localhost:8080/",
-        )
+        ),
     )
 }
 

@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.security
+package nl.nlportal.configurationpanel.theme.web.dto
 
-import org.springframework.security.authentication.AbstractAuthenticationToken
-import org.springframework.security.core.GrantedAuthority
+import java.util.UUID
 
-class ApiTokenAuthentication(
-    private val token: String,
-    authenticated: Boolean,
-    authorities: List<GrantedAuthority> = emptyList(),
-) : AbstractAuthenticationToken(authorities) {
-    init {
-        isAuthenticated = authenticated
-    }
-
-    override fun getCredentials(): Any = token
-
-    override fun getPrincipal(): Any = "Api Client"
-}
+data class ThemeLogoResponse(
+    val logoId: UUID,
+    val filename: String,
+    val size: Long,
+    val contentType: String,
+)

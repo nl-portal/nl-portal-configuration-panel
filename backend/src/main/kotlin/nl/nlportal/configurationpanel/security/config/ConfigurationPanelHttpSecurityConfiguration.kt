@@ -38,15 +38,11 @@ class ConfigurationPanelHttpSecurityConfiguration {
 
     @Bean
     fun tokenAuthenticationProvider(
-        @Value("\${configuration-panel.security.token}") configurationToken: String = ""
-    ): AuthenticationProvider {
-        return TokenAuthenticationProvider(configurationToken)
-    }
+        @Value("\${configuration-panel.security.token}") configurationToken: String = "",
+    ): AuthenticationProvider = TokenAuthenticationProvider(configurationToken)
 
     @Bean
-    fun configurationPanelAuthenticationManager(
-        authenticationProviders: List<AuthenticationProvider>,
-    ): AuthenticationManager =
+    fun configurationPanelAuthenticationManager(authenticationProviders: List<AuthenticationProvider>): AuthenticationManager =
         ProviderManager(authenticationProviders)
 
     @Bean
@@ -58,8 +54,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
             .securityMatcher(AntPathRequestMatcher("/api/v1/**"))
             .authorizeHttpRequests { request ->
                 request.anyRequest().authenticated()
-            }
-            .csrf { it.disable() }
+            }.csrf { it.disable() }
             .cors { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer {
@@ -78,8 +73,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
             .securityMatcher(AntPathRequestMatcher("$configServerBasePath/**"))
             .authorizeHttpRequests { request ->
                 request.anyRequest().authenticated()
-            }
-            .csrf { it.disable() }
+            }.csrf { it.disable() }
             .cors { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .addFilter(configurationServerRequestHeaderAuthenticationFilter(authenticationManager))
@@ -88,16 +82,14 @@ class ConfigurationPanelHttpSecurityConfiguration {
     }
 
     fun configurationServerRequestHeaderAuthenticationFilter(
-        authenticationManager: AuthenticationManager
-    ): RequestHeaderAuthenticationFilter {
-        return RequestHeaderAuthenticationFilter().apply {
+        authenticationManager: AuthenticationManager,
+    ): RequestHeaderAuthenticationFilter =
+        RequestHeaderAuthenticationFilter().apply {
             setPrincipalRequestHeader("X-Config-Token")
             setExceptionIfHeaderMissing(false)
             setRequiresAuthenticationRequestMatcher(
-                AntPathRequestMatcher("$configServerBasePath/**")
+                AntPathRequestMatcher("$configServerBasePath/**"),
             )
             setAuthenticationManager(authenticationManager)
         }
-    }
 }
-

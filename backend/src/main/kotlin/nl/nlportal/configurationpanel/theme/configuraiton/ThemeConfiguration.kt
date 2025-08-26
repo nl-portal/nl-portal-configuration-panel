@@ -21,20 +21,16 @@ import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
 import nl.nlportal.configurationpanel.theme.service.ThemeService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @Configuration
-@EnableJpaRepositories(basePackages = ["nl.nlportal.configurationpanel.theme"])
 class ThemeConfiguration {
-
     @Bean
     fun themeService(
         themeLogoRepository: ThemeLogoRepository,
-        notifyService: NotifyService
-    ): ThemeService {
-        return ThemeService(
+        notifyService: NotifyService,
+    ): ThemeService =
+        ThemeService(
             themeLogoRepository = themeLogoRepository,
-            notifyService = notifyService
+            notifyService = notifyService,
         )
-    }
 }

@@ -16,18 +16,60 @@
 
 package nl.nlportal.configurationpanel.theme.service
 
+import jakarta.transaction.Transactional
 import nl.nlportal.configurationpanel.service.NotifyService
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
+import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.util.UUID
 
 @Service
 class ThemeService(
     private val themeLogoRepository: ThemeLogoRepository,
-    private val notifyService: NotifyService
+    private val notifyService: NotifyService,
 ) {
-    fun saveThemeLogo(file: MultipartFile): ThemeLogo {
-        return themeLogoRepository.save(ThemeLogo.fromMultipartFile(file))
+    fun getThemeLogosByApplication(application: String): List<ThemeLogoResponse> =
+        themeLogoRepository.findAllByApplication(application).map { entry ->
+            ThemeLogoResponse(
+                logoId = entry.id,
+                filename = entry.filename,
+                size = entry.size,
+                contentType = entry.mimetype,
+            )
+        }
+
+    fun getThemeLogoByIdOrNull(logoId: UUID): ThemeLogo? = themeLogoRepository.findByIdOrNull(logoId.toString())
+
+    @Transactional
+    fun saveThemeLogo(
+        file: MultipartFile,
+        application: String,
+        profile: String? = null,
+        label: String? = null,
+    ): ThemeLogo {
+        val themeLogo =
+            ThemeLogo.fromMultipartFile(
+                file,
+                application,
+                profile,
+                label,
+            )
+
+        return themeLogoRepository
+            .findByApplicationAndProfileAndLabel(
+                application,
+                profile,
+                label,
+            )?.let { existing ->
+                if (themeLogo != existing) {
+                    return themeLogoRepository.save(
+                        themeLogo.copy(id = existing.id),
+                    )
+                } else return existing
+            }
+            ?: themeLogoRepository.save(themeLogo)
     }
 }

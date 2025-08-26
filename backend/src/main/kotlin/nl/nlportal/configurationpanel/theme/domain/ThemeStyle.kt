@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.domain
+package nl.nlportal.configurationpanel.theme.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.Instant
+import java.util.UUID
 
 @Entity
-@Table(name = "nlp_configuration")
-data class ConfigurationProperty(
+@Table(
+    name = "nlp_theme_styles",
+)
+data class ThemeStyle(
     @Id
-    @Column(name = "property_key", updatable = false, nullable = false)
-    val propertyKey: String = "",
-    @Column(name = "property_value", updatable = true, nullable = false)
-    val propertyValue: String = "",
+    @Column(name = "id", updatable = false, nullable = false)
+    val id: UUID = UUID.randomUUID(),
+    @Column(name = "style", updatable = false, nullable = false)
+    val filename: String = "",
     @Column(name = "application", updatable = false, nullable = false)
     val application: String = "",
     @Column(name = "profile", nullable = true)

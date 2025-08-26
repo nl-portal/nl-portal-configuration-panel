@@ -21,14 +21,16 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ConfigRepository : JpaRepository<ConfigurationProperty, String> {
-
+interface ConfigurationsRepository : JpaRepository<ConfigurationProperty, String> {
     fun findByApplication(application: String): List<ConfigurationProperty>?
 
-    fun findByApplicationAndPropertyKey(application: String, propertyKey: String): ConfigurationProperty?
+    fun findByApplicationAndPropertyKey(
+        application: String,
+        propertyKey: String,
+    ): ConfigurationProperty?
 
     fun findByApplicationAndPropertyKeyStartsWith(
         application: String,
-        propertyKeyPrefix: String
+        propertyKeyPrefix: String,
     ): List<ConfigurationProperty>?
 }

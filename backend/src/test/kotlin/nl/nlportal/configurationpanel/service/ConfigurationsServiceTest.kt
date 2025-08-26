@@ -1,7 +1,7 @@
 package nl.nlportal.configurationpanel.service
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.repository.ConfigRepository
+import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
@@ -16,27 +16,27 @@ import org.mockito.junit.jupiter.MockitoExtension
 import java.time.Instant
 
 @ExtendWith(MockitoExtension::class)
-class ConfigServiceTest {
-
+class ConfigurationsServiceTest {
     @Mock
-    private lateinit var configRepository: ConfigRepository
+    private lateinit var configRepository: ConfigurationsRepository
 
     @Mock
     private lateinit var notifyService: NotifyService
 
-    private lateinit var configService: ConfigService
+    private lateinit var configService: ConfigurationsService
 
     private lateinit var sampleConfig: ConfigurationProperty
 
     @BeforeEach
     fun setUp() {
-        configService = ConfigService(configRepository, notifyService)
-        sampleConfig = ConfigurationProperty(
-            propertyKey = "feature_123",
-            propertyValue = "value1",
-            application = "my-application1",
-            modifiedOn = Instant.now()
-        )
+        configService = ConfigurationsService(configRepository, notifyService)
+        sampleConfig =
+            ConfigurationProperty(
+                propertyKey = "feature_123",
+                propertyValue = "value1",
+                application = "my-application1",
+                modifiedOn = Instant.now(),
+            )
     }
 
     @Test
@@ -66,7 +66,7 @@ class ConfigServiceTest {
         val result =
             configService.getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
                 "application",
-                "non_existing_feature"
+                "non_existing_feature",
             )
 
         // Assert

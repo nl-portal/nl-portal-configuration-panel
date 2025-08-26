@@ -19,10 +19,19 @@ package nl.nlportal.configurationpanel.theme.repository
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.util.UUID
 
 @Repository
 interface ThemeLogoRepository : JpaRepository<ThemeLogo, String> {
+    fun findAllByApplication(application: String): List<ThemeLogo>
 
-    fun findByApplication(application: String): ThemeLogo?
-    fun findByApplicationAndProfileAndLabel(application: String, profile: String?, label: String?): ThemeLogo?
+    fun findByApplicationAndProfileAndLabel(
+        application: String,
+        profile: String?,
+        label: String?,
+    ): ThemeLogo?
+
+    fun deleteById(id: UUID)
+
+    fun deleteAndFlushById(id: UUID)
 }

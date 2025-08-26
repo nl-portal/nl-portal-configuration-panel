@@ -22,21 +22,27 @@
     <changeSet id="1" author="Ritense">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="config_theme_logos"/>
+                <tableExists tableName="nlp_theme_logos"/>
             </not>
         </preConditions>
-        <createTable tableName="config_theme_logos">
+        <createTable tableName="nlp_theme_logos">
             <column name="id" type="uuid">
                 <constraints primaryKey="true"/>
             </column>
             <column name="filename" type="varchar(255)"/>
             <column name="mimetype" type="varchar(55)"/>
+            <column name="size" type="bigint"/>
             <column name="content" type="bytea"/>
             <column name="application" type="varchar(255)"/>
             <column name="profile" type="varchar(55)"/>
             <column name="label" type="varchar(55)"/>
             <column name="modified_on" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
+        <addUniqueConstraint
+                constraintName="unique-set-application-profile-label-constraint"
+                columnNames="application, profile, label"
+                tableName="nlp_theme_logos"
+                validate="true"
+        />
     </changeSet>
-
 </databaseChangeLog>

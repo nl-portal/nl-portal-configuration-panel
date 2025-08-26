@@ -16,26 +16,62 @@
 
 package nl.nlportal.configurationpanel.theme.web.rest
 
-import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.service.ConfigService
-import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.service.ThemeService
+import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
+import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api", produces = ["application/json"])
 class ThemeConfigurationResource(
-    private val themeService: ThemeService
+    private val themeService: ThemeService,
 ) {
+    @GetMapping("/v1/theme/{application}/logo")
+    fun getApplicationThemeLogos(
+        @PathVariable application: String,
+    ): ResponseEntity<List<ThemeLogoResponse>> = ResponseEntity.ok(themeService.getThemeLogosByApplication(application))
 
-    @PostMapping("/v1/configurations/{application}/theme/logo", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun storeApplicationThemeLogo(@RequestParam("file") file: MultipartFile): List<ConfigurationProperty> {
-        return themeService.saveThemeLogo(file)
+    @GetMapping("/v1/theme/{application}/logo/{id}")
+    fun getApplicationThemeLogoById(
+        @PathVariable application: String,
+        @PathVariable id: UUID,
+    ): ResponseEntity<ByteArray> {
+        return when (val logo = themeService.getThemeLogoByIdOrNull(id)) {
+            null -> return ResponseEntity.notFound().build()
+            else ->
+                ResponseEntity
+                    .ok()
+                    .header(CONTENT_DISPOSITION, "attachment; filename=${logo.filename}")
+                    .body(logo.content)
+        }
     }
+
+    @PostMapping("/v1/theme/{application}/logo", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun storeApplicationThemeLogo(
+        @RequestParam("file") file: MultipartFile,
+        @PathVariable application: String,
+        @RequestParam profile: String? = null,
+        @RequestParam label: String? = null,
+    ): ResponseEntity<ThemeLogoResponse> =
+        themeService
+            .saveThemeLogo(file, application, profile, label)
+            .let {
+                ResponseEntity.ok(
+                    ThemeLogoResponse(
+                        logoId = it.id,
+                        filename = it.filename,
+                        size = it.size,
+                        contentType = it.mimetype,
+                    ),
+                )
+            }
 }
