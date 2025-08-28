@@ -1,6 +1,7 @@
 package nl.nlportal.configurationpanel.service
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
+import nl.nlportal.configurationpanel.notify.service.NotifyService
 import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull

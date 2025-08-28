@@ -20,7 +20,7 @@ import nl.nlportal.configurationpanel.configuration.ConfigurationPanelCacheConfi
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import nl.nlportal.configurationpanel.service.ConfigurationsService
-import nl.nlportal.configurationpanel.service.NotifyService
+import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

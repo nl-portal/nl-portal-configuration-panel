@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.client
+package nl.nlportal.configurationpanel.notify.client
 
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component

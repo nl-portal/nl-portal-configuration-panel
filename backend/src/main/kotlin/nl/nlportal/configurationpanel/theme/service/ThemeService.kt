@@ -16,19 +16,19 @@
 
 package nl.nlportal.configurationpanel.theme.service
 
-import jakarta.transaction.Transactional
-import nl.nlportal.configurationpanel.service.NotifyService
+import nl.nlportal.configurationpanel.notify.service.NotifyService
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
+import nl.nlportal.configurationpanel.theme.domain.ThemeStyles
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
+import nl.nlportal.configurationpanel.theme.repository.ThemeStylesRepository
 import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.UUID
 
-@Service
 class ThemeService(
     private val themeLogoRepository: ThemeLogoRepository,
+    private val themeStylesRepository: ThemeStylesRepository,
     private val notifyService: NotifyService,
 ) {
     fun getThemeLogosByApplication(application: String): List<ThemeLogoResponse> =
@@ -43,7 +43,6 @@ class ThemeService(
 
     fun getThemeLogoByIdOrNull(logoId: UUID): ThemeLogo? = themeLogoRepository.findByIdOrNull(logoId.toString())
 
-    @Transactional
     fun saveThemeLogo(
         file: MultipartFile,
         application: String,
@@ -68,8 +67,42 @@ class ThemeService(
                     return themeLogoRepository.save(
                         themeLogo.copy(id = existing.id),
                     )
-                } else return existing
+                } else {
+                    return existing
+                }
             }
             ?: themeLogoRepository.save(themeLogo)
+    }
+
+    fun getThemeStylesByApplication(
+        application: String,
+        profile: String?,
+        label: String?,
+    ): ThemeStyles? = themeStylesRepository.findByApplicationAndProfileAndLabel(application, profile, label)
+
+    fun saveThemeStyles(
+        styles: String,
+        application: String,
+        profile: String?,
+        label: String?,
+    ): ThemeStyles {
+        val themeStyles =
+            ThemeStyles(
+                styles = styles,
+                application = application,
+                profile = profile,
+                label = label,
+            )
+
+        return themeStylesRepository
+            .findByApplicationAndProfileAndLabel(application, profile, label)
+            ?.let { existing ->
+                if (themeStyles != existing) {
+                    return themeStylesRepository.save(themeStyles)
+                } else {
+                    return existing
+                }
+            }
+            ?: themeStylesRepository.save(themeStyles)
     }
 }

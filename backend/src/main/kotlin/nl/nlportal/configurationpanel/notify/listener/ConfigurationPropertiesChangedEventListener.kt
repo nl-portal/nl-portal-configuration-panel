@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.configuration
+package nl.nlportal.configurationpanel.notify.listener
 
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
+import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
+import nl.nlportal.configurationpanel.notify.service.NotifyService
+import org.springframework.context.event.EventListener
 
-@Component
-@ConfigurationProperties(prefix = "configuration-panel.notify")
-data class ConfigurationPanelNotifyConfigurationProperties(
-    var notifyOnChanges: Boolean = false,
-    var notifyList: List<String> = emptyList(),
-)
+class ConfigurationPropertiesChangedEventListener(
+    private val notifyService: NotifyService
+) {
+
+    @EventListener(ConfigurationPropertiesChangedEvent::class)
+    fun handle(event: ConfigurationPropertiesChangedEvent) {
+        notifyService.restartNlPortalClients()
+    }
+}

@@ -18,27 +18,52 @@ package nl.nlportal.configurationpanel.theme.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import nl.nlportal.configurationpanel.theme.listener.ThemeStylesEntityListener
 import java.time.Instant
 import java.util.UUID
 
 @Entity
+@EntityListeners(ThemeStylesEntityListener::class)
 @Table(
     name = "nlp_theme_styles",
 )
-data class ThemeStyle(
+data class ThemeStyles(
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     val id: UUID = UUID.randomUUID(),
-    @Column(name = "style", updatable = false, nullable = false)
-    val filename: String = "",
+    @Column(name = "styles", updatable = true, nullable = false)
+    val styles: String = "",
     @Column(name = "application", updatable = false, nullable = false)
     val application: String = "",
-    @Column(name = "profile", nullable = true)
+    @Column(name = "profile", updatable = false, nullable = true)
     val profile: String? = null,
-    @Column(name = "label", nullable = true)
+    @Column(name = "label", updatable = false, nullable = true)
     val label: String? = null,
     @Column(name = "modified_on")
     val modifiedOn: Instant? = Instant.now(),
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ThemeStyles
+
+        if (styles != other.styles) return false
+        if (application != other.application) return false
+        if (profile != other.profile) return false
+        if (label != other.label) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = styles.hashCode()
+        result = 31 * result + application.hashCode()
+        result = 31 * result + (profile?.hashCode() ?: 0)
+        result = 31 * result + (label?.hashCode() ?: 0)
+        return result
+    }
+}

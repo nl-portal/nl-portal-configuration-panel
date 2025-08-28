@@ -18,8 +18,10 @@ package nl.nlportal.configurationpanel.theme.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import nl.nlportal.configurationpanel.theme.listener.ThemeLogoEntityListener
 import org.apache.hc.client5.http.utils.Base64
 import org.apache.tika.Tika
 import org.springframework.web.multipart.MultipartFile
@@ -27,6 +29,7 @@ import java.time.Instant
 import java.util.UUID
 
 @Entity
+@EntityListeners(ThemeLogoEntityListener::class)
 @Table(
     name = "nlp_theme_logos",
 )
@@ -44,26 +47,27 @@ data class ThemeLogo(
     val content: ByteArray = byteArrayOf(),
     @Column(name = "application", updatable = false, nullable = false)
     val application: String = "",
-    @Column(name = "profile", nullable = true)
+    @Column(name = "profile", updatable = false, nullable = true)
     val profile: String? = null,
-    @Column(name = "label", nullable = true)
+    @Column(name = "label", updatable = false, nullable = true)
     val label: String? = null,
     @Column(name = "modified_on")
     val modifiedOn: Instant? = Instant.now(),
 ) {
-    fun toBase64DataUri(): String {
+    fun asBase64DataUri(): String {
         val base64content = Base64.encodeBase64String(content)
 
         return "data:$mimetype;base64,$base64content"
     }
 
-    fun toDataUri(): String {
+    fun asDataUri(): String {
         val stringContent = content.toString(Charsets.UTF_8)
 
         return "data:$mimetype;$stringContent"
     }
 
     override fun hashCode(): Int = content.contentHashCode()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

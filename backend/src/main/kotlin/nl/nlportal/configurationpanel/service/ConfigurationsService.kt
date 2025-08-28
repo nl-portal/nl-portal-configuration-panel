@@ -17,14 +17,16 @@
 package nl.nlportal.configurationpanel.service
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
+import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
 import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
 class ConfigurationsService(
     private val configRepository: ConfigurationsRepository,
-    private val notifyService: NotifyService,
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) {
     @Cacheable("configCache")
     fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
@@ -38,7 +40,8 @@ class ConfigurationsService(
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         application: String,
         featureKey: String,
-    ): List<ConfigurationProperty>? = configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
+    ): List<ConfigurationProperty>? =
+        configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
 
     fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
         application: String,
@@ -49,12 +52,21 @@ class ConfigurationsService(
             ?.apply { configRepository.deleteAll(this) }
     }
 
-    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? = configRepository.save(config)
+    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? =
+        configRepository
+            .save(config)
+            .also {
+                applicationEventPublisher.publishEvent(
+                    ConfigurationPropertiesChangedEvent(listOf(it))
+                )
+            }
 
     fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> =
         configRepository
             .saveAll(configs)
             .also {
-                notifyService.restartNlPortalClients()
+                applicationEventPublisher.publishEvent(
+                    ConfigurationPropertiesChangedEvent(it)
+                )
             }
 }

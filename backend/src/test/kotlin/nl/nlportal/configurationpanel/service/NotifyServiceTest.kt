@@ -1,7 +1,8 @@
 package nl.nlportal.configurationpanel.service
 
-import nl.nlportal.configurationpanel.client.NlPortalClient
-import nl.nlportal.configurationpanel.configuration.ConfigurationPanelNotifyConfigurationProperties
+import nl.nlportal.configurationpanel.notify.client.NlPortalClient
+import nl.nlportal.configurationpanel.notify.configuration.ConfigurationPanelNotifyConfigurationProperties
+import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

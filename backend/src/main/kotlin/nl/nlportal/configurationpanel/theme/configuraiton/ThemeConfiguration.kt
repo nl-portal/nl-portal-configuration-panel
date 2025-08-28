@@ -16,8 +16,10 @@
 
 package nl.nlportal.configurationpanel.theme.configuraiton
 
-import nl.nlportal.configurationpanel.service.NotifyService
+import nl.nlportal.configurationpanel.notify.service.NotifyService
+import nl.nlportal.configurationpanel.theme.listener.ThemeLogoEntityListener
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
+import nl.nlportal.configurationpanel.theme.repository.ThemeStylesRepository
 import nl.nlportal.configurationpanel.theme.service.ThemeService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,10 +29,15 @@ class ThemeConfiguration {
     @Bean
     fun themeService(
         themeLogoRepository: ThemeLogoRepository,
+        themeStylesRepository: ThemeStylesRepository,
         notifyService: NotifyService,
     ): ThemeService =
         ThemeService(
             themeLogoRepository = themeLogoRepository,
+            themeStylesRepository = themeStylesRepository,
             notifyService = notifyService,
         )
+
+    @Bean
+    fun themeLogoEntityListener(): ThemeLogoEntityListener = ThemeLogoEntityListener()
 }

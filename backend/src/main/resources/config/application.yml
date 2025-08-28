@@ -1,6 +1,7 @@
 logging:
     level:
         root: ${LOGLEVEL:INFO}
+        org.hibernate.internal.util: INFO
 
 spring:
     application:

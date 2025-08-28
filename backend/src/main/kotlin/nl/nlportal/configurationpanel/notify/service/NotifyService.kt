@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.service
+package nl.nlportal.configurationpanel.notify.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import nl.nlportal.configurationpanel.client.NlPortalClient
-import nl.nlportal.configurationpanel.configuration.ConfigurationPanelNotifyConfigurationProperties
+import nl.nlportal.configurationpanel.notify.client.NlPortalClient
+import nl.nlportal.configurationpanel.notify.configuration.ConfigurationPanelNotifyConfigurationProperties
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 
@@ -28,7 +28,6 @@ class NotifyService(
     private val nlPortalClient: NlPortalClient,
 ) {
     fun restartNlPortalClients() {
-        if (notifyConfigurationProperties.notifyOnChanges) {
             notifyConfigurationProperties.notifyList.forEach {
                 try {
                     nlPortalClient.restartNlPortalViaActuator(it)
@@ -36,7 +35,6 @@ class NotifyService(
                     logger.debug(e) { "Failed to restart NL Portal Client at url $it" }
                 }
             }
-        }
     }
 
     companion object {

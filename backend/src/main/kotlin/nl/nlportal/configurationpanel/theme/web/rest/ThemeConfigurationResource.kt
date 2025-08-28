@@ -18,12 +18,14 @@ package nl.nlportal.configurationpanel.theme.web.rest
 
 import nl.nlportal.configurationpanel.theme.service.ThemeService
 import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
+import nl.nlportal.configurationpanel.theme.web.dto.ThemeStylesResponse
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -71,6 +73,36 @@ class ThemeConfigurationResource(
                         filename = it.filename,
                         size = it.size,
                         contentType = it.mimetype,
+                    ),
+                )
+            }
+
+    @GetMapping("/v1/theme/{application}/styles")
+    fun getApplicationThemeStyles(
+        @PathVariable application: String,
+        @RequestParam profile: String? = null,
+        @RequestParam label: String? = null,
+    ): ResponseEntity<ThemeStylesResponse> {
+        return when (val themeStyle = themeService.getThemeStylesByApplication(application, profile, label)) {
+            null -> return ResponseEntity.notFound().build()
+            else -> ResponseEntity.ok().body(ThemeStylesResponse(stylesId = themeStyle.id, styles = themeStyle.styles))
+        }
+    }
+
+    @PostMapping("/v1/theme/{application}/styles", consumes = [MediaType.TEXT_PLAIN_VALUE])
+    fun storeApplicationThemeLogo(
+        @PathVariable application: String,
+        @RequestParam profile: String? = null,
+        @RequestParam label: String? = null,
+        @RequestBody styles: String,
+    ): ResponseEntity<ThemeStylesResponse> =
+        themeService
+            .saveThemeStyles(styles, application, profile, label)
+            .let {
+                ResponseEntity.ok(
+                    ThemeStylesResponse(
+                        stylesId = it.id,
+                        styles = styles,
                     ),
                 )
             }

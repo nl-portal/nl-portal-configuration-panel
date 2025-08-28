@@ -39,9 +39,32 @@
             <column name="modified_on" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
         <addUniqueConstraint
-                constraintName="unique-set-application-profile-label-constraint"
+                constraintName="unique-logo-per-consumer"
                 columnNames="application, profile, label"
                 tableName="nlp_theme_logos"
+                validate="true"
+        />
+    </changeSet>
+    <changeSet id="2" author="Ritense">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="nlp_theme_styles"/>
+            </not>
+        </preConditions>
+        <createTable tableName="nlp_theme_styles">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="styles" type="text"/>
+            <column name="application" type="varchar(255)"/>
+            <column name="profile" type="varchar(55)"/>
+            <column name="label" type="varchar(55)"/>
+            <column name="modified_on" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <addUniqueConstraint
+                constraintName="unique-styles-per-consumer"
+                columnNames="application, profile, label"
+                tableName="nlp_theme_styles"
                 validate="true"
         />
     </changeSet>
