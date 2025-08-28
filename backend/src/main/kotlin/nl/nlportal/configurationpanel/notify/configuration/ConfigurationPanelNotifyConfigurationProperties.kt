@@ -17,7 +17,6 @@
 package nl.nlportal.configurationpanel.notify.configuration
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
 
 @ConfigurationProperties(prefix = "configuration-panel.notify")
 data class ConfigurationPanelNotifyConfigurationProperties(

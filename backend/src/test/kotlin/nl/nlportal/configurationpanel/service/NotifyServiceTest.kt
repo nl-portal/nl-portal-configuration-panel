@@ -12,7 +12,6 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
-import kotlin.test.assertEquals
 
 @ExtendWith(MockitoExtension::class)
 class NotifyServiceTest {
@@ -47,18 +46,5 @@ class NotifyServiceTest {
 
         // Then
         verify(nlPortalClient, times(2)).restartNlPortalViaActuator(any())
-    }
-
-    @Test
-    fun `should not notify if disabled`() {
-        // Given
-        notifyConfigurationProperties.notifyOnChanges = false
-
-        // When
-        notifyService.restartNlPortalClients()
-
-        // Then
-        verify(nlPortalClient, times(0)).restartNlPortalViaActuator(any())
-        assertEquals(2, notifyConfigurationProperties.notifyList.size)
     }
 }

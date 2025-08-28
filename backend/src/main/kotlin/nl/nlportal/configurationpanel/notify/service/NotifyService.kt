@@ -28,13 +28,17 @@ class NotifyService(
     private val nlPortalClient: NlPortalClient,
 ) {
     fun restartNlPortalClients() {
-            notifyConfigurationProperties.notifyList.forEach {
-                try {
-                    nlPortalClient.restartNlPortalViaActuator(it)
-                } catch (e: RestClientException) {
-                    logger.debug(e) { "Failed to restart NL Portal Client at url $it" }
-                }
+        logger.info {
+            "Configuration properties changed. Sending restart signal to " +
+                "${notifyConfigurationProperties.notifyList.size} client(s)."
+        }
+        notifyConfigurationProperties.notifyList.forEach {
+            try {
+                nlPortalClient.restartNlPortalViaActuator(it)
+            } catch (e: RestClientException) {
+                logger.debug(e) { "Failed to restart NL Portal Client at url $it" }
             }
+        }
     }
 
     companion object {

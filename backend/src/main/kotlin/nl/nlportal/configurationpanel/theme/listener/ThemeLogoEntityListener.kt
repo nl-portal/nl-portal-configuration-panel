@@ -21,14 +21,14 @@ import jakarta.persistence.PrePersist
 import jakarta.persistence.PreUpdate
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.provider.SpringContextProvider
-import nl.nlportal.configurationpanel.service.ConfigurationsService
+import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 
 class ThemeLogoEntityListener {
     @PrePersist
     @PreUpdate
     fun storeLogoAsConfiguration(themeLogo: ThemeLogo) {
-        val configurationsService = SpringContextProvider.getBean(ConfigurationsService::class.java)
+        val configurationsService = SpringContextProvider.getBean(ConfigurationPropertiesService::class.java)
         val configurationProperty =
             ConfigurationProperty(
                 propertyKey = THEME_LOGO_CONFIGURATION_PROPERTY_KEY,

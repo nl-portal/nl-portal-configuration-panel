@@ -1,7 +1,6 @@
 package nl.nlportal.configurationpanel.service
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.notify.service.NotifyService
 import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -14,23 +13,24 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.context.ApplicationEventPublisher
 import java.time.Instant
 
 @ExtendWith(MockitoExtension::class)
-class ConfigurationsServiceTest {
+class ConfigurationPropertiesServiceTest {
     @Mock
     private lateinit var configRepository: ConfigurationsRepository
 
     @Mock
-    private lateinit var notifyService: NotifyService
+    private lateinit var applicationEventPublisher: ApplicationEventPublisher
 
-    private lateinit var configService: ConfigurationsService
+    private lateinit var configService: ConfigurationPropertiesService
 
     private lateinit var sampleConfig: ConfigurationProperty
 
     @BeforeEach
     fun setUp() {
-        configService = ConfigurationsService(configRepository, notifyService)
+        configService = ConfigurationPropertiesService(configRepository, applicationEventPublisher)
         sampleConfig =
             ConfigurationProperty(
                 propertyKey = "feature_123",

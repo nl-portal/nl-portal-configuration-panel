@@ -24,9 +24,9 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
-class ConfigurationsService(
+class ConfigurationPropertiesService(
     private val configRepository: ConfigurationsRepository,
-    private val applicationEventPublisher: ApplicationEventPublisher
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Cacheable("configCache")
     fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
@@ -40,8 +40,7 @@ class ConfigurationsService(
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         application: String,
         featureKey: String,
-    ): List<ConfigurationProperty>? =
-        configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
+    ): List<ConfigurationProperty>? = configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
 
     fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
         application: String,
@@ -57,7 +56,7 @@ class ConfigurationsService(
             .save(config)
             .also {
                 applicationEventPublisher.publishEvent(
-                    ConfigurationPropertiesChangedEvent(listOf(it))
+                    ConfigurationPropertiesChangedEvent(listOf(it)),
                 )
             }
 
@@ -66,7 +65,7 @@ class ConfigurationsService(
             .saveAll(configs)
             .also {
                 applicationEventPublisher.publishEvent(
-                    ConfigurationPropertiesChangedEvent(it)
+                    ConfigurationPropertiesChangedEvent(it),
                 )
             }
 }

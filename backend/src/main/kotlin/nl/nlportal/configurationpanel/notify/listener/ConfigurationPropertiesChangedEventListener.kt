@@ -21,9 +21,8 @@ import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.springframework.context.event.EventListener
 
 class ConfigurationPropertiesChangedEventListener(
-    private val notifyService: NotifyService
+    private val notifyService: NotifyService,
 ) {
-
     @EventListener(ConfigurationPropertiesChangedEvent::class)
     fun handle(event: ConfigurationPropertiesChangedEvent) {
         notifyService.restartNlPortalClients()

@@ -18,9 +18,9 @@ package nl.nlportal.configurationpanel.config
 
 import nl.nlportal.configurationpanel.configuration.ConfigurationPanelCacheConfiguration
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
-import nl.nlportal.configurationpanel.service.ConfigurationsService
 import nl.nlportal.configurationpanel.notify.service.NotifyService
+import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
+import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -40,14 +40,14 @@ import java.time.Instant
 @SpringBootTest(
     classes = [
         ConfigurationPanelCacheConfiguration::class,
-        ConfigurationsService::class,
+        ConfigurationPropertiesService::class,
         NotifyService::class,
         TestCacheConfiguration::class,
     ],
 )
 class ConfigurationPanelCacheConfigurationTest {
     @Autowired
-    lateinit var configService: ConfigurationsService
+    lateinit var configService: ConfigurationPropertiesService
 
     @MockitoBean
     lateinit var configRepository: ConfigurationsRepository

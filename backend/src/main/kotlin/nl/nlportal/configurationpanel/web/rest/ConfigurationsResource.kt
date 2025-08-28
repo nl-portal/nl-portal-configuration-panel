@@ -17,7 +17,7 @@
 package nl.nlportal.configurationpanel.web.rest
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.service.ConfigurationsService
+import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api", produces = ["application/json"])
 class ConfigurationsResource(
-    private val configService: ConfigurationsService,
+    private val configService: ConfigurationPropertiesService,
 ) {
     @GetMapping("/v1/configurations/{application}")
     fun getConfigurationPropertiesByApplicationOrNull(

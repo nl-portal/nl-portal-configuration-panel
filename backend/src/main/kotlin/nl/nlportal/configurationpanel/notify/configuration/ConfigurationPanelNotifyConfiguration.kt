@@ -26,12 +26,8 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @EnableConfigurationProperties(ConfigurationPanelNotifyConfigurationProperties::class)
 class ConfigurationPanelNotifyConfiguration {
-
     @Bean
     @ConditionalOnProperty(prefix = "configuration-panel.notify", name = ["notify-on-changes"], havingValue = "true")
-    fun configurationPropertiesChangedEventListener(
-        notifyService: NotifyService,
-    ): ConfigurationPropertiesChangedEventListener {
-        return ConfigurationPropertiesChangedEventListener(notifyService)
-    }
+    fun configurationPropertiesChangedEventListener(notifyService: NotifyService): ConfigurationPropertiesChangedEventListener =
+        ConfigurationPropertiesChangedEventListener(notifyService)
 }

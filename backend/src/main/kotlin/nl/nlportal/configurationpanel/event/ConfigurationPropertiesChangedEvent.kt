@@ -18,4 +18,6 @@ package nl.nlportal.configurationpanel.event
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 
-data class ConfigurationPropertiesChangedEvent(val configurationProperties: List<ConfigurationProperty>)
+data class ConfigurationPropertiesChangedEvent(
+    val configurationProperties: List<ConfigurationProperty>,
+)
