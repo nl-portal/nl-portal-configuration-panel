@@ -16,20 +16,25 @@
 
 import {Navigate} from "react-router-dom";
 import {paths} from "./paths.ts";
-import FeatureConfigurationPage from "../pages/FeatureConfigurationPage.tsx";
-import FeaturesPage from "../pages/FeaturesPage.tsx";
+import FeaturePage from "../pages/FeaturePage.tsx";
+import NLPortalConfigurationPage from "../pages/NLPortalConfigurationPage.tsx";
+import ThemePage from "../pages/ThemePage.tsx";
 
 export const routes = [
     {
-        path: paths.features,
-        element: <FeaturesPage/>,
+        path: paths.configuration,
+        element: <NLPortalConfigurationPage/>,
     },
     {
         path: paths.feature(),
-        element: <FeatureConfigurationPage/>,
+        element: <FeaturePage/>,
+    },
+    {
+        path: paths.theme(),
+        element: <ThemePage/>,
     },
     {
         path: "*",
-        element: <Navigate to={paths.features}/>,
+        element: <Navigate to={paths.configuration}/>,
     },
 ];

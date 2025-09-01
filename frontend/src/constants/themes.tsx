@@ -13,21 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import ThemeLogoConfiguration from "../components/theme-components/ThemeLogoConfiguration.tsx";
+import ThemeSettings from "../interfaces/ThemeConfiguration.ts";
 
-package nl.nlportal.configurationpanel.theme.repository
-
-import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
-import java.util.UUID
-
-@Repository
-interface ThemeLogoRepository : JpaRepository<ThemeLogo, UUID> {
-    fun findAllByApplication(application: String): List<ThemeLogo>
-
-    fun findByApplicationAndProfileAndLabel(
-        application: String,
-        profile: String?,
-        label: String?,
-    ): ThemeLogo?
-}
+export const themes: ThemeSettings[] = [
+    {
+        themeConfigurationId: 'logo',
+        themeConfigurationComponent: ThemeLogoConfiguration,
+    },
+    {
+        themeConfigurationId: 'style',
+        themeConfigurationComponent: ThemeLogoConfiguration,
+    },
+]

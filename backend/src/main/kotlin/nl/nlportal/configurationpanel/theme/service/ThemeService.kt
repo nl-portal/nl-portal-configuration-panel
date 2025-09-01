@@ -38,10 +38,13 @@ class ThemeService(
                 filename = entry.filename,
                 size = entry.size,
                 contentType = entry.mimetype,
+                application = entry.application,
+                profile = entry.profile,
+                label = entry.label,
             )
         }
 
-    fun getThemeLogoByIdOrNull(logoId: UUID): ThemeLogo? = themeLogoRepository.findByIdOrNull(logoId.toString())
+    fun getThemeLogoByIdOrNull(logoId: UUID): ThemeLogo? = themeLogoRepository.findByIdOrNull(logoId)
 
     fun saveThemeLogo(
         file: MultipartFile,

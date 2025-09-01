@@ -21,4 +21,7 @@ import java.util.UUID
 data class ThemeStylesResponse(
     val stylesId: UUID,
     val styles: String,
+    val application: String,
+    val profile: String? = null,
+    val label: String? = null,
 )

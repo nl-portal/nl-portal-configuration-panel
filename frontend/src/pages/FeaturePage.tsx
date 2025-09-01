@@ -19,7 +19,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {paths} from "../constants/paths";
 import {PageHeader} from "@gemeente-denhaag/page";
 import {Heading2, Heading3, Heading4} from "@gemeente-denhaag/typography";
-import styles from './FeatureConfigurationPage.module.scss'
+import styles from './FeaturePage.module.scss'
 import {FormattedMessage} from "react-intl";
 import {features} from "../constants/features.tsx";
 import {createElement, useCallback, useEffect, useState} from "react";
@@ -33,7 +33,7 @@ import _ from "lodash";
 import useDeleteConfigurationsByFeatureMutation from "../hooks/useDeleteConfigurationsByFeatureMutation.tsx";
 import BackLink from "../components/BackLink.tsx";
 
-const FeatureConfigurationPage = () => {
+const FeaturePage = () => {
     const {featureId} = useParams();
     const navigate = useNavigate();
     const feature = features.find(it => it.featureId == featureId);
@@ -120,7 +120,7 @@ const FeatureConfigurationPage = () => {
     if (featureConfigurationsError)
         return (
             <section>
-                <BackLink href={paths.features} children={
+                <BackLink href={paths.configuration} children={
                     <Heading4>
                         <FormattedMessage id={"features.config.back"}></FormattedMessage>
                     </Heading4>
@@ -128,7 +128,7 @@ const FeatureConfigurationPage = () => {
                 </BackLink>
                 <Heading3>
                     <FormattedMessage
-                        id={"features.config.configurations-error"}
+                        id={"features.config.loading-error"}
                         values={{featureId: feature?.featureId}}
                     />
                 </Heading3>
@@ -138,9 +138,9 @@ const FeatureConfigurationPage = () => {
     return (
         <PageGrid>
             <PageHeader>
-                <BackLink href={paths.features} children={
+                <BackLink href={paths.configuration} children={
                     <Heading4>
-                        <FormattedMessage id={"features.config.back"}></FormattedMessage>
+                        <FormattedMessage id={"action.back"}></FormattedMessage>
                     </Heading4>
                 }>
                 </BackLink>
@@ -171,17 +171,17 @@ const FeatureConfigurationPage = () => {
                         type={"submit"}
                         form={"configuration-form"}
                     >
-                        <FormattedMessage id={"features.config.save"}></FormattedMessage>
+                        <FormattedMessage id={"action.save"}></FormattedMessage>
                     </Button>
                     <Button
                         variant="secondary-action"
                         className={styles["feature-config__button"]}
-                        onClick={() => navigate(paths.features)}
+                        onClick={() => navigate(paths.configuration)}
                         disabled={false}
                     >
                         <FormattedMessage id={isDirty
-                            ? "features.config.cancel"
-                            : "features.config.back"}></FormattedMessage>
+                            ? "action.cancel"
+                            : "action.back"}></FormattedMessage>
                     </Button>
                 </div>
             </div>
@@ -189,4 +189,4 @@ const FeatureConfigurationPage = () => {
     );
 };
 
-export default FeatureConfigurationPage;
+export default FeaturePage;

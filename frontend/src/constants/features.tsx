@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 import FeatureConfiguration from "../interfaces/FeatureConfiguration.ts";
-import BerichtenFeatureConfiguration from "../components/features/BerichtenFeatureConfiguration.tsx";
-import TaakFeatureConfiguration from "../components/features/TaakFeatureConfiguration.tsx";
-import ObjectsApiFeatureConfiguration from "../components/features/ObjectsApiFeatureConfiguration.tsx";
-import CatalogiApiFeatureConfiguration from "../components/features/CatalogiApiFeatureConfiguration.tsx";
-import ProductFeatureConfiguration from "../components/features/ProductFeatureConfiguration.tsx";
-import DmnFeatureConfiguration from "../components/features/DmnFeatureConfiguration.tsx";
-import PrefillFeatureConfiguration from "../components/features/PrefillFeatureConfiguration.tsx";
-import BesluitenApiFeatureConfiguration from "../components/features/BesluitenApiFeatureConfiguration.tsx";
-import OpenKlant2FeatureConfiguration from "../components/features/OpenKlant2FeatureConfiguration.tsx";
-import OpenKlantFeatureConfiguration from "../components/features/OpenKlantFeatureConfiguration.tsx";
-import HaalCentraalBrpFeatureConfiguration from "../components/features/HaalCentraalBrpFeatureConfiguration.tsx";
-import HaalCentraalHrFeatureConfiguration from "../components/features/HaalCentraalHrFeatureConfiguration.tsx";
-import ZakenApiFeatureConfiguration from "../components/features/ZakenApiFeatureConfiguration.tsx";
-import DocumentenApisFeatureConfiguration from "../components/features/DocumentenApisFeatureConfiguration.tsx";
-import OgonePaymentFeatureConfiguration from "../components/features/OgonePaymentFeatureConfiguration.tsx";
-import ClamAVFeatureConfiguration from "../components/features/ClamAVFeatureConfiguration.tsx";
-import DirectPaymentFeatureConfiguration from "../components/features/DirectPaymentFeatureConfiguration.tsx";
-import HaalCentraal2FeatureConfiguration from "../components/features/HaalCentraal2FeatureConfiguration.tsx";
+import BerichtenFeatureConfiguration from "../components/feature-components/BerichtenFeatureConfiguration.tsx";
+import TaakFeatureConfiguration from "../components/feature-components/TaakFeatureConfiguration.tsx";
+import ObjectsApiFeatureConfiguration from "../components/feature-components/ObjectsApiFeatureConfiguration.tsx";
+import CatalogiApiFeatureConfiguration from "../components/feature-components/CatalogiApiFeatureConfiguration.tsx";
+import ProductFeatureConfiguration from "../components/feature-components/ProductFeatureConfiguration.tsx";
+import DmnFeatureConfiguration from "../components/feature-components/DmnFeatureConfiguration.tsx";
+import PrefillFeatureConfiguration from "../components/feature-components/PrefillFeatureConfiguration.tsx";
+import BesluitenApiFeatureConfiguration from "../components/feature-components/BesluitenApiFeatureConfiguration.tsx";
+import OpenKlant2FeatureConfiguration from "../components/feature-components/OpenKlant2FeatureConfiguration.tsx";
+import OpenKlantFeatureConfiguration from "../components/feature-components/OpenKlantFeatureConfiguration.tsx";
+import HaalCentraalBrpFeatureConfiguration from "../components/feature-components/HaalCentraalBrpFeatureConfiguration.tsx";
+import HaalCentraalHrFeatureConfiguration from "../components/feature-components/HaalCentraalHrFeatureConfiguration.tsx";
+import ZakenApiFeatureConfiguration from "../components/feature-components/ZakenApiFeatureConfiguration.tsx";
+import DocumentenApisFeatureConfiguration from "../components/feature-components/DocumentenApisFeatureConfiguration.tsx";
+import OgonePaymentFeatureConfiguration from "../components/feature-components/OgonePaymentFeatureConfiguration.tsx";
+import ClamAVFeatureConfiguration from "../components/feature-components/ClamAVFeatureConfiguration.tsx";
+import DirectPaymentFeatureConfiguration from "../components/feature-components/DirectPaymentFeatureConfiguration.tsx";
+import HaalCentraal2FeatureConfiguration from "../components/feature-components/HaalCentraal2FeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
     {

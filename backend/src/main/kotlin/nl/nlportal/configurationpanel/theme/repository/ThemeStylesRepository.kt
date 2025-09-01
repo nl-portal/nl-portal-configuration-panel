@@ -19,9 +19,10 @@ package nl.nlportal.configurationpanel.theme.repository
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyles
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.util.UUID
 
 @Repository
-interface ThemeStylesRepository : JpaRepository<ThemeStyles, String> {
+interface ThemeStylesRepository : JpaRepository<ThemeStyles, UUID> {
     fun findByApplicationAndProfileAndLabel(
         application: String,
         profile: String?,

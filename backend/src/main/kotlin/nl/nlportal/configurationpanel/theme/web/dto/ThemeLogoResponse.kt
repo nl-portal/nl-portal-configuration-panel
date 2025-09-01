@@ -23,4 +23,7 @@ data class ThemeLogoResponse(
     val filename: String,
     val size: Long,
     val contentType: String,
+    val application: String,
+    val profile: String? = null,
+    val label: String? = null,
 )

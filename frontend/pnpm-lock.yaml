@@ -105,6 +105,9 @@ importers:
       '@eslint/js':
         specifier: ^9.17.0
         version: 9.25.1
+      '@gemeente-denhaag/file':
+        specifier: ^2.0.0
+        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/react':
         specifier: ^18.3.18
         version: 18.3.20
@@ -602,6 +605,12 @@ packages:
   '@gemeente-denhaag/file@0.1.1':
     resolution: {integrity: sha512-H55+dR/MptxC8eSuXBge2BxfjUwE6ou9d3UP56zAcQZ7/g+Dbi8bygYA2V9Xd2EV2FNgTHdZq8YHaJ6PnlsQyA==}
 
+  '@gemeente-denhaag/file@2.0.0':
+    resolution: {integrity: sha512-y4zM6cBhxCk38tYV5Hzu/HoMELoGIwccUGWwt6oKDjMAbQF1uG+pfiHAveSb68AqFqWxtGEQF3XCBHXqQWNUPQ==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
+
   '@gemeente-denhaag/form-field-error-message@0.3.0-alpha.55':
     resolution: {integrity: sha512-yM0PgkUUZYXh3PVOGptvmFjmtmhfmX2NTq5tvJllDgvScajeAcIchKtrYueFWfd2DibCIWhAYeUwAD1TcsmypA==}
     peerDependencies:
@@ -664,6 +673,12 @@ packages:
 
   '@gemeente-denhaag/icons@3.0.2':
     resolution: {integrity: sha512-l+gGvjWjgY02s1IJWP8cveM7ENgvi8pkbUd82GyBi72WVbHi1avNrFNYmu2NT3851W70L37fg48w1zSBDjXvgQ==}
+    peerDependencies:
+      react: 18 || 19
+      react-dom: 18 || 19
+
+  '@gemeente-denhaag/icons@4.0.0':
+    resolution: {integrity: sha512-GhVfng4dzWV+ASxlho+059HCcZkfuKAee40m+s9tMo/hS933XZlfYmHkzlKGZzkUd9bekBMZdHxguh+1EA9QBg==}
     peerDependencies:
       react: 18 || 19
       react-dom: 18 || 19
@@ -3387,6 +3402,13 @@ snapshots:
     transitivePeerDependencies:
       - react
 
+  '@gemeente-denhaag/file@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@gemeente-denhaag/icons': 4.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   '@gemeente-denhaag/form-field-error-message@0.3.0-alpha.55(react@18.3.1)':
     dependencies:
       react: 18.3.1
@@ -3485,6 +3507,12 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
 
   '@gemeente-denhaag/icons@3.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@gemeente-denhaag/icons@4.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       clsx: 2.1.1
       react: 18.3.1

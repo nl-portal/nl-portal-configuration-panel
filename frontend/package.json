@@ -16,6 +16,7 @@
     "@gemeente-denhaag/button": "^2.0.0",
     "@gemeente-denhaag/checkbox": "^2.0.0",
     "@gemeente-denhaag/design-tokens-components": "^2.1.1",
+    "@gemeente-denhaag/file": "^2.0.0",
     "@gemeente-denhaag/form-field": "^2.0.0",
     "@gemeente-denhaag/form-fieldset": "^2.0.0",
     "@gemeente-denhaag/form-label": "^2.0.0",

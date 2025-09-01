@@ -20,7 +20,7 @@
   width: 80%;
 }
 
-.features-list__item {
+.configuration-list__item {
   display: flex;
   flex-direction: column;
   border-bottom: var(--nlportal-account-detail-border-width, 1px)
@@ -41,7 +41,7 @@
   }
 }
 
-.features-list__header {
+.configuration-list__header {
   margin-block-end: var(--nlportal-space-block-xs, 0.5rem);
 
   @include mixins.breakpoint(desktop) {
@@ -52,7 +52,7 @@
   }
 }
 
-.features-list__value-edit {
+.configuration-list__value-edit {
   margin-block-end: var(--nlportal-space-block-md, 1rem);
   display: flex;
   flex-direction: row;

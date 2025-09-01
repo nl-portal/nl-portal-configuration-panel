@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.theme.repository
+const useSaveFile = () => {
+    return (
+        blob: Blob, filename: string
+    ) => {
+        const url = URL.createObjectURL(blob);
 
-import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
-import java.util.UUID
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
 
-@Repository
-interface ThemeLogoRepository : JpaRepository<ThemeLogo, UUID> {
-    fun findAllByApplication(application: String): List<ThemeLogo>
-
-    fun findByApplicationAndProfileAndLabel(
-        application: String,
-        profile: String?,
-        label: String?,
-    ): ThemeLogo?
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 }
+
+export default useSaveFile;

@@ -73,6 +73,9 @@ class ThemeConfigurationResource(
                         filename = it.filename,
                         size = it.size,
                         contentType = it.mimetype,
+                        application = it.application,
+                        profile = it.profile,
+                        label = it.label
                     ),
                 )
             }
@@ -85,7 +88,14 @@ class ThemeConfigurationResource(
     ): ResponseEntity<ThemeStylesResponse> {
         return when (val themeStyle = themeService.getThemeStylesByApplication(application, profile, label)) {
             null -> return ResponseEntity.notFound().build()
-            else -> ResponseEntity.ok().body(ThemeStylesResponse(stylesId = themeStyle.id, styles = themeStyle.styles))
+            else -> ResponseEntity.ok().body(
+                ThemeStylesResponse(
+                    stylesId = themeStyle.id, styles = themeStyle.styles,
+                    application = themeStyle.application,
+                    profile = themeStyle.profile,
+                    label = themeStyle.label
+                )
+            )
         }
     }
 
@@ -103,6 +113,9 @@ class ThemeConfigurationResource(
                     ThemeStylesResponse(
                         stylesId = it.id,
                         styles = styles,
+                        application = it.application,
+                        profile = it.profile,
+                        label = it.label
                     ),
                 )
             }
