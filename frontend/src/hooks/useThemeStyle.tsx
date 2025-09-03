@@ -15,64 +15,8 @@
  */
 
 const useThemeStyle = () => {
-    // const auth = useAuth();
-    // const {configPanelSettings, clientSettings} = useContext(ConfigPanelSettingsContext);
-    // const downloadThemeLogo = async (style) => {
-    //     const response = await fetch(
-    //         `${configPanelSettings.backendUrl}/v1/theme/${clientSettings.applicationName}/style/${logo.logoId}`,
-    //         {
-    //             method: 'GET',
-    //             headers: {
-    //                 Authorization: 'Bearer ' + auth.user?.access_token,
-    //             }
-    //         }
-    //     )
-    //     const data = await response.blob();
-    //     const blob = data.slice(0, data.size, logo.contentType);
-    //
-    //     saveFile(blob, logo.filename);
-    // }
-    // const deleteThemeLogo = async (themeLogoId: string) => {
-    //     return await fetch(
-    //         `${configPanelSettings.backendUrl}/v1/theme/${clientSettings.applicationName}/logo/${themeLogoId}`,
-    //         {
-    //             method: 'DELETE',
-    //             headers: {
-    //                 Authorization: 'Bearer ' + auth.user?.access_token,
-    //             }
-    //         }
-    //     );
-    // }
-    // const uploadFile = async (file: File): Promise<ThemeLogo> => {
-    //     const uploadLink = `${configPanelSettings.backendUrl}/v1/theme/${clientSettings.applicationName}/logo`;
-    //     const formData = new FormData();
-    //     formData.append("file", file);
-    //
-    //     const response = await fetch(uploadLink, {
-    //         method: "POST",
-    //         headers: {
-    //             Authorization: `Bearer ${auth.user?.access_token}`,
-    //         },
-    //         body: formData,
-    //     })
-    //     return await response.json()
-    // };
 
-    return {
-        // downloadThemeLogo: useMutation({
-        //     mutationKey: ['downloadThemeLogo',],
-        //     mutationFn: downloadThemeLogo
-        // }),
-        // uploadThemeLogo: useMutation({
-        //     mutationKey: ['uploadThemeLogo',],
-        //     mutationFn: uploadFile,
-        //
-        // }),
-        // deleteThemeLogo: useMutation({
-        //     mutationKey: ['deleteThemeLogo',],
-        //     mutationFn: deleteThemeLogo,
-        // })
-    }
+    return {}
 }
 
 export default useThemeStyle;
