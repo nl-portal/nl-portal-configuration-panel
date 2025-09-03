@@ -75,13 +75,13 @@ class ThemeService(
             ?: themeLogoRepository.save(themeLogo)
     }
 
-    fun getThemeStylesByApplication(
+    fun getThemeStyle(
         application: String,
         profile: String?,
         label: String?,
     ): ThemeStyles? = themeStylesRepository.findByApplicationAndProfileAndLabel(application, profile, label)
 
-    fun saveThemeStyles(
+    fun saveThemeStyle(
         styles: String,
         application: String,
         profile: String?,
@@ -108,4 +108,6 @@ class ThemeService(
     }
 
     fun deleteThemeLogoById(id: UUID) = themeLogoRepository.deleteById(id)
+
+    fun deleteThemeStyleById(id: UUID) = themeStylesRepository.deleteById(id)
 }

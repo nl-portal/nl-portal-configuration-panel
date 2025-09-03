@@ -18,7 +18,7 @@ package nl.nlportal.configurationpanel.theme.web.dto
 
 import java.util.UUID
 
-data class ThemeStylesResponse(
+data class ThemeStyleResponse(
     val stylesId: UUID,
     val styles: String,
     val application: String,

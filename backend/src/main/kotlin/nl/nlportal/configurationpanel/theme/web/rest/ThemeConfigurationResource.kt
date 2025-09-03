@@ -18,7 +18,7 @@ package nl.nlportal.configurationpanel.theme.web.rest
 
 import nl.nlportal.configurationpanel.theme.service.ThemeService
 import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
-import nl.nlportal.configurationpanel.theme.web.dto.ThemeStylesResponse
+import nl.nlportal.configurationpanel.theme.web.dto.ThemeStyleResponse
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -92,16 +92,16 @@ class ThemeConfigurationResource(
             }
 
     @GetMapping("/v1/theme/{application}/styles")
-    fun getApplicationThemeStyles(
+    fun getThemeStyle(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<ThemeStylesResponse> {
-        return when (val themeStyle = themeService.getThemeStylesByApplication(application, profile, label)) {
+    ): ResponseEntity<ThemeStyleResponse> {
+        return when (val themeStyle = themeService.getThemeStyle(application, profile, label)) {
             null -> return ResponseEntity.notFound().build()
             else ->
                 ResponseEntity.ok().body(
-                    ThemeStylesResponse(
+                    ThemeStyleResponse(
                         stylesId = themeStyle.id,
                         styles = themeStyle.styles,
                         application = themeStyle.application,
@@ -112,18 +112,28 @@ class ThemeConfigurationResource(
         }
     }
 
+    @DeleteMapping("/v1/theme/{application}/style/{id}")
+    fun deleteThemeStyleById(
+        @PathVariable application: String,
+        @PathVariable id: UUID,
+    ): ResponseEntity<Nothing> =
+        when (runCatching { themeService.deleteThemeStyleById(id) }.isSuccess) {
+            false -> ResponseEntity.internalServerError().build()
+            true -> ResponseEntity.ok().build()
+        }
+
     @PostMapping("/v1/theme/{application}/styles", consumes = [MediaType.TEXT_PLAIN_VALUE])
-    fun storeThemeLogo(
+    fun saveThemeStyle(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
         @RequestBody styles: String,
-    ): ResponseEntity<ThemeStylesResponse> =
+    ): ResponseEntity<ThemeStyleResponse> =
         themeService
-            .saveThemeStyles(styles, application, profile, label)
+            .saveThemeStyle(styles, application, profile, label)
             .let {
                 ResponseEntity.ok(
-                    ThemeStylesResponse(
+                    ThemeStyleResponse(
                         stylesId = it.id,
                         styles = styles,
                         application = it.application,
