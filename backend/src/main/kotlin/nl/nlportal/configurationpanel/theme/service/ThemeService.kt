@@ -16,7 +16,6 @@
 
 package nl.nlportal.configurationpanel.theme.service
 
-import nl.nlportal.configurationpanel.notify.service.NotifyService
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyles
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
@@ -29,7 +28,6 @@ import java.util.UUID
 class ThemeService(
     private val themeLogoRepository: ThemeLogoRepository,
     private val themeStylesRepository: ThemeStylesRepository,
-    private val notifyService: NotifyService,
 ) {
     fun getThemeLogosByApplication(application: String): List<ThemeLogoResponse> =
         themeLogoRepository.findAllByApplication(application).map { entry ->
@@ -108,4 +106,6 @@ class ThemeService(
             }
             ?: themeStylesRepository.save(themeStyles)
     }
+
+    fun deleteThemeLogoById(id: UUID) = themeLogoRepository.deleteById(id)
 }

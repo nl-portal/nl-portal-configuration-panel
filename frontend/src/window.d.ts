@@ -22,5 +22,6 @@ export declare global {
     OIDC_REDIRECT_URI: string;
     OIDC_POST_LOGOUT_REDIRECT_URI: string;
     CLIENT_APPLICATION_NAME: string;
+    CONFIG_PANEL_REST_API_URL: string;
   }
 }

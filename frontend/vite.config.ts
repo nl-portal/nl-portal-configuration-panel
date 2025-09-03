@@ -25,6 +25,14 @@ export default defineConfig({
             transformMixedEsModules: true
         },
         outDir: "build",
+        chunkSizeWarningLimit: 2000,
+        rollupOptions: {
+            output: {
+                manualChunks(id: string) {
+                    if (id.includes("@gemeente-denhaag")) return "gemeente-denhaag"
+                }
+            }
+        }
     },
     server: {
         proxy: {

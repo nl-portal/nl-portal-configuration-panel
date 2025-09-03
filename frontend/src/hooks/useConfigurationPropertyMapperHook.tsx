@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ConfigurationProperty from "../interfaces/ConfigurationProperty.ts";
 import _ from "lodash";
 import {flatten} from "flat";
 import {useContext} from "react";
 import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
+import {ConfigurationProperty} from "./useConfiguration.tsx";
 
 const useConfigurationPropertyMapperHook = () => {
     const {clientSettings} = useContext(ConfigPanelSettingsContext);
@@ -37,7 +37,7 @@ const useConfigurationPropertyMapperHook = () => {
     const toProperties = (
         configuration: object = {},
         prefix?: string,
-        application: string = clientSettings.applicationName,
+        application: string = clientSettings.applicationName!,
     ): ConfigurationProperty[] => {
         const configurationProperties: ConfigurationProperty[] = []
         const flattenedProperties: object = flatten(configuration, {safe: true});

@@ -18,6 +18,7 @@ package nl.nlportal.configurationpanel.security.config
 
 import nl.nlportal.configurationpanel.security.TokenAuthenticationProvider
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -29,9 +30,11 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties(ConfigurationPanelCorsConfigurationProperties::class)
 class ConfigurationPanelHttpSecurityConfiguration {
     @Value("\${spring.cloud.config.server.prefix}")
     private val configServerBasePath: String = ""
@@ -46,6 +49,19 @@ class ConfigurationPanelHttpSecurityConfiguration {
         ProviderManager(authenticationProviders)
 
     @Bean
+    fun corsConfigurationSource(
+        configurationPanelCorsConfigurationProperties: ConfigurationPanelCorsConfigurationProperties,
+    ): UrlBasedCorsConfigurationSource {
+        val source = UrlBasedCorsConfigurationSource()
+
+        configurationPanelCorsConfigurationProperties.cors.forEach {
+            source.registerCorsConfiguration(it.path, it.config)
+        }
+
+        return source
+    }
+
+    @Bean
     fun configurationPanelSecurityFilterChain(
         authenticationManager: AuthenticationManager,
         http: HttpSecurity,
@@ -55,7 +71,6 @@ class ConfigurationPanelHttpSecurityConfiguration {
             .authorizeHttpRequests { request ->
                 request.anyRequest().authenticated()
             }.csrf { it.disable() }
-            .cors { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer {
                 it.jwt {}

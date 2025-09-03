@@ -19,39 +19,42 @@ import {useNavigate, useParams} from "react-router-dom";
 import {paths} from "../constants/paths";
 import {PageHeader} from "@gemeente-denhaag/page";
 import {Heading2, Heading3, Heading4} from "@gemeente-denhaag/typography";
-import styles from './FeaturePage.module.scss'
+import styles from '../styles/Configuration.module.scss'
 import {FormattedMessage} from "react-intl";
 import {features} from "../constants/features.tsx";
 import {createElement, useCallback, useEffect, useState} from "react";
 import useConfigurationPropertyMapper from "../hooks/useConfigurationPropertyMapperHook.tsx";
-import useConfigurationsByFeature from "../hooks/useConfigurationsByFeatureQuery.tsx";
 import Skeleton from "react-loading-skeleton";
 import PageGrid from "../components/PageGrid.tsx";
-import useConfigurationsMutation from "../hooks/useConfigurationsMutation.tsx";
-import {toast} from "react-toastify";
 import _ from "lodash";
-import useDeleteConfigurationsByFeatureMutation from "../hooks/useDeleteConfigurationsByFeatureMutation.tsx";
 import BackLink from "../components/BackLink.tsx";
+import useConfiguration from "../hooks/useConfiguration.tsx";
+import {toast} from "react-toastify";
 
 const FeaturePage = () => {
     const {featureId} = useParams();
     const navigate = useNavigate();
-    const feature = features.find(it => it.featureId == featureId);
+    const feature =
+        features.find(it => it.featureId === featureId);
     const {parseProperties, toProperties} = useConfigurationPropertyMapper();
     const {
-        data: featureConfigurations,
-        isLoading: featureConfigurationsLoading,
-        isError: featureConfigurationsError
-    } = useConfigurationsByFeature({featurePrefix: feature?.featureConfigurationPrefix});
-    const {
-        mutate: mutateConfigurations,
-        isSuccess: mutateConfigurationsSuccess,
-        isError: mutateConfigurationsError
-    } = useConfigurationsMutation();
-    const {
-        mutate: deleteConfigurations,
-        isError: deleteConfigurationsError
-    } = useDeleteConfigurationsByFeatureMutation({featurePrefix: feature?.featureConfigurationPrefix});
+        getConfigurations: {
+            data: featureConfigurations,
+            isPending:
+                featureConfigurationsLoading,
+            isError:
+                featureConfigurationsError
+        },
+        storeConfigrations: {
+            mutate: mutateConfigurations,
+            isSuccess: storeConfigurations,
+            isError: storeConfigurationsError
+        },
+        deleteConfigurations: {
+            mutate: deleteConfigurations,
+            isError: deleteConfigurationsError
+        }
+    } = useConfiguration({featurePrefix: feature?.featureConfigurationPrefix});
     const [prefilledConfig, setPrefilledConfig] = useState<object | undefined>(undefined);
     const [modifiedConfig, setModifiedConfig] = useState<object>({});
     const [isDirty, setIsDirty] = useState<boolean>(false);
@@ -75,31 +78,45 @@ const FeaturePage = () => {
             const configurationProperties =
                 toProperties(modifiedConfig, feature?.featureConfigurationPrefix);
             if (configurationProperties.length > 0) {
-                deleteConfigurations(undefined, {
+                deleteConfigurations(feature!.featureConfigurationPrefix, {
                     onSuccess: () => {
-                        mutateConfigurations(configurationProperties);
-                    }
+                        mutateConfigurations(configurationProperties, {
+                            onSuccess: () => {
+                                toast(() =>
+                                    <Heading4>
+                                        <FormattedMessage id={"api.save.success"}/>
+                                    </Heading4>
+                                )
+                            },
+                            onError: () => {
+                                toast(() =>
+                                    <Heading4>
+                                        <FormattedMessage id={"api.error"}/>
+                                    </Heading4>
+                                )
+                            },
+                        });
+                    },
+                    onError: () => {
+                        toast(() =>
+                            <Heading4>
+                                <FormattedMessage id={"api.error"}/>)
+                            </Heading4>
+                        )
+                    },
                 });
             }
         }
     };
 
     useEffect(() => {
-        if (mutateConfigurationsSuccess) {
-            toast(
-                <>
-                    <Heading4>
-                        <FormattedMessage id={"api.save.success"}/>
-                    </Heading4>
-                </>
-            )
+        if (storeConfigurations) {
             setPrefilledConfig(modifiedConfig)
         }
-        if (mutateConfigurationsError || deleteConfigurationsError) {
-            toast(<FormattedMessage id={"api.save.error"}/>)
+        if (storeConfigurationsError || deleteConfigurationsError) {
             setIsDirty(true)
         }
-    }, [mutateConfigurationsSuccess, mutateConfigurationsError, deleteConfigurationsError])
+    }, [storeConfigurations, storeConfigurationsError, deleteConfigurationsError])
 
     useEffect(() => {
         if (featureConfigurations) {
@@ -108,6 +125,10 @@ const FeaturePage = () => {
             setPrefilledConfig(prefillData);
         }
     }, [featureConfigurations])
+
+    useEffect(() => {
+        if (!feature) navigate(paths.configuration)
+    }, [feature])
 
     if (featureConfigurationsLoading) {
         return (
@@ -119,20 +140,22 @@ const FeaturePage = () => {
 
     if (featureConfigurationsError)
         return (
-            <section>
+            <>
                 <BackLink href={paths.configuration} children={
                     <Heading4>
-                        <FormattedMessage id={"features.config.back"}></FormattedMessage>
+                        <FormattedMessage id={"action.back"}></FormattedMessage>
                     </Heading4>
                 }>
                 </BackLink>
-                <Heading3>
-                    <FormattedMessage
-                        id={"features.config.loading-error"}
-                        values={{featureId: feature?.featureId}}
-                    />
-                </Heading3>
-            </section>
+                <div className={styles["feature-config__content"]}>
+                    <Heading3>
+                        <FormattedMessage
+                            id={"features.config.loading-error"}
+                            values={{featureId: feature?.featureId}}
+                        />
+                    </Heading3>
+                </div>
+            </>
         );
 
     return (
@@ -144,7 +167,9 @@ const FeaturePage = () => {
                     </Heading4>
                 }>
                 </BackLink>
-                <Heading2><FormattedMessage id={"features." + featureId}/></Heading2>
+                <div className={styles["feature-config__header"]}>
+                    <Heading2><FormattedMessage id={"features." + featureId}/></Heading2>
+                </div>
             </PageHeader>
             <div className={styles["feature-config__content"]}>
                 {(

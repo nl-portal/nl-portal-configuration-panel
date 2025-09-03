@@ -51,6 +51,7 @@ services:
             OIDC_REDIRECT_URI: "http://localhost:3001"
             OIDC_POST_LOGOUT_REDIRECT_URI: "http://localhost:3001"
             CLIENT_APPLICATION_NAME: "nl-portal-app"
+            CONFIG_PANEL_REST_API_URL: "http://localhost:8090/api"
 
     configuration-panel-backend-remote:
         image: ghcr.io/nl-portal/configuration-panel-backend

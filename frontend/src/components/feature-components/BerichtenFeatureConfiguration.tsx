@@ -23,7 +23,7 @@ import {RadioButton} from "@gemeente-denhaag/radio-button";
 import {FormLabel} from "@gemeente-denhaag/form-label";
 import {ConfigurationForm} from "../ConfigurationForm.tsx";
 import {useForm} from "react-hook-form";
-import styles from "../ConfigurationForm.module.scss"
+import styles from "../../styles/Configuration.module.scss"
 import TextInput from "@gemeente-denhaag/text-input";
 
 interface BerichtenConfiguration {

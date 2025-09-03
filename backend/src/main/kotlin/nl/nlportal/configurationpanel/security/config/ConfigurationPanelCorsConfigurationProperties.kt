@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Ritense BV, the Netherlands.
+ * Copyright 2015-2023 Ritense BV, the Netherlands.
  *
  * Licensed under EUPL, Version 1.2 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package nl.nlportal.configurationpanel.security.config
 
-export const config = {
-  OIDC_URL: window.OIDC_URL,
-  OIDC_REALM: window.OIDC_REALM,
-  OIDC_CLIENT_ID: window.OIDC_CLIENT_ID,
-  OIDC_REDIRECT_URI: window.OIDC_REDIRECT_URI,
-  OIDC_POST_LOGOUT_REDIRECT_URI: window.OIDC_POST_LOGOUT_REDIRECT_URI,
-  CLIENT_APPLICATION_NAME: window.CLIENT_APPLICATION_NAME,
-  CONFIG_PANEL_REST_API_URL: window.CONFIG_PANEL_REST_API_URL,
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.web.cors.CorsConfiguration
+
+@ConfigurationProperties(prefix = "configuration-panel.security")
+data class ConfigurationPanelCorsConfigurationProperties(
+    var cors: List<CorsPathConfigurationItem> = emptyList(),
+) {
+    data class CorsPathConfigurationItem(
+        var path: String = "",
+        var config: CorsConfiguration = CorsConfiguration(),
+    )
 }

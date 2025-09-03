@@ -21,7 +21,7 @@ import {FormattedMessage, useIntl} from "react-intl";
 import {Heading3, Heading4, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
-import styles from "../ConfigurationForm.module.scss"
+import styles from "../../styles/Configuration.module.scss"
 import {RadioButton} from "@gemeente-denhaag/radio-button";
 import ConfigurationForm from "../ConfigurationForm.tsx";
 import {useForm} from "react-hook-form";

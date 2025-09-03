@@ -35,7 +35,6 @@ class ThemeConfiguration {
         ThemeService(
             themeLogoRepository = themeLogoRepository,
             themeStylesRepository = themeStylesRepository,
-            notifyService = notifyService,
         )
 
     @Bean

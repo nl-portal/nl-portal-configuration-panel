@@ -23,7 +23,7 @@ import {paths} from "../constants/paths.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {themes} from "../constants/themes.tsx";
 import {useEffect} from "react";
-import styles from "./FeaturePage.module.scss";
+import styles from "../styles/Configuration.module.scss";
 
 const ThemePage = () => {
         const {themeConfigurationId} = useParams();
@@ -42,14 +42,14 @@ const ThemePage = () => {
                     </Heading4>
                 }>
                 </BackLink>
-                <Heading2><FormattedMessage id={"theme." + themeConfigurationId}/></Heading2>
+                <div className={styles["feature-config__header"]}>
+                    <Heading2><FormattedMessage id={"theme." + themeConfigurationId}/></Heading2>
+                </div>
             </PageHeader>
-            <div className={styles["feature-config__content"]}>
-                {
-                    theme?.themeConfigurationComponent &&
-                    <theme.themeConfigurationComponent/>
-                }
-            </div>
+            {
+                theme?.themeConfigurationComponent &&
+                <theme.themeConfigurationComponent/>
+            }
         </PageGrid>
     }
 ;

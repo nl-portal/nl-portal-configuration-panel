@@ -2,34 +2,34 @@ import React, {ReactNode} from "react";
 
 interface IConfigPanelSettings {
     clientSettings: {
-        applicationName: string;
+        applicationName?: string;
+    }
+    configPanelSettings: {
+        restApiUrl?: string;
     }
 }
 
-interface IConfigPanelSettingsProviderProps {
-    applicationName?: string;
-    children?: ReactNode
-}
+const ConfigPanelSettingsContext = React.createContext<IConfigPanelSettings>(
+    {
+        clientSettings: {},
+        configPanelSettings: {}
+    }
+);
 
-const ConfigPanelSettingsContext = React.createContext<IConfigPanelSettings>({
-    clientSettings: {
-        applicationName: ''
-    },
-});
-
-export const ConfigPanelSettingsProvider = ({
-                                                applicationName = 'nl-portal-app',
-                                                children,
-                                            }: IConfigPanelSettingsProviderProps) => {
-    return (
-        <ConfigPanelSettingsContext.Provider
-            value={{
-                clientSettings: {applicationName: applicationName},
-            }}
-        >
-            {children}
-        </ConfigPanelSettingsContext.Provider>
-    );
-};
+export const ConfigPanelSettingsProvider =
+    (children?: ReactNode) => {
+        return (
+            <ConfigPanelSettingsContext.Provider
+                value={
+                    {
+                        clientSettings: {},
+                        configPanelSettings: {}
+                    }
+                }
+            >
+                {children}
+            </ConfigPanelSettingsContext.Provider>
+        );
+    };
 
 export default ConfigPanelSettingsContext;

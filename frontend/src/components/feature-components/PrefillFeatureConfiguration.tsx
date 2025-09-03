@@ -5,7 +5,7 @@ import {FormattedMessage} from "react-intl";
 import {Heading3, Paragraph} from "@gemeente-denhaag/typography";
 import {FormField} from "@gemeente-denhaag/form-field";
 import {FormLabel} from "@gemeente-denhaag/form-label";
-import styles from '../ConfigurationForm.module.scss';
+import styles from '../../styles/Configuration.module.scss';
 import TextInput from "@gemeente-denhaag/text-input";
 import {useForm} from "react-hook-form";
 import {RadioButton} from "@gemeente-denhaag/radio-button";

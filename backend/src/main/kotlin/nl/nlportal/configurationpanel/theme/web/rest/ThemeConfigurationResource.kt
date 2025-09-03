@@ -22,6 +22,7 @@ import nl.nlportal.configurationpanel.theme.web.dto.ThemeStylesResponse
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -38,12 +39,12 @@ class ThemeConfigurationResource(
     private val themeService: ThemeService,
 ) {
     @GetMapping("/v1/theme/{application}/logo")
-    fun getApplicationThemeLogos(
+    fun getThemeLogos(
         @PathVariable application: String,
     ): ResponseEntity<List<ThemeLogoResponse>> = ResponseEntity.ok(themeService.getThemeLogosByApplication(application))
 
     @GetMapping("/v1/theme/{application}/logo/{id}")
-    fun getApplicationThemeLogoById(
+    fun getThemeLogoById(
         @PathVariable application: String,
         @PathVariable id: UUID,
     ): ResponseEntity<ByteArray> {
@@ -57,8 +58,18 @@ class ThemeConfigurationResource(
         }
     }
 
+    @DeleteMapping("/v1/theme/{application}/logo/{id}")
+    fun deleteThemeLogoById(
+        @PathVariable application: String,
+        @PathVariable id: UUID,
+    ): ResponseEntity<Nothing> =
+        when (runCatching { themeService.deleteThemeLogoById(id) }.isSuccess) {
+            false -> ResponseEntity.internalServerError().build()
+            true -> ResponseEntity.ok().build()
+        }
+
     @PostMapping("/v1/theme/{application}/logo", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun storeApplicationThemeLogo(
+    fun storeThemeLogo(
         @RequestParam("file") file: MultipartFile,
         @PathVariable application: String,
         @RequestParam profile: String? = null,
@@ -75,7 +86,7 @@ class ThemeConfigurationResource(
                         contentType = it.mimetype,
                         application = it.application,
                         profile = it.profile,
-                        label = it.label
+                        label = it.label,
                     ),
                 )
             }
@@ -88,19 +99,21 @@ class ThemeConfigurationResource(
     ): ResponseEntity<ThemeStylesResponse> {
         return when (val themeStyle = themeService.getThemeStylesByApplication(application, profile, label)) {
             null -> return ResponseEntity.notFound().build()
-            else -> ResponseEntity.ok().body(
-                ThemeStylesResponse(
-                    stylesId = themeStyle.id, styles = themeStyle.styles,
-                    application = themeStyle.application,
-                    profile = themeStyle.profile,
-                    label = themeStyle.label
+            else ->
+                ResponseEntity.ok().body(
+                    ThemeStylesResponse(
+                        stylesId = themeStyle.id,
+                        styles = themeStyle.styles,
+                        application = themeStyle.application,
+                        profile = themeStyle.profile,
+                        label = themeStyle.label,
+                    ),
                 )
-            )
         }
     }
 
     @PostMapping("/v1/theme/{application}/styles", consumes = [MediaType.TEXT_PLAIN_VALUE])
-    fun storeApplicationThemeLogo(
+    fun storeThemeLogo(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
@@ -115,7 +128,7 @@ class ThemeConfigurationResource(
                         styles = styles,
                         application = it.application,
                         profile = it.profile,
-                        label = it.label
+                        label = it.label,
                     ),
                 )
             }
