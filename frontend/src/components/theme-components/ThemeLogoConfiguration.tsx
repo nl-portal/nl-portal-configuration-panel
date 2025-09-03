@@ -44,12 +44,16 @@ const ThemeLogoConfiguration = () => {
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            Array.from(e.target.files).forEach((file) => uploadThemeLogo.mutate(file, {
-                    onSettled: () => {
-                        void queryClient.invalidateQueries({queryKey: ["getThemeLogos"]})
-                    }
+            Array.from(e.target.files).forEach((file) => {
+                    uploadThemeLogo.mutate(file, {
+                            onSettled: () => {
+                                e.target.value = '';
+                                void queryClient.invalidateQueries({queryKey: ["getThemeLogos"]})
+                            }
+                        }
+                    )
                 }
-            ));
+            )
         }
     }
     const handleDelete = (themeLogoId: string) => {
