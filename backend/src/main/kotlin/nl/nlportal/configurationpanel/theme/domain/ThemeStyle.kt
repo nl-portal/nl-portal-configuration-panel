@@ -28,9 +28,9 @@ import java.util.UUID
 @Entity
 @EntityListeners(ThemeStylesEntityListener::class)
 @Table(
-    name = "nlp_theme_styles",
+    name = "nlp_theme_style",
 )
-data class ThemeStyles(
+data class ThemeStyle(
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     val id: UUID = UUID.randomUUID(),
@@ -49,7 +49,7 @@ data class ThemeStyles(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ThemeStyles
+        other as ThemeStyle
 
         if (styles != other.styles) return false
         if (application != other.application) return false

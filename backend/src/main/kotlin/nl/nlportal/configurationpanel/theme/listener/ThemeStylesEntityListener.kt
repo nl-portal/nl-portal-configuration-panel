@@ -18,16 +18,18 @@ package nl.nlportal.configurationpanel.theme.listener
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.persistence.PrePersist
+import jakarta.persistence.PreRemove
 import jakarta.persistence.PreUpdate
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.provider.SpringContextProvider
 import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
-import nl.nlportal.configurationpanel.theme.domain.ThemeStyles
+import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
 
 class ThemeStylesEntityListener {
     @PrePersist
     @PreUpdate
-    fun storeLogoAsConfiguration(themeStyles: ThemeStyles) {
+    @PreRemove
+    fun storeLogoAsConfiguration(themeStyles: ThemeStyle) {
         val configurationsService = SpringContextProvider.getBean(ConfigurationPropertiesService::class.java)
         val configurationProperty =
             ConfigurationProperty(

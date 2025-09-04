@@ -16,16 +16,16 @@
 
 package nl.nlportal.configurationpanel.theme.repository
 
-import nl.nlportal.configurationpanel.theme.domain.ThemeStyles
+import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface ThemeStylesRepository : JpaRepository<ThemeStyles, UUID> {
+interface ThemeStyleRepository : JpaRepository<ThemeStyle, UUID> {
     fun findByApplicationAndProfileAndLabel(
         application: String,
         profile: String?,
         label: String?,
-    ): ThemeStyles?
+    ): ThemeStyle?
 }

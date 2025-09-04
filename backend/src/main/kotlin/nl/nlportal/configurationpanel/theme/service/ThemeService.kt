@@ -17,9 +17,9 @@
 package nl.nlportal.configurationpanel.theme.service
 
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
-import nl.nlportal.configurationpanel.theme.domain.ThemeStyles
+import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
-import nl.nlportal.configurationpanel.theme.repository.ThemeStylesRepository
+import nl.nlportal.configurationpanel.theme.repository.ThemeStyleRepository
 import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.web.multipart.MultipartFile
@@ -27,7 +27,7 @@ import java.util.UUID
 
 class ThemeService(
     private val themeLogoRepository: ThemeLogoRepository,
-    private val themeStylesRepository: ThemeStylesRepository,
+    private val themeStylesRepository: ThemeStyleRepository,
 ) {
     fun getThemeLogosByApplication(application: String): List<ThemeLogoResponse> =
         themeLogoRepository.findAllByApplication(application).map { entry ->
@@ -79,16 +79,16 @@ class ThemeService(
         application: String,
         profile: String?,
         label: String?,
-    ): ThemeStyles? = themeStylesRepository.findByApplicationAndProfileAndLabel(application, profile, label)
+    ): ThemeStyle? = themeStylesRepository.findByApplicationAndProfileAndLabel(application, profile, label)
 
     fun saveThemeStyle(
         styles: String,
         application: String,
         profile: String?,
         label: String?,
-    ): ThemeStyles {
+    ): ThemeStyle {
         val themeStyles =
-            ThemeStyles(
+            ThemeStyle(
                 styles = styles,
                 application = application,
                 profile = profile,

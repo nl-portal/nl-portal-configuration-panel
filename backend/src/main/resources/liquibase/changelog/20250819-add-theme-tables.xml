@@ -48,10 +48,10 @@
     <changeSet id="2" author="Ritense">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="nlp_theme_styles"/>
+                <tableExists tableName="nlp_theme_style"/>
             </not>
         </preConditions>
-        <createTable tableName="nlp_theme_styles">
+        <createTable tableName="nlp_theme_style">
             <column name="id" type="uuid">
                 <constraints primaryKey="true"/>
             </column>
@@ -64,7 +64,7 @@
         <addUniqueConstraint
                 constraintName="unique-styles-per-consumer"
                 columnNames="application, profile, label"
-                tableName="nlp_theme_styles"
+                tableName="nlp_theme_style"
                 validate="true"
         />
     </changeSet>
