@@ -20,7 +20,6 @@ import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
 import nl.nlportal.configurationpanel.theme.repository.ThemeStyleRepository
-import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.web.multipart.MultipartFile
 import java.util.UUID
@@ -29,18 +28,13 @@ class ThemeService(
     private val themeLogoRepository: ThemeLogoRepository,
     private val themeStylesRepository: ThemeStyleRepository,
 ) {
-    fun getThemeLogosByApplication(application: String): List<ThemeLogoResponse> =
-        themeLogoRepository.findAllByApplication(application).map { entry ->
-            ThemeLogoResponse(
-                logoId = entry.id,
-                filename = entry.filename,
-                size = entry.size,
-                contentType = entry.mimetype,
-                application = entry.application,
-                profile = entry.profile,
-                label = entry.label,
-            )
-        }
+    fun getThemeLogos(
+        application: String,
+        profile: String?,
+        label: String?,
+    ): List<ThemeLogo> =
+        themeLogoRepository
+            .findAllByApplicationAndProfileAndLabel(application, profile, label)
 
     fun getThemeLogoByIdOrNull(logoId: UUID): ThemeLogo? = themeLogoRepository.findByIdOrNull(logoId)
 
@@ -75,11 +69,13 @@ class ThemeService(
             ?: themeLogoRepository.save(themeLogo)
     }
 
-    fun getThemeStyle(
+    fun getThemeStyles(
         application: String,
         profile: String?,
         label: String?,
-    ): ThemeStyle? = themeStylesRepository.findByApplicationAndProfileAndLabel(application, profile, label)
+    ): List<ThemeStyle> =
+        themeStylesRepository
+            .findAllByApplicationAndProfileAndLabel(application, profile, label)
 
     fun saveThemeStyle(
         styles: String,

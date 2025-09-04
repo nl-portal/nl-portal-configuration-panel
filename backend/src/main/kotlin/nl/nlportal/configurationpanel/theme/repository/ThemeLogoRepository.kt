@@ -23,7 +23,11 @@ import java.util.UUID
 
 @Repository
 interface ThemeLogoRepository : JpaRepository<ThemeLogo, UUID> {
-    fun findAllByApplication(application: String): List<ThemeLogo>
+    fun findAllByApplicationAndProfileAndLabel(
+        application: String,
+        profile: String?,
+        label: String?,
+    ): List<ThemeLogo>
 
     fun findByApplicationAndProfileAndLabel(
         application: String,

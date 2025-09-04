@@ -28,4 +28,10 @@ interface ThemeStyleRepository : JpaRepository<ThemeStyle, UUID> {
         profile: String?,
         label: String?,
     ): ThemeStyle?
+
+    fun findAllByApplicationAndProfileAndLabel(
+        application: String,
+        profile: String?,
+        label: String?,
+    ): List<ThemeStyle>
 }

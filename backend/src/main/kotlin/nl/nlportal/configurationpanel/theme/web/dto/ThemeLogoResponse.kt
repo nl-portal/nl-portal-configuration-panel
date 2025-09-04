@@ -16,6 +16,7 @@
 
 package nl.nlportal.configurationpanel.theme.web.dto
 
+import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import java.util.UUID
 
 data class ThemeLogoResponse(
@@ -26,4 +27,18 @@ data class ThemeLogoResponse(
     val application: String,
     val profile: String? = null,
     val label: String? = null,
-)
+) {
+    companion object {
+        @JvmStatic
+        fun fromThemeLogo(themeLogo: ThemeLogo): ThemeLogoResponse =
+            ThemeLogoResponse(
+                logoId = themeLogo.id,
+                filename = themeLogo.filename,
+                size = themeLogo.size,
+                contentType = themeLogo.mimetype,
+                application = themeLogo.application,
+                profile = themeLogo.profile,
+                label = themeLogo.label,
+            )
+    }
+}
