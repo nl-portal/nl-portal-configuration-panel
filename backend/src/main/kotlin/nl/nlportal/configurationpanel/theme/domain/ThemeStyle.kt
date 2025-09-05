@@ -18,15 +18,12 @@ package nl.nlportal.configurationpanel.theme.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import nl.nlportal.configurationpanel.theme.listener.ThemeStylesEntityListener
 import java.time.Instant
 import java.util.UUID
 
 @Entity
-@EntityListeners(ThemeStylesEntityListener::class)
 @Table(
     name = "nlp_theme_style",
 )
@@ -65,5 +62,9 @@ data class ThemeStyle(
         result = 31 * result + (profile?.hashCode() ?: 0)
         result = 31 * result + (label?.hashCode() ?: 0)
         return result
+    }
+
+    companion object {
+        const val THEME_STYLE_CONFIGURATION_PROPERTY_KEY = "nl-portal.config.theme.styles"
     }
 }

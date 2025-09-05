@@ -17,7 +17,7 @@
 package nl.nlportal.configurationpanel.theme.web.rest
 
 import nl.nlportal.configurationpanel.theme.service.ThemeService
-import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoResponse
+import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoDTO
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -41,12 +41,12 @@ class ThemeLogoConfigurationResource(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<List<ThemeLogoResponse>> =
+    ): ResponseEntity<List<ThemeLogoDTO>> =
         ResponseEntity.ok(
             themeService
                 .getThemeLogos(application, profile, label)
                 .map { themeLogo ->
-                    ThemeLogoResponse.fromThemeLogo(themeLogo)
+                    ThemeLogoDTO.fromThemeLogo(themeLogo)
                 },
         )
 
@@ -80,12 +80,12 @@ class ThemeLogoConfigurationResource(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<ThemeLogoResponse> =
+    ): ResponseEntity<ThemeLogoDTO> =
         themeService
             .saveThemeLogo(file, application, profile, label)
             .let { themeLogo ->
                 ResponseEntity.ok(
-                    ThemeLogoResponse.fromThemeLogo(themeLogo),
+                    ThemeLogoDTO.fromThemeLogo(themeLogo),
                 )
             }
 }

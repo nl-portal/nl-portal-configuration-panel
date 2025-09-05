@@ -14,27 +14,10 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.theme.web.dto
+package nl.nlportal.configurationpanel.event
 
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
-import java.util.UUID
 
-data class ThemeStyleResponse(
-    val styleId: UUID,
-    val styles: String,
-    val application: String,
-    val profile: String? = null,
-    val label: String? = null,
-) {
-    companion object {
-        @JvmStatic
-        fun fromThemeStyle(themeStyle: ThemeStyle) =
-            ThemeStyleResponse(
-                styleId = themeStyle.id,
-                styles = themeStyle.styles,
-                application = themeStyle.application,
-                profile = themeStyle.profile,
-                label = themeStyle.label,
-            )
-    }
-}
+data class ThemeStyleChangedEvent(
+    val themeStyle: ThemeStyle,
+)

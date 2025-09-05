@@ -1,6 +1,6 @@
 package nl.nlportal.configurationpanel.listener
 
-import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
+import nl.nlportal.configurationpanel.event.ThemeLogoChangedEvent
 import nl.nlportal.configurationpanel.notify.client.NlPortalClient
 import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.junit.jupiter.api.Tag
@@ -17,13 +17,15 @@ import org.springframework.cache.CacheManager
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
 
 @SpringBootTest
 @Tag("integration")
 @AutoConfigureWebTestClient(timeout = "36000")
+@ActiveProfiles(profiles = ["no-notify", "jdbc"])
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ConfigurationPropertiesChangedEventListenerIT(
+class ThemeLogoChangedEventListenerDisabledIT(
     @Autowired private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @TestConfiguration
@@ -39,15 +41,15 @@ class ConfigurationPropertiesChangedEventListenerIT(
     lateinit var nlPortalClient: NlPortalClient
 
     @Test
-    fun `should notify client to restart on configuration change`() {
+    fun `should not notify on configuration properties change`() {
         // Given
-        val event = ConfigurationPropertiesChangedEvent(emptyList())
+        val event = ThemeLogoChangedEvent(emptyList())
 
         // When
         applicationEventPublisher.publishEvent(event)
 
         // Then
-        verify(notifyService, times(1)).restartNlPortalClients()
-        verify(nlPortalClient, times(2)).restartNlPortalViaActuator(any())
+        verify(notifyService, times(0)).restartNlPortalClients()
+        verify(nlPortalClient, times(0)).restartNlPortalViaActuator(any())
     }
 }

@@ -16,17 +16,26 @@
 
 package nl.nlportal.configurationpanel.theme.service
 
+import nl.nlportal.configurationpanel.event.ThemeLogoChangedEvent
+import nl.nlportal.configurationpanel.event.ThemeStyleChangedEvent
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
+import nl.nlportal.configurationpanel.theme.event.ThemeLogoDeletedEvent
+import nl.nlportal.configurationpanel.theme.event.ThemeStyleDeletedEvent
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository
 import nl.nlportal.configurationpanel.theme.repository.ThemeStyleRepository
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.util.UUID
 
+@Service
 class ThemeService(
+    private val applicationEventPublisher: ApplicationEventPublisher,
     private val themeLogoRepository: ThemeLogoRepository,
-    private val themeStylesRepository: ThemeStyleRepository,
+    private val themeStyleRepository: ThemeStyleRepository,
 ) {
     fun getThemeLogos(
         application: String,
@@ -38,6 +47,7 @@ class ThemeService(
 
     fun getThemeLogoByIdOrNull(logoId: UUID): ThemeLogo? = themeLogoRepository.findByIdOrNull(logoId)
 
+    @Transactional
     fun saveThemeLogo(
         file: MultipartFile,
         application: String,
@@ -59,14 +69,30 @@ class ThemeService(
                 label,
             )?.let { existing ->
                 if (themeLogo != existing) {
-                    return themeLogoRepository.save(
-                        themeLogo.copy(id = existing.id),
-                    )
+                    return themeLogoRepository
+                        .save(
+                            themeLogo.copy(id = existing.id),
+                        ).also { applicationEventPublisher.publishEvent(ThemeLogoChangedEvent(it)) }
                 } else {
                     return existing
                 }
             }
-            ?: themeLogoRepository.save(themeLogo)
+            ?: themeLogoRepository
+                .save(themeLogo)
+                .also { applicationEventPublisher.publishEvent(ThemeLogoChangedEvent(it)) }
+    }
+
+    @Transactional
+    fun deleteThemeLogoById(id: UUID) {
+        val themeLogo = themeLogoRepository.findByIdOrNull(id)
+
+        themeLogo?.let {
+            themeLogoRepository
+                .deleteById(id)
+                .also {
+                    applicationEventPublisher.publishEvent(ThemeLogoDeletedEvent(themeLogo = themeLogo))
+                }
+        }
     }
 
     fun getThemeStyles(
@@ -74,16 +100,17 @@ class ThemeService(
         profile: String?,
         label: String?,
     ): List<ThemeStyle> =
-        themeStylesRepository
+        themeStyleRepository
             .findAllByApplicationAndProfileAndLabel(application, profile, label)
 
-    fun saveThemeStyle(
+    @Transactional
+    fun createThemeStyle(
         styles: String,
         application: String,
         profile: String?,
         label: String?,
     ): ThemeStyle {
-        val themeStyles =
+        val themeStyle =
             ThemeStyle(
                 styles = styles,
                 application = application,
@@ -91,19 +118,42 @@ class ThemeService(
                 label = label,
             )
 
-        return themeStylesRepository
-            .findByApplicationAndProfileAndLabel(application, profile, label)
-            ?.let { existing ->
-                if (themeStyles != existing) {
-                    return themeStylesRepository.save(themeStyles)
-                } else {
-                    return existing
-                }
-            }
-            ?: themeStylesRepository.save(themeStyles)
+        val existing = themeStyleRepository.findByApplicationAndProfileAndLabel(application, profile, label)
+        return if (themeStyle != existing) {
+            themeStyleRepository
+                .save(themeStyle)
+                .also { applicationEventPublisher.publishEvent(ThemeStyleChangedEvent(it)) }
+        } else {
+            existing
+        }
     }
 
-    fun deleteThemeLogoById(id: UUID) = themeLogoRepository.deleteById(id)
+    @Transactional
+    fun updateThemeStyleById(
+        styleId: UUID,
+        styles: String,
+    ): ThemeStyle? {
+        return themeStyleRepository
+            .findByIdOrNull(styleId)
+            ?.let { existing ->
+                return themeStyleRepository
+                    .save(existing.copy(styles = styles))
+                    .also {
+                        applicationEventPublisher.publishEvent(ThemeStyleChangedEvent(it))
+                    }
+            }
+    }
 
-    fun deleteThemeStyleById(id: UUID) = themeStylesRepository.deleteById(id)
+    @Transactional
+    fun deleteThemeStyleById(id: UUID) {
+        val themeStyle = themeStyleRepository.findByIdOrNull(id)
+
+        themeStyle?.let {
+            themeStyleRepository
+                .deleteById(id)
+                .also {
+                    applicationEventPublisher.publishEvent(ThemeStyleDeletedEvent(themeStyle = themeStyle))
+                }
+        }
+    }
 }

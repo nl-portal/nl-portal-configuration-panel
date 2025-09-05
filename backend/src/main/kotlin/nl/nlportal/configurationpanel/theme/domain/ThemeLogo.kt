@@ -18,10 +18,8 @@ package nl.nlportal.configurationpanel.theme.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import nl.nlportal.configurationpanel.theme.listener.ThemeLogoEntityListener
 import org.apache.hc.client5.http.utils.Base64
 import org.apache.tika.Tika
 import org.springframework.web.multipart.MultipartFile
@@ -29,7 +27,6 @@ import java.time.Instant
 import java.util.UUID
 
 @Entity
-@EntityListeners(ThemeLogoEntityListener::class)
 @Table(
     name = "nlp_theme_logos",
 )
@@ -83,6 +80,8 @@ data class ThemeLogo(
     }
 
     companion object {
+        const val THEME_LOGO_CONFIGURATION_PROPERTY_KEY = "nl-portal.config.theme.logo"
+
         @JvmStatic
         fun fromMultipartFile(
             file: MultipartFile,

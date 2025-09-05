@@ -16,11 +16,13 @@
 
 package nl.nlportal.configurationpanel.theme.web.dto
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import java.util.UUID
 
-data class ThemeLogoResponse(
-    val logoId: UUID,
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class ThemeLogoDTO(
+    val logoId: UUID? = null,
     val filename: String,
     val size: Long,
     val contentType: String,
@@ -30,8 +32,8 @@ data class ThemeLogoResponse(
 ) {
     companion object {
         @JvmStatic
-        fun fromThemeLogo(themeLogo: ThemeLogo): ThemeLogoResponse =
-            ThemeLogoResponse(
+        fun fromThemeLogo(themeLogo: ThemeLogo): ThemeLogoDTO =
+            ThemeLogoDTO(
                 logoId = themeLogo.id,
                 filename = themeLogo.filename,
                 size = themeLogo.size,

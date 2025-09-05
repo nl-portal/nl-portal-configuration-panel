@@ -17,13 +17,14 @@
 package nl.nlportal.configurationpanel.theme.web.rest
 
 import nl.nlportal.configurationpanel.theme.service.ThemeService
-import nl.nlportal.configurationpanel.theme.web.dto.ThemeStyleResponse
+import nl.nlportal.configurationpanel.theme.web.dto.ThemeStyleDTO
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -40,12 +41,12 @@ class ThemeStyleConfigurationResource(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<List<ThemeStyleResponse>> =
+    ): ResponseEntity<List<ThemeStyleDTO>> =
         ResponseEntity.ok(
             themeService
                 .getThemeStyles(application, profile, label)
                 .map { themeStyle ->
-                    ThemeStyleResponse.fromThemeStyle(themeStyle)
+                    ThemeStyleDTO.fromThemeStyle(themeStyle)
                 },
         )
 
@@ -58,18 +59,30 @@ class ThemeStyleConfigurationResource(
         return ResponseEntity.ok().build()
     }
 
-    @PostMapping("/v1/theme/{application}/style", consumes = [MediaType.TEXT_PLAIN_VALUE])
-    fun saveThemeStyle(
+    @PostMapping("/v1/theme/{application}/style")
+    fun createThemeStyle(
         @PathVariable application: String,
-        @RequestParam profile: String? = null,
-        @RequestParam label: String? = null,
-        @RequestBody styles: String,
-    ): ResponseEntity<ThemeStyleResponse> =
+        @RequestBody themeStyleRequest: ThemeStyleDTO,
+    ): ResponseEntity<ThemeStyleDTO> =
         themeService
-            .saveThemeStyle(styles, application, profile, label)
+            .createThemeStyle(themeStyleRequest.styles, application, themeStyleRequest.profile, themeStyleRequest.label)
             .let { themeStyle ->
                 ResponseEntity.ok(
-                    ThemeStyleResponse.fromThemeStyle(themeStyle),
+                    ThemeStyleDTO.fromThemeStyle(themeStyle),
                 )
             }
+
+    @PutMapping("/v1/theme/{application}/style/{id}", consumes = ["text/css;characterset=utf-8"])
+    fun updateThemeStyle(
+        @PathVariable application: String,
+        @PathVariable id: UUID,
+        @RequestBody styles: String,
+    ): ResponseEntity<ThemeStyleDTO> =
+        themeService
+            .updateThemeStyleById(id, styles)
+            ?.let { themeStyle ->
+                ResponseEntity.ok(
+                    ThemeStyleDTO.fromThemeStyle(themeStyle),
+                )
+            } ?: ResponseEntity.notFound().build()
 }

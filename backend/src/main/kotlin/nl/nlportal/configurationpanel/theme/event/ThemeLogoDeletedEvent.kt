@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.theme.configuraiton
+package nl.nlportal.configurationpanel.theme.event
 
-import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
-import nl.nlportal.configurationpanel.theme.listener.ThemeEventListener
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
+import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 
-@Configuration
-class ThemeConfiguration {
-    @Bean
-    fun themeEventListener(configurationPropertiesService: ConfigurationPropertiesService): ThemeEventListener =
-        ThemeEventListener(configurationPropertiesService)
-}
+data class ThemeLogoDeletedEvent(
+    val themeLogo: ThemeLogo,
+)
