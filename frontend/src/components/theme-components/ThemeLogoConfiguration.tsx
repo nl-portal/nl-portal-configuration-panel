@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, {Fragment, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
 import {Heading3, Heading4, Paragraph} from "@gemeente-denhaag/typography";
 import {FormattedMessage} from "react-intl";
@@ -94,7 +94,7 @@ const ThemeLogoConfiguration = () => {
         <div className={styles["feature-config__content"]}>
             <ConfigurationForm className={styles["feature-config__form"]}
                                children={
-                                   <Fragment>
+                                   <>
                                        <section
                                            className={styles["form-field__section"]}
                                            key={"add-another-section"}
@@ -135,17 +135,20 @@ const ThemeLogoConfiguration = () => {
                                        </section>
                                        {currentLogos.length < 1 &&
                                            <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-                                               <Heading4>
+                                               <Heading3>
                                                    <FormattedMessage id={"theme.logo.no-existing-logos"}/>
-                                               </Heading4>
+                                               </Heading3>
                                            </FieldsetLegend>
                                        }
                                        {currentLogos.length > 0 &&
                                            <>
                                                <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-                                                   <Heading4>
+                                                   <Heading3>
                                                        <FormattedMessage id={"theme.logo.existing-logos"}/>
-                                                   </Heading4>
+                                                   </Heading3>
+                                                   <Paragraph>
+                                                       <FormattedMessage id={"theme.logo.existing-logos.description"}/>
+                                                   </Paragraph>
                                                </FieldsetLegend>
                                                {
 
@@ -156,9 +159,9 @@ const ThemeLogoConfiguration = () => {
                                                            <FormField>
                                                                <ActionField
                                                                    field={
-                                                                       <Heading4>
+                                                                       <Heading3>
                                                                            {`${logo.application || ''}${logo.profile ? " - " + logo.profile : ''}${logo.label ? " - " + logo.label : ''}`}
-                                                                       </Heading4>}
+                                                                       </Heading3>}
                                                                    button={
                                                                        <IconButton
                                                                            type={"button"}
@@ -170,6 +173,16 @@ const ThemeLogoConfiguration = () => {
                                                                />
                                                            </FormField>
                                                            <FormField
+                                                               label={
+                                                                   <Heading4>
+                                                                       <FormattedMessage id={"theme.theme.logo.label"}/>
+                                                                   </Heading4>
+                                                               }
+                                                               description={
+                                                                   <Paragraph>
+                                                                       <FormattedMessage id={"theme.theme.logo.description"}/>
+                                                                   </Paragraph>
+                                                               }
                                                                key={`logo-${index}`}
                                                            >
                                                                <File
@@ -189,7 +202,7 @@ const ThemeLogoConfiguration = () => {
                                                }
                                            </>
                                        }
-                                   </Fragment>
+                                   </>
                                }>
             </ConfigurationForm>
         </div>

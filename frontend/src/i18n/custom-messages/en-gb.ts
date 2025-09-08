@@ -43,6 +43,8 @@ export const EN_GB_MESSAGES: Messages = {
         "theme.logo.select-file": "Select File",
         "theme.logo.no-existing-logos": "No Logos Found",
         "theme.style": "Style",
+        "theme.style.stylesheet.label": "Stylesheet",
+        "theme.style.stylesheet.description": "Define your styles or override style tokens. <linkUrl>Click here</linkUrl> for a list of tokens used in NL Portal.",
         "features.berichten": "Messages",
         "features.berichten.configuration": "Configuration",
         "features.berichten.bericht-object-type-url": "Message Objecttype Url:",
