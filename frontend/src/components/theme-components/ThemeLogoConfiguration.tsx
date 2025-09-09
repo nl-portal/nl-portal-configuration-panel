@@ -182,13 +182,13 @@ const ThemeLogoConfiguration = () => {
                                                            <FormField
                                                                label={
                                                                    <Heading4>
-                                                                       <FormattedMessage id={"theme.theme.logo.label"}/>
+                                                                       <FormattedMessage id={"theme.logo.label"}/>
                                                                    </Heading4>
                                                                }
                                                                description={
                                                                    <Paragraph>
                                                                        <FormattedMessage
-                                                                           id={"theme.theme.logo.description"}/>
+                                                                           id={"theme.logo.description"}/>
                                                                    </Paragraph>
                                                                }
                                                                key={`logo-${index}`}

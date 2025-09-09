@@ -148,7 +148,7 @@ const ThemeStyleConfiguration = () => {
                                         <FormattedMessage id={"theme.style.existing-styles"}/>
                                     </Heading3>
                                     <Paragraph>
-                                        <FormattedMessage id={"theme.logo.existing-styles.description"}/>
+                                        <FormattedMessage id={"theme.style.existing-styles.description"}/>
                                     </Paragraph>
                                 </FieldsetLegend>
                                 {
