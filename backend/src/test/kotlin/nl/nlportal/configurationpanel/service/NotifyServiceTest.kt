@@ -45,6 +45,6 @@ class NotifyServiceTest {
         notifyService.restartNlPortalClients()
 
         // Then
-        verify(nlPortalClient, times(2)).restartNlPortalViaActuator(any())
+        verify(nlPortalClient, times(2)).restartNlPortalClient(any())
     }
 }

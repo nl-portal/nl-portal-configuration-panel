@@ -34,7 +34,7 @@ class NotifyService(
         }
         notifyConfigurationProperties.notifyList.forEach {
             try {
-                nlPortalClient.restartNlPortalViaActuator(it)
+                nlPortalClient.restartNlPortalClient(it)
             } catch (e: RestClientException) {
                 logger.debug(e) { "Failed to restart NL Portal Client at url $it" }
             }

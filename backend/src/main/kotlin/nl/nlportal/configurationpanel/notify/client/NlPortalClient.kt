@@ -22,7 +22,7 @@ import org.springframework.web.client.RestClient
 
 @Component
 class NlPortalClient {
-    fun restartNlPortalViaActuator(nlPortalBaseUrl: String) {
+    fun restartNlPortalClient(nlPortalBaseUrl: String) {
         val restClient = RestClient.create(nlPortalBaseUrl)
 
         restClient

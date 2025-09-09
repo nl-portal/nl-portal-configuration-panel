@@ -18,8 +18,8 @@ package nl.nlportal.configurationpanel.theme.web.rest
 
 import nl.nlportal.configurationpanel.theme.service.ThemeService
 import nl.nlportal.configurationpanel.theme.web.dto.ThemeStyleDTO
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -72,6 +72,7 @@ class ThemeStyleConfigurationResource(
                 )
             }
 
+    @Transactional
     @PutMapping("/v1/theme/{application}/style/{id}", consumes = ["text/css;characterset=utf-8"])
     fun updateThemeStyle(
         @PathVariable application: String,

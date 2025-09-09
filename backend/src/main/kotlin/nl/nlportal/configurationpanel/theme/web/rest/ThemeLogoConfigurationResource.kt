@@ -21,6 +21,7 @@ import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoDTO
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -74,6 +75,7 @@ class ThemeLogoConfigurationResource(
         return ResponseEntity.ok().build()
     }
 
+    @Transactional
     @PostMapping("/v1/theme/{application}/logo", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun storeThemeLogo(
         @RequestParam("file") file: MultipartFile,
