@@ -102,7 +102,16 @@ const ThemeStyleConfiguration = () => {
                 className={styles["feature-config__form"]}
                 children={
                     <>
-                        {getThemeStylesData && !getThemeStylesData.find(style => style.application === clientSettings.applicationName) &&
+                        {
+                            getThemeStylesData && getThemeStylesData.length < 1 &&
+                            <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+                                <Heading3>
+                                    <FormattedMessage id={"theme.style.no-existing-styles"}/>
+                                </Heading3>
+                            </FieldsetLegend>
+                        }
+                        {
+                            getThemeStylesData && !getThemeStylesData.find(style => style.application === clientSettings.applicationName) &&
                             <section
                                 className={styles["form-field__section"]}
                                 key={"add-theme-style-section"}
@@ -130,14 +139,6 @@ const ThemeStyleConfiguration = () => {
                                     </div>
                                 </FormField>
                             </section>
-                        }
-                        {
-                            getThemeStylesData && getThemeStylesData.length < 1 &&
-                            <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-                                <Heading3>
-                                    <FormattedMessage id={"theme.style.no-existing-styles"}/>
-                                </Heading3>
-                            </FieldsetLegend>
                         }
                         {
                             getThemeStylesData && getThemeStylesData.length > 0 &&

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {FieldsetLegend} from "@gemeente-denhaag/form-fieldset";
 import {Heading3, Heading4, Paragraph} from "@gemeente-denhaag/typography";
 import {FormattedMessage} from "react-intl";
@@ -30,9 +30,11 @@ import IconButton from "@gemeente-denhaag/iconbutton";
 import {useQueryClient} from "@tanstack/react-query";
 import {FormLabel} from "@gemeente-denhaag/form-label";
 import useUtil from "../../hooks/useUtil.tsx";
+import ConfigPanelSettingsContext from "../../contexts/ConfigPanelSettingsContext.tsx";
 
 const ThemeLogoConfiguration = () => {
     const queryClient = useQueryClient();
+    const {clientSettings} = useContext(ConfigPanelSettingsContext)
     const {formatBytes} = useUtil();
     const {
         getThemeLogos: {data: themeLogos, isLoading: themeLogosLoading, isError: themeLogosError},
@@ -95,52 +97,57 @@ const ThemeLogoConfiguration = () => {
             <ConfigurationForm className={styles["feature-config__form"]}
                                children={
                                    <>
-                                       <section
-                                           className={styles["form-field__section"]}
-                                           key={"add-another-section"}
-                                       >
-                                           <FormField
-                                               label={
-                                                   <FormLabel>
-                                                       <FormattedMessage id={"theme.logo.upload-theme-logo.label"}/>
-                                                   </FormLabel>
-                                               }
-                                               description={
-                                                   <Paragraph>
-                                                       <FormattedMessage
-                                                           id={"theme.logo.upload-theme-logo.description"}/>
-                                                   </Paragraph>
-                                               }
-                                           >
-                                               <div className={styles[""]}>
-                                                   <input
-                                                       id={"upload-theme-logo"}
-                                                       type={"file"}
-                                                       onChange={handleFileUpload}
-                                                       accept={"image/*"}
-                                                       multiple={false}
-                                                       disabled={uploadThemeLogo.isPending}
-                                                       style={{display: "none"}}
-                                                   />
-                                                   <Button
-                                                       className={styles["feature-config__button"]}
-                                                       onClick={() => {
-                                                           document.getElementById('upload-theme-logo')?.click()
-                                                       }}
-                                                   >
-                                                       <FormattedMessage id={"theme.logo.select-file"}/>
-                                                   </Button>
-                                               </div>
-                                           </FormField>
-                                       </section>
-                                       {currentLogos.length < 1 &&
+                                       {
+                                           currentLogos.length < 1 &&
                                            <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
                                                <Heading3>
                                                    <FormattedMessage id={"theme.logo.no-existing-logos"}/>
                                                </Heading3>
                                            </FieldsetLegend>
                                        }
-                                       {currentLogos.length > 0 &&
+                                       {
+                                           themeLogos && !themeLogos.find(logo => logo.application === clientSettings.applicationName) &&
+                                           <section
+                                               className={styles["form-field__section"]}
+                                               key={"add-another-section"}
+                                           >
+                                               <FormField
+                                                   label={
+                                                       <FormLabel>
+                                                           <FormattedMessage id={"theme.logo.upload-theme-logo.label"}/>
+                                                       </FormLabel>
+                                                   }
+                                                   description={
+                                                       <Paragraph>
+                                                           <FormattedMessage
+                                                               id={"theme.logo.upload-theme-logo.description"}/>
+                                                       </Paragraph>
+                                                   }
+                                               >
+                                                   <div>
+                                                       <input
+                                                           id={"upload-theme-logo"}
+                                                           type={"file"}
+                                                           onChange={handleFileUpload}
+                                                           accept={"image/*"}
+                                                           multiple={false}
+                                                           disabled={uploadThemeLogo.isPending}
+                                                           style={{display: "none"}}
+                                                       />
+                                                       <Button
+                                                           className={styles["feature-config__button"]}
+                                                           onClick={() => {
+                                                               document.getElementById('upload-theme-logo')?.click()
+                                                           }}
+                                                       >
+                                                           <FormattedMessage id={"theme.logo.select-file"}/>
+                                                       </Button>
+                                                   </div>
+                                               </FormField>
+                                           </section>
+                                       }
+                                       {
+                                           currentLogos.length > 0 &&
                                            <>
                                                <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
                                                    <Heading3>
@@ -180,7 +187,8 @@ const ThemeLogoConfiguration = () => {
                                                                }
                                                                description={
                                                                    <Paragraph>
-                                                                       <FormattedMessage id={"theme.theme.logo.description"}/>
+                                                                       <FormattedMessage
+                                                                           id={"theme.theme.logo.description"}/>
                                                                    </Paragraph>
                                                                }
                                                                key={`logo-${index}`}
