@@ -39,7 +39,7 @@ const useThemeLogo = () => {
     const {configPanelSettings, clientSettings} = useContext(ConfigPanelSettingsContext);
     const getThemeLogos = async (): Promise<ThemeLogo[]> => {
         const response = await fetch(
-            `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/logo`,
+            `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/logo`,
             {
                 method: 'GET',
                 headers: {
@@ -51,7 +51,7 @@ const useThemeLogo = () => {
     }
     const getThemeLogoContent = async (themeLogo: ThemeLogo) => {
         const response = await fetch(
-            `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/logo/${themeLogo.logoId}`,
+            `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/logo/${themeLogo.logoId}`,
             {
                 method: 'GET',
                 mode: 'cors',
@@ -68,7 +68,7 @@ const useThemeLogo = () => {
     }
     const deleteThemeLogo = async (themeLogoId: string) => {
         await fetch(
-            `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/logo/${themeLogoId}`,
+            `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/logo/${themeLogoId}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -78,7 +78,7 @@ const useThemeLogo = () => {
         );
     }
     const uploadFile = async (file: File): Promise<ThemeLogo> => {
-        const uploadLink = `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/logo`;
+        const uploadLink = `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/logo`;
         const formData = new FormData();
         formData.append("file", file);
 

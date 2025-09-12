@@ -37,7 +37,7 @@ const useConfigurationPropertyMapperHook = () => {
     const toProperties = (
         configuration: object = {},
         prefix?: string,
-        application: string = clientSettings.applicationName!,
+        application: string = clientSettings.applicationName || "",
     ): ConfigurationProperty[] => {
         const configurationProperties: ConfigurationProperty[] = []
         const flattenedProperties: object = flatten(configuration, {safe: true});

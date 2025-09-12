@@ -35,7 +35,7 @@ const useThemeStyle = () => {
     const {configPanelSettings, clientSettings} = useContext(ConfigPanelSettingsContext);
     const getThemeStyles = async (): Promise<ThemeStyle[]> => {
         const response = await fetch(
-            `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/style`,
+            `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/style`,
             {
                 method: 'GET',
                 headers: {
@@ -46,7 +46,7 @@ const useThemeStyle = () => {
         return await response.json();
     }
     const createThemeStyle = async (styles: string): Promise<ThemeStyle> => {
-        const methodUrl = `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/style`;
+        const methodUrl = `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/style`;
         const response = await fetch(methodUrl, {
             method: "POST",
             headers: {
@@ -59,7 +59,7 @@ const useThemeStyle = () => {
         return await response.json()
     };
     const updateThemeStyle = async (themeStyle: {styleId: string, styles: string}): Promise<ThemeStyle> => {
-        const methodUrl = `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/style/${themeStyle.styleId}`;
+        const methodUrl = `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/style/${themeStyle.styleId}`;
         const response = await fetch(methodUrl, {
             method: "PUT",
             headers: {
@@ -73,7 +73,7 @@ const useThemeStyle = () => {
     };
     const deleteThemeStyle = async (themeStyleId: string): Promise<void> => {
         await fetch(
-            `${configPanelSettings.restApiUrl}/v1/theme/${clientSettings.applicationName}/style/${themeStyleId}`,
+            `${configPanelSettings.restApiUrl || ""}/v1/theme/${clientSettings.applicationName || ""}/style/${themeStyleId}`,
             {
                 method: 'DELETE',
                 headers: {

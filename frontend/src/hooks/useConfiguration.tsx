@@ -37,7 +37,7 @@ const useConfiguration = (props: UseConfigurationProps) => {
 
     const getConfigurations = async (): Promise<ConfigurationProperty[]> => {
         const response = await fetch(
-            `${configPanelSettings.restApiUrl}/v1/configurations/${clientSettings.applicationName}/features/${props.featurePrefix}`,
+            `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${props.featurePrefix}`,
             {
                 method: 'GET',
                 headers: {
@@ -52,7 +52,7 @@ const useConfiguration = (props: UseConfigurationProps) => {
         configurations: ConfigurationProperty[] = []
     ): Promise<ConfigurationProperty[]> => {
         const response = await fetch(
-            `${configPanelSettings.restApiUrl}/v1/configurations`,
+            `${configPanelSettings.restApiUrl || ""}/v1/configurations`,
             {
                 method: 'POST',
                 headers: {
@@ -68,7 +68,7 @@ const useConfiguration = (props: UseConfigurationProps) => {
     }
     const deleteConfigurations = async (featurePrefix: string): Promise<void> => {
         await fetch(
-            `${configPanelSettings.restApiUrl}/v1/configurations/${clientSettings.applicationName}/features/${featurePrefix}`,
+            `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${featurePrefix}`,
             {
                 method: 'DELETE',
                 headers: {

@@ -16,7 +16,6 @@
 
 package nl.nlportal.configurationpanel.theme.listener
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.event.ThemeLogoChangedEvent
 import nl.nlportal.configurationpanel.event.ThemeStyleChangedEvent
@@ -27,14 +26,12 @@ import nl.nlportal.configurationpanel.theme.event.ThemeLogoDeletedEvent
 import nl.nlportal.configurationpanel.theme.event.ThemeStyleDeletedEvent
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
-import org.springframework.transaction.support.TransactionSynchronizationManager
 
 class ThemeEventListener(
     private val configurationPropertiesService: ConfigurationPropertiesService,
 ) {
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun handleThemeStyleChangedEvent(event: ThemeLogoChangedEvent) {
-        KotlinLogging.logger { }.info { TransactionSynchronizationManager.isActualTransactionActive() }
         configurationPropertiesService.saveConfigurationProperty(
             ConfigurationProperty(
                 propertyKey = "nl-portal.config.theme.logo",
