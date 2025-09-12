@@ -89,7 +89,7 @@
         border-top: 2px solid var(--rijkshuisstijl-donkerblauw);
     }
 
-    div[class*="_features-list"] {
+    div[class*="_configuration-list"] {
         padding: 0;
         margin: 0;
     }
@@ -97,6 +97,15 @@
     input {
         &::placeholder {
             opacity: 0.4;
+        }
+    }
+
+
+    .denhaag-file {
+        border-radius: var(--denhaag-border-radius);
+
+        div.denhaag-file__left {
+            border-radius: var(--denhaag-border-radius);
         }
     }
 
@@ -108,5 +117,4 @@
             --denhaag-typography-scale-xl-font-size
     );
     --nlportal-page-grid-gap-lg: 2em;
-
 }

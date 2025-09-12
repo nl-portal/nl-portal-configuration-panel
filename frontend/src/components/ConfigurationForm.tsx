@@ -1,5 +1,5 @@
 import {FormHTMLAttributes, ReactNode} from "react";
-import styles from "./ConfigurationForm.module.scss";
+import styles from "../styles/Configuration.module.scss";
 
 interface ConfigurationFormProps extends FormHTMLAttributes<HTMLFormElement> {
     children?: ReactNode;

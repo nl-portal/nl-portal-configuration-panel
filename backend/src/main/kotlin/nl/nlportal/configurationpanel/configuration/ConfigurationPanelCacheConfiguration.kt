@@ -26,8 +26,7 @@ import org.springframework.scheduling.annotation.Scheduled
 
 @EnableCaching
 @Configuration
-class ConfigurationPanelCacheConfiguration: CacheManagerCustomizer<ConcurrentMapCacheManager> {
-
+class ConfigurationPanelCacheConfiguration : CacheManagerCustomizer<ConcurrentMapCacheManager> {
     override fun customize(cacheManager: ConcurrentMapCacheManager) {
         cacheManager.setCacheNames(listOf("configCache"))
     }

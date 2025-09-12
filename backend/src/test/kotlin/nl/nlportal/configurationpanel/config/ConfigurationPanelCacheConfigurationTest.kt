@@ -18,9 +18,9 @@ package nl.nlportal.configurationpanel.config
 
 import nl.nlportal.configurationpanel.configuration.ConfigurationPanelCacheConfiguration
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.repository.ConfigRepository
-import nl.nlportal.configurationpanel.service.ConfigService
-import nl.nlportal.configurationpanel.service.NotifyService
+import nl.nlportal.configurationpanel.notify.service.NotifyService
+import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
+import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -40,35 +40,34 @@ import java.time.Instant
 @SpringBootTest(
     classes = [
         ConfigurationPanelCacheConfiguration::class,
-        ConfigService::class,
+        ConfigurationPropertiesService::class,
         NotifyService::class,
-        TestCacheConfiguration::class
-    ]
+        TestCacheConfiguration::class,
+    ],
 )
 class ConfigurationPanelCacheConfigurationTest {
-
     @Autowired
-    lateinit var configService: ConfigService
+    lateinit var configService: ConfigurationPropertiesService
 
     @MockitoBean
-    lateinit var configRepository: ConfigRepository
+    lateinit var configRepository: ConfigurationsRepository
 
     @MockitoBean
     lateinit var notifyService: NotifyService
 
     @Test
     fun `test caching behavior`() {
-        val config = ConfigurationProperty(
-            propertyKey = "feature1",
-            propertyValue = "value1",
-            application = "my-application1",
-            modifiedOn = Instant.now()
-        )
+        val config =
+            ConfigurationProperty(
+                propertyKey = "feature1",
+                propertyValue = "value1",
+                application = "my-application1",
+                modifiedOn = Instant.now(),
+            )
 
         `when`(
-            configRepository.findByApplicationAndPropertyKey("my-application1", "feature1")
-        )
-            .thenReturn(config)
+            configRepository.findByApplicationAndPropertyKey("my-application1", "feature1"),
+        ).thenReturn(config)
 
         // First call (should fetch from DB)
         val firstCall =
@@ -83,7 +82,8 @@ class ConfigurationPanelCacheConfigurationTest {
         assertEquals(firstCall, secondCall)
 
         // Verify repository was only called once
-        Mockito.verify(configRepository, Mockito.times(1))
+        Mockito
+            .verify(configRepository, Mockito.times(1))
             .findByApplicationAndPropertyKey("my-application1", "feature1")
     }
 }
@@ -91,7 +91,5 @@ class ConfigurationPanelCacheConfigurationTest {
 @TestConfiguration
 class TestCacheConfiguration {
     @Bean
-    fun cacheManager(): CacheManager {
-        return ConcurrentMapCacheManager("configCache")
-    }
+    fun cacheManager(): CacheManager = ConcurrentMapCacheManager("configCache")
 }

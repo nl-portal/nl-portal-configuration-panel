@@ -1,0 +1,46 @@
+spring:
+    cloud:
+        config:
+          server:
+              prefix: "configuration"
+    liquibase:
+        enabled: false
+    datasource:
+        driver-class-name: org.h2.Driver
+        url: jdbc:h2:mem:;MODE=PostgreSQL
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    jwk-set-uri: http://localhost:8082
+
+---
+
+configuration-panel:
+    cache:
+        config-ttl: "30000"
+    notify:
+        notify-on-changes: true
+        notify-list: "http://localhost:8080, http://localhost:8081"
+    security:
+        token: SecretTestToken123456
+spring:
+    config:
+        activate:
+            on-profile: "jdbc"
+
+---
+
+configuration-panel:
+    cache:
+        config-ttl: "30000"
+    notify:
+        notify-on-changes: false
+    security:
+        token: SecretTestToken123456
+spring:
+    config:
+        activate:
+            on-profile: "no-notify"
+
+

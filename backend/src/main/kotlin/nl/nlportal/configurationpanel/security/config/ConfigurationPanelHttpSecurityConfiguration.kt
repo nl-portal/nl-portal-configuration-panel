@@ -18,6 +18,7 @@ package nl.nlportal.configurationpanel.security.config
 
 import nl.nlportal.configurationpanel.security.TokenAuthenticationProvider
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -29,25 +30,36 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties(ConfigurationPanelCorsConfigurationProperties::class)
 class ConfigurationPanelHttpSecurityConfiguration {
     @Value("\${spring.cloud.config.server.prefix}")
     private val configServerBasePath: String = ""
 
     @Bean
     fun tokenAuthenticationProvider(
-        @Value("\${configuration-panel.security.token}") configurationToken: String = ""
-    ): AuthenticationProvider {
-        return TokenAuthenticationProvider(configurationToken)
-    }
+        @Value("\${configuration-panel.security.token}") configurationToken: String = "",
+    ): AuthenticationProvider = TokenAuthenticationProvider(configurationToken)
 
     @Bean
-    fun configurationPanelAuthenticationManager(
-        authenticationProviders: List<AuthenticationProvider>,
-    ): AuthenticationManager =
+    fun configurationPanelAuthenticationManager(authenticationProviders: List<AuthenticationProvider>): AuthenticationManager =
         ProviderManager(authenticationProviders)
+
+    @Bean
+    fun corsConfigurationSource(
+        configurationPanelCorsConfigurationProperties: ConfigurationPanelCorsConfigurationProperties,
+    ): UrlBasedCorsConfigurationSource {
+        val source = UrlBasedCorsConfigurationSource()
+
+        configurationPanelCorsConfigurationProperties.cors.forEach {
+            source.registerCorsConfiguration(it.path, it.config)
+        }
+
+        return source
+    }
 
     @Bean
     fun configurationPanelSecurityFilterChain(
@@ -58,9 +70,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
             .securityMatcher(AntPathRequestMatcher("/api/v1/**"))
             .authorizeHttpRequests { request ->
                 request.anyRequest().authenticated()
-            }
-            .csrf { it.disable() }
-            .cors { it.disable() }
+            }.csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer {
                 it.jwt {}
@@ -78,8 +88,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
             .securityMatcher(AntPathRequestMatcher("$configServerBasePath/**"))
             .authorizeHttpRequests { request ->
                 request.anyRequest().authenticated()
-            }
-            .csrf { it.disable() }
+            }.csrf { it.disable() }
             .cors { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .addFilter(configurationServerRequestHeaderAuthenticationFilter(authenticationManager))
@@ -88,16 +97,14 @@ class ConfigurationPanelHttpSecurityConfiguration {
     }
 
     fun configurationServerRequestHeaderAuthenticationFilter(
-        authenticationManager: AuthenticationManager
-    ): RequestHeaderAuthenticationFilter {
-        return RequestHeaderAuthenticationFilter().apply {
+        authenticationManager: AuthenticationManager,
+    ): RequestHeaderAuthenticationFilter =
+        RequestHeaderAuthenticationFilter().apply {
             setPrincipalRequestHeader("X-Config-Token")
             setExceptionIfHeaderMissing(false)
             setRequiresAuthenticationRequestMatcher(
-                AntPathRequestMatcher("$configServerBasePath/**")
+                AntPathRequestMatcher("$configServerBasePath/**"),
             )
             setAuthenticationManager(authenticationManager)
         }
-    }
 }
-

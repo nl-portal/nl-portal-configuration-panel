@@ -23,17 +23,7 @@ services:
             - configuration-panel-database
         ports:
             - "8090:8080"
-        environment: &configuration-panel-backend-env
-            LOGLEVEL: "INFO"
-            DATABASE_URL: "jdbc:postgresql://configuration-panel-database:5432/nl-portal-config"
-            DATABASE_USERNAME: "config"
-            DATABASE_PASSWORD: "password"
-            JWKS_URI: "http://host.docker.internal:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs"
-            CONFIG_CACHE_TTL: "30000"
-            CONFIG_SERVER_PREFIX: "/configuration"
-            CONFIG_SERVER_TOKEN: "VerySecretToken"
-            CONFIG_NOTIFY_ENABLED: true
-            CONFIG_NOTIFY_LIST: "http://host.docker.internal:8080"
+        env_file: ./imports/backend.env
 
     configuration-panel-frontend-local:
         profiles:
@@ -44,13 +34,7 @@ services:
             - configuration-panel-backend-local
         ports:
             - "8091:8080"
-        environment: &configuration-panel-frontend-env
-            OIDC_URL: "http://localhost:8082/auth/realms/nlportalconfig"
-            OIDC_REALM: "nlportalconfig"
-            OIDC_CLIENT_ID: "nl-portal-config"
-            OIDC_REDIRECT_URI: "http://localhost:3001"
-            OIDC_POST_LOGOUT_REDIRECT_URI: "http://localhost:3001"
-            CLIENT_APPLICATION_NAME: "nl-portal-app"
+        env_file: ./imports/frontend.env
 
     configuration-panel-backend-remote:
         image: ghcr.io/nl-portal/configuration-panel-backend
@@ -62,7 +46,7 @@ services:
             - configuration-panel-database
         ports:
             - "8090:8080"
-        environment: *configuration-panel-backend-env
+        env_file: ./imports/backend.env
 
     configuration-panel-frontend-remote:
         image: ghcr.io/nl-portal/configuration-panel-frontend
@@ -74,7 +58,7 @@ services:
             - configuration-panel-backend-remote
         ports:
             - "8091:8080"
-        environment: *configuration-panel-frontend-env
+        env_file: ./imports/frontend.env
 
     configuration-panel-database:
         container_name: configuration-panel-database
@@ -83,6 +67,8 @@ services:
             POSTGRES_USER: config
             POSTGRES_PASSWORD: password
             POSTGRES_DB: nl-portal-config
+        ports:
+            - "54322:5432"
         volumes:
             - configuration-panel-database-data:/var/lib/postgres # persist data even if container shuts down
 
@@ -92,7 +78,7 @@ services:
             - configuration-panel-keycloak-database
         image: quay.io/keycloak/keycloak:26.3
         ports:
-            - "8082:8080"
+            - "127.0.0.1:8082:8080"
         environment:
             KC_DB: postgres
             KC_DB_URL: jdbc:postgresql://configuration-panel-keycloak-database/keycloak

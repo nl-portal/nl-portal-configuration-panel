@@ -41,11 +41,16 @@ function App() {
             >
                 <QueryClientProvider client={queryClient}>
                     <ConfigPanelSettingsContext.Provider
-                    value={{
-                        clientSettings: {
-                            applicationName: config.CLIENT_APPLICATION_NAME
-                        },
-                    }}
+                        value={
+                            {
+                                clientSettings: {
+                                    applicationName: config.CLIENT_APPLICATION_NAME
+                                },
+                                configPanelSettings: {
+                                    restApiUrl: config.CONFIG_PANEL_REST_API_URL
+                                }
+                            }
+                        }
                     >
                         <LocalizationProvider
                             customMessages={CUSTOM_MESSAGES}

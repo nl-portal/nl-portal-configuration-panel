@@ -24,16 +24,11 @@ class ApiTokenAuthentication(
     authenticated: Boolean,
     authorities: List<GrantedAuthority> = emptyList(),
 ) : AbstractAuthenticationToken(authorities) {
-
     init {
         isAuthenticated = authenticated
     }
 
-    override fun getCredentials(): Any {
-        return token
-    }
+    override fun getCredentials(): Any = token
 
-    override fun getPrincipal(): Any {
-        return "Api Client"
-    }
+    override fun getPrincipal(): Any = "Api Client"
 }
