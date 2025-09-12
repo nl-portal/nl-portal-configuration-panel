@@ -79,7 +79,7 @@ following shell commands:
    ./gradlew bootRun
    ```
 
-## Environment Variabes
+## Environment Variables
 
 The following is a list of environment variables specific to this application. Usual Spring boot variables can be
 configured as well.
@@ -129,7 +129,7 @@ configured as well.
 
 ## Connecting to an existing NL Portal
 
-### Via envinronment varibales
+### Via environment variables
 
 Configure the following environment variables according to your infrastructure, be it local or remote to affect the
 example docker-compose setup.
