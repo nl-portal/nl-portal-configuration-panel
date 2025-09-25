@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {FC} from "react";
+import { FC } from "react";
 import FeatureConfigurationProps from "./FeatureConfigurationProps.ts";
 
 export default interface FeatureConfiguration {
-    featureId: string;
-    featureConfigurationPrefix: string;
-    featureComponent: FC<FeatureConfigurationProps>;
+  featureId: string;
+  featureConfigurationPrefix: string;
+  featureComponent: FC<FeatureConfigurationProps>;
 }

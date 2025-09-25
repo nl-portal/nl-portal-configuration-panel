@@ -14,50 +14,50 @@
  * limitations under the License.
  */
 
-import {FC, Fragment, ReactNode, useEffect} from "react";
-import {useAuth} from "react-oidc-context";
-import {Paragraph} from "@gemeente-denhaag/typography";
+import { FC, Fragment, ReactNode, useEffect } from "react";
+import { useAuth } from "react-oidc-context";
+import { Paragraph } from "@gemeente-denhaag/typography";
 
-const Authenticator: FC<{ children?: ReactNode }> = ({children}) => {
-    const auth = useAuth();
+const Authenticator: FC<{ children?: ReactNode }> = ({ children }) => {
+  const auth = useAuth();
 
-    useEffect(() => {
-        if (!auth.isAuthenticated && !auth.isLoading) {
-            setTimeout(async () => {
-                void auth.signinRedirect()
-            }, 2000)
-        }
-    }, [auth.isLoading, auth.isAuthenticated])
-
-    useEffect(() => {
-        if (auth.isAuthenticated) {
-            const handleTokenExpiring = () => auth.startSilentRenew();
-            const handleTokenExpired = () => auth.signoutRedirect();
-
-            auth.events.addAccessTokenExpiring(handleTokenExpiring)
-            auth.events.addAccessTokenExpired(handleTokenExpired);
-        }
-    }, [auth.isAuthenticated]);
-
-    if (auth.isLoading && !auth.isAuthenticated) {
-        return <Paragraph>Redirecting to Identity Provider...</Paragraph>
+  useEffect(() => {
+    if (!auth.isAuthenticated && !auth.isLoading) {
+      setTimeout(async () => {
+        void auth.signinRedirect();
+      }, 2000);
     }
+  }, [auth.isLoading, auth.isAuthenticated]);
 
-    if (auth.isLoading && auth.isAuthenticated) {
-        return <Paragraph>Authenticated, loading page...</Paragraph>
-    }
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      const handleTokenExpiring = () => auth.startSilentRenew();
+      const handleTokenExpired = () => auth.signoutRedirect();
 
-    if (auth.error) {
-        return <Paragraph>Failed to redirect to Identity Provider. Retrying in 2 seconds...</Paragraph>
+      auth.events.addAccessTokenExpiring(handleTokenExpiring);
+      auth.events.addAccessTokenExpired(handleTokenExpired);
     }
+  }, [auth.isAuthenticated]);
 
-    if (!auth.isLoading && auth.isAuthenticated) {
-        return (
-            <Fragment>
-                {children}
-            </Fragment>
-        )
-    }
+  if (auth.isLoading && !auth.isAuthenticated) {
+    return <Paragraph>Redirecting to Identity Provider...</Paragraph>;
+  }
+
+  if (auth.isLoading && auth.isAuthenticated) {
+    return <Paragraph>Authenticated, loading page...</Paragraph>;
+  }
+
+  if (auth.error) {
+    return (
+      <Paragraph>
+        Failed to redirect to Identity Provider. Retrying in 2 seconds...
+      </Paragraph>
+    );
+  }
+
+  if (!auth.isLoading && auth.isAuthenticated) {
+    return <Fragment>{children}</Fragment>;
+  }
 };
 
 export default Authenticator;

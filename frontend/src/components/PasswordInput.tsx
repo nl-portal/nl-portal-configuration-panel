@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-import React, {ForwardedRef, forwardRef, useState} from "react";
-import TextInput, {TextInputProps} from "@gemeente-denhaag/text-input";
+import React, { ForwardedRef, forwardRef, useState } from "react";
+import TextInput, { TextInputProps } from "@gemeente-denhaag/text-input";
 import IconButton from "@gemeente-denhaag/iconbutton";
-import {HideIcon, ShowIcon} from "@gemeente-denhaag/icons";
+import { HideIcon, ShowIcon } from "@gemeente-denhaag/icons";
 
 interface PasswordInputProps extends TextInputProps {
-    id: string
+  id: string;
 }
 
-const PasswordInput: React.ForwardRefExoticComponent<PasswordInputProps & React.RefAttributes<HTMLInputElement>> = forwardRef(
-    (defaultProps: PasswordInputProps, ref: ForwardedRef<HTMLInputElement>) => {
-        const [showValue, setShowValue] = useState(false)
+const PasswordInput: React.ForwardRefExoticComponent<
+  PasswordInputProps & React.RefAttributes<HTMLInputElement>
+> = forwardRef(
+  (defaultProps: PasswordInputProps, ref: ForwardedRef<HTMLInputElement>) => {
+    const [showValue, setShowValue] = useState(false);
 
-        return (
-            <TextInput
-                {...defaultProps}
-                ref={ref}
-                type={showValue ? "text" : "password"}
-                iconEnd={
-                    <IconButton
-                        onClick={() => setShowValue(!showValue)}
-                    >
-                        {showValue ? <HideIcon/> : <ShowIcon/>}
-                    </IconButton>
-                }
-            />
-        );
-    },
+    return (
+      <TextInput
+        {...defaultProps}
+        ref={ref}
+        type={showValue ? "text" : "password"}
+        iconEnd={
+          <IconButton onClick={() => setShowValue(!showValue)}>
+            {showValue ? <HideIcon /> : <ShowIcon />}
+          </IconButton>
+        }
+      />
+    );
+  },
 );
 
 export default PasswordInput;

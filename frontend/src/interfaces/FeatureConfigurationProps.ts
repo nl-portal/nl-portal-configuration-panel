@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2025 Ritense BV, the Netherlands.
  *
@@ -16,8 +15,8 @@
  */
 
 export default interface FeatureConfigurationProps {
-    onChange?: (featureConfiguration: object) => void;
-    onValid?: (isValid: boolean) => void;
-    onSubmit?: () => void;
-    prefillConfiguration?: object;
+  onChange?: (featureConfiguration: object) => void;
+  onValid?: (isValid: boolean) => void;
+  onSubmit?: () => void;
+  prefillConfiguration?: object;
 }

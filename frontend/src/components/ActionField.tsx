@@ -14,31 +14,38 @@
  * limitations under the License.
  */
 
-import React, {cloneElement, ForwardedRef, forwardRef, ReactElement} from "react";
-import {FormField, FormFieldProps} from "@gemeente-denhaag/form-field";
-import styles from "./ActionField.module.scss"
+import React, {
+  cloneElement,
+  ForwardedRef,
+  forwardRef,
+  ReactElement,
+} from "react";
+import { FormField, FormFieldProps } from "@gemeente-denhaag/form-field";
+import styles from "./ActionField.module.scss";
 
 interface ActionFieldProps extends FormFieldProps {
-    field: ReactElement
-    button: ReactElement
+  field: ReactElement;
+  button: ReactElement;
 }
 
-const ActionField: React.ForwardRefExoticComponent<ActionFieldProps & React.RefAttributes<HTMLInputElement>> = forwardRef(
-    ({field: fieldElement, button: buttonElement, ...defaultProps}, ref: ForwardedRef<HTMLInputElement>) => {
-        return (
-            <FormField
-                {...defaultProps}
-                ref={ref}
-            >
-                <div
-                    className={styles["action-field__row"]}
-                >
-                    {fieldElement}
-                    {cloneElement(buttonElement, {className: styles["action-field__button"]})}
-                </div>
-            </FormField>
-        );
-    },
+const ActionField: React.ForwardRefExoticComponent<
+  ActionFieldProps & React.RefAttributes<HTMLInputElement>
+> = forwardRef(
+  (
+    { field: fieldElement, button: buttonElement, ...defaultProps },
+    ref: ForwardedRef<HTMLInputElement>,
+  ) => {
+    return (
+      <FormField {...defaultProps} ref={ref}>
+        <div className={styles["action-field__row"]}>
+          {fieldElement}
+          {cloneElement(buttonElement, {
+            className: styles["action-field__button"],
+          })}
+        </div>
+      </FormField>
+    );
+  },
 );
 
 export default ActionField;

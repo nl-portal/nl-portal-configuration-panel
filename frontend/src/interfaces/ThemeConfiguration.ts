@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {FC} from "react";
+import { FC } from "react";
 
 export default interface ThemeSettings {
-    themeConfigurationId: string;
-    themeConfigurationComponent: FC;
+  themeConfigurationId: string;
+  themeConfigurationComponent: FC;
 }

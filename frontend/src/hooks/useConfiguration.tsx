@@ -14,93 +14,99 @@
  * limitations under the License.
  */
 
-import {useContext} from "react";
-import {useAuth} from "react-oidc-context";
+import { useContext } from "react";
+import { useAuth } from "react-oidc-context";
 import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
-import {useMutation, useQuery} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export type ConfigurationProperty = {
-    propertyKey: string
-    propertyValue: string
-    application: string
-}
+  propertyKey: string;
+  propertyValue: string;
+  application: string;
+};
 
 export interface UseConfigurationProps {
-    applicationName?: string;
-    featurePrefix?: string;
-    refetchInterval?: number | false | undefined;
+  applicationName?: string;
+  featurePrefix?: string;
+  refetchInterval?: number | false | undefined;
 }
 
 const useConfiguration = (props: UseConfigurationProps) => {
-    const auth = useAuth();
-    const {configPanelSettings, clientSettings} = useContext(ConfigPanelSettingsContext);
+  const auth = useAuth();
+  const { configPanelSettings, clientSettings } = useContext(
+    ConfigPanelSettingsContext,
+  );
 
-    const getConfigurations = async (): Promise<ConfigurationProperty[]> => {
-        const response = await fetch(
-            `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${props.featurePrefix}`,
-            {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: 'Bearer ' + auth.user?.access_token,
-                }
-            }
-        )
-        return await response.json()
-    };
-    const storeConfigrations = async (
-        configurations: ConfigurationProperty[] = []
-    ): Promise<ConfigurationProperty[]> => {
-        const response = await fetch(
-            `${configPanelSettings.restApiUrl || ""}/v1/configurations`,
-            {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: 'Bearer ' + auth.user?.access_token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(configurations)
-            }
-        )
+  const getConfigurations = async (): Promise<ConfigurationProperty[]> => {
+    const response = await fetch(
+      `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${props.featurePrefix}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + auth.user?.access_token,
+        },
+      },
+    );
+    return await response.json();
+  };
+  const storeConfigrations = async (
+    configurations: ConfigurationProperty[] = [],
+  ): Promise<ConfigurationProperty[]> => {
+    const response = await fetch(
+      `${configPanelSettings.restApiUrl || ""}/v1/configurations`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + auth.user?.access_token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(configurations),
+      },
+    );
 
-        return await response.json()
-    }
-    const deleteConfigurations = async (featurePrefix: string): Promise<void> => {
-        await fetch(
-            `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${featurePrefix}`,
-            {
-                method: 'DELETE',
-                headers: {
-                    Authorization: 'Bearer ' + auth.user?.access_token,
-                }
-            }
-        )
-    }
+    return await response.json();
+  };
+  const deleteConfigurations = async (featurePrefix: string): Promise<void> => {
+    await fetch(
+      `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${featurePrefix}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + auth.user?.access_token,
+        },
+      },
+    );
+  };
 
-    return {
-        getConfigurations: useQuery({
-            queryKey: ['getConfigurations',],
-            queryFn: getConfigurations,
-            select: (configurations: ConfigurationProperty[]): ConfigurationProperty[] => {
-                return configurations.map(({propertyKey, propertyValue, application}) => {
-                    return {
-                        propertyKey: propertyKey,
-                        propertyValue: propertyValue,
-                        application: application,
-                    }
-                })
-            },
-        }),
-        storeConfigrations: useMutation({
-            mutationKey: ['storeConfigrations'],
-            mutationFn: storeConfigrations,
-        }),
-        deleteConfigurations: useMutation({
-            mutationKey: ['deleteConfigurations'],
-            mutationFn: deleteConfigurations,
-        })
-    }
-}
+  return {
+    getConfigurations: useQuery({
+      queryKey: ["getConfigurations"],
+      queryFn: getConfigurations,
+      select: (
+        configurations: ConfigurationProperty[],
+      ): ConfigurationProperty[] => {
+        return configurations.map(
+          ({ propertyKey, propertyValue, application }) => {
+            return {
+              propertyKey: propertyKey,
+              propertyValue: propertyValue,
+              application: application,
+            };
+          },
+        );
+      },
+    }),
+    storeConfigrations: useMutation({
+      mutationKey: ["storeConfigrations"],
+      mutationFn: storeConfigrations,
+    }),
+    deleteConfigurations: useMutation({
+      mutationKey: ["deleteConfigurations"],
+      mutationFn: deleteConfigurations,
+    }),
+  };
+};
 
 export default useConfiguration;

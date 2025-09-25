@@ -14,72 +14,67 @@
  * limitations under the License.
  */
 
-import React, {Fragment, ReactElement} from "react";
+import React, { Fragment, ReactElement } from "react";
 import styles from "./Header.module.scss";
 import classNames from "classnames";
 import ResponsiveContent from "@gemeente-denhaag/responsive-content";
 import LogoutButton from "./LogoutButton.tsx";
 import CurrentUser from "./CurrentUser.tsx";
-import LanguageSwitcher from "./LanguageSwitcher.tsx"
+import LanguageSwitcher from "./LanguageSwitcher.tsx";
 
 interface HeaderProps {
-    logo: ReactElement;
+  logo: ReactElement;
 }
 
-const Header = ({
-                    logo,
-                }: HeaderProps) => {
-    const headerLogoElement = React.cloneElement(logo, {
-        className: styles["header__logo-image"],
-    });
+const Header = ({ logo }: HeaderProps) => {
+  const headerLogoElement = React.cloneElement(logo, {
+    className: styles["header__logo-image"],
+  });
 
-    return (
-        <div
-            className={styles["header-container"]}
-            ref={null}
-            style={{marginBlockStart: 0}}
-        >
-            <div
-                className={classNames(styles["header-wrapper"], {
-                    [styles["header-wrapper--fullscreen"]]: false,
+  return (
+    <div
+      className={styles["header-container"]}
+      ref={null}
+      style={{ marginBlockStart: 0 }}
+    >
+      <div
+        className={classNames(styles["header-wrapper"], {
+          [styles["header-wrapper--fullscreen"]]: false,
+        })}
+      >
+        <header className={styles.header}>
+          <div
+            className={classNames(styles.header, {
+              [styles["header--fullscreen"]]: false,
+            })}
+          >
+            <ResponsiveContent className={styles.header__inner}>
+              <div
+                className={classNames(styles["header__logo-container"], {
+                  [styles["header__logo-container--fullscreen"]]: false,
                 })}
-            >
-                <header
-                    className={styles.header}
-                >
-                    <div
-                        className={classNames(styles.header, {
-                            [styles["header--fullscreen"]]: false,
-                        })}
-                    >
-                        <ResponsiveContent className={styles.header__inner}>
-                            <div
-                                className={classNames(styles["header__logo-container"], {
-                                    [styles["header__logo-container--fullscreen"]]: false,
-                                })}
-                            >
-                                {headerLogoElement}
-
-                            </div>
-                            <div className={styles["header__elements-desktop"]}>
-                                <Fragment>
-                                    <div className={styles["header__element--large-spacing"]}>
-                                        <CurrentUser/>
-                                    </div>
-                                    <div className={styles["header__element--medium-spacing"]}>
-                                        <LogoutButton/>
-                                    </div>
-                                    <div className={styles["header__element--medium-spacing"]}>
-                                        <LanguageSwitcher />
-                                    </div>
-                                </Fragment>
-                            </div>
-                        </ResponsiveContent>
-                    </div>
-                </header>
-            </div>
-        </div>
-    )
-}
+              >
+                {headerLogoElement}
+              </div>
+              <div className={styles["header__elements-desktop"]}>
+                <Fragment>
+                  <div className={styles["header__element--large-spacing"]}>
+                    <CurrentUser />
+                  </div>
+                  <div className={styles["header__element--medium-spacing"]}>
+                    <LogoutButton />
+                  </div>
+                  <div className={styles["header__element--medium-spacing"]}>
+                    <LanguageSwitcher />
+                  </div>
+                </Fragment>
+              </div>
+            </ResponsiveContent>
+          </div>
+        </header>
+      </div>
+    </div>
+  );
+};
 
 export default Header;

@@ -14,54 +14,43 @@
  * limitations under the License.
  */
 
-import {FC, ReactElement} from "react";
-import {Outlet} from "react-router-dom";
-import {Page as PageWrapper,} from "@gemeente-denhaag/page";
+import { FC, ReactElement } from "react";
+import { Outlet } from "react-router-dom";
+import { Page as PageWrapper } from "@gemeente-denhaag/page";
 import ResponsiveContent from "@gemeente-denhaag/responsive-content";
 import Header from "./Header";
-import {ConfigPanelPaths} from "../constants/paths.ts";
-import styles from "./Layout.module.scss"
-import {ToastContainer} from "react-toastify";
+import { ConfigPanelPaths } from "../constants/paths.ts";
+import styles from "./Layout.module.scss";
+import { ToastContainer } from "react-toastify";
 
 interface LayoutComponentProps {
-    paths: ConfigPanelPaths;
-    headerLogo: ReactElement;
+  paths: ConfigPanelPaths;
+  headerLogo: ReactElement;
 }
 
-const LayoutComponent: FC<LayoutComponentProps> = ({
-                                                       headerLogo,
-                                                       paths
-                                                   }) => {
-
-    return (
-        <PageWrapper>
-            <ToastContainer
-                position={"bottom-center"}
-                hideProgressBar={true}
-                autoClose={3000}
-                closeOnClick={true}
-            />
-            <ResponsiveContent className="denhaag-page-content denhaag-responsive-content--sidebar">
-                <Header
-                    logo={headerLogo}
-                />
-                <main className={styles["layout-content"] + " denhaag-page-content__main"}>
-                    {<Outlet context={{paths}}/>}
-                </main>
-            </ResponsiveContent>
-        </PageWrapper>
-    );
+const LayoutComponent: FC<LayoutComponentProps> = ({ headerLogo, paths }) => {
+  return (
+    <PageWrapper>
+      <ToastContainer
+        position={"bottom-center"}
+        hideProgressBar={true}
+        autoClose={3000}
+        closeOnClick={true}
+      />
+      <ResponsiveContent className="denhaag-page-content denhaag-responsive-content--sidebar">
+        <Header logo={headerLogo} />
+        <main
+          className={styles["layout-content"] + " denhaag-page-content__main"}
+        >
+          {<Outlet context={{ paths }} />}
+        </main>
+      </ResponsiveContent>
+    </PageWrapper>
+  );
 };
 
-const Layout: FC<LayoutComponentProps> = ({
-                                              paths,
-                                              headerLogo
-                                          }) => (
-
-    <LayoutComponent
-        paths={paths}
-        headerLogo={headerLogo}
-    />
+const Layout: FC<LayoutComponentProps> = ({ paths, headerLogo }) => (
+  <LayoutComponent paths={paths} headerLogo={headerLogo} />
 );
 
 export default Layout;
