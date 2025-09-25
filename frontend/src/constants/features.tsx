@@ -23,11 +23,13 @@ import DmnFeatureConfiguration from "../components/feature-components/DmnFeature
 import PrefillFeatureConfiguration from "../components/feature-components/PrefillFeatureConfiguration.tsx";
 import BesluitenApiFeatureConfiguration from "../components/feature-components/BesluitenApiFeatureConfiguration.tsx";
 import OpenKlant2FeatureConfiguration from "../components/feature-components/OpenKlant2FeatureConfiguration.tsx";
-import OpenKlantFeatureConfiguration from "../components/feature-components/OpenKlantFeatureConfiguration.tsx";
-import HaalCentraalBrpFeatureConfiguration from "../components/feature-components/HaalCentraalBrpFeatureConfiguration.tsx";
-import HaalCentraalHrFeatureConfiguration from "../components/feature-components/HaalCentraalHrFeatureConfiguration.tsx";
+import HaalCentraalBrpFeatureConfiguration
+    from "../components/feature-components/HaalCentraalBrpFeatureConfiguration.tsx";
+import HaalCentraalHrFeatureConfiguration
+    from "../components/feature-components/HaalCentraalHrFeatureConfiguration.tsx";
 import ZakenApiFeatureConfiguration from "../components/feature-components/ZakenApiFeatureConfiguration.tsx";
-import DocumentenApisFeatureConfiguration from "../components/feature-components/DocumentenApisFeatureConfiguration.tsx";
+import DocumentenApisFeatureConfiguration
+    from "../components/feature-components/DocumentenApisFeatureConfiguration.tsx";
 import OgonePaymentFeatureConfiguration from "../components/feature-components/OgonePaymentFeatureConfiguration.tsx";
 import ClamAVFeatureConfiguration from "../components/feature-components/ClamAVFeatureConfiguration.tsx";
 import DirectPaymentFeatureConfiguration from "../components/feature-components/DirectPaymentFeatureConfiguration.tsx";
@@ -58,11 +60,6 @@ export const features: FeatureConfiguration[] = [
         featureId: "objectsapi",
         featureConfigurationPrefix: "nl-portal.config.objectsapi",
         featureComponent: ObjectsApiFeatureConfiguration
-    },
-    {
-        featureId: "openklant",
-        featureConfigurationPrefix: "nl-portal.config.openklant",
-        featureComponent: OpenKlantFeatureConfiguration
     },
     {
         featureId: "openklant2",
