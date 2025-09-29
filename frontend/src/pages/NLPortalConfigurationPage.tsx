@@ -14,37 +14,42 @@
  * limitations under the License.
  */
 
-import {PageHeader} from "@gemeente-denhaag/page";
-import {FormattedMessage} from "react-intl";
-import {Heading2, Paragraph} from "@gemeente-denhaag/typography";
-import styles from "./NLPortalConfigurationPage.module.scss"
+import { PageHeader } from "@gemeente-denhaag/page";
+import { FormattedMessage } from "react-intl";
+import { Heading2, Paragraph } from "@gemeente-denhaag/typography";
+import styles from "./NLPortalConfigurationPage.module.scss";
 import ConfigurationList from "../components/ConfigurationList.tsx";
-import {features} from "../constants/features.tsx";
+import { features } from "../constants/features.tsx";
 import PageGrid from "../components/PageGrid.tsx";
-import {themes} from "../constants/themes.tsx";
+import { themes } from "../constants/themes.tsx";
 
 const NLPortalConfigurationPage = () => {
-
-    return <PageGrid>
-        <PageHeader>
-            <Heading2><FormattedMessage id="configuration.title"/></Heading2>
-        </PageHeader>
-        <Paragraph className={styles["features__sub-header"]}>
-            <FormattedMessage id="configuration.subtitle"/>
-        </Paragraph>
-        <div>
-            <ConfigurationList
-                configurationKey={"theme"}
-                entries={themes.map(themeSettings => themeSettings.themeConfigurationId)}
-            />
-        </div>
-        <div>
-            <ConfigurationList
-                configurationKey={"features"}
-                entries={features.map(feat => feat.featureId)}
-            />
-        </div>
+  return (
+    <PageGrid>
+      <PageHeader>
+        <Heading2>
+          <FormattedMessage id="configuration.title" />
+        </Heading2>
+      </PageHeader>
+      <Paragraph className={styles["features__sub-header"]}>
+        <FormattedMessage id="configuration.subtitle" />
+      </Paragraph>
+      <div>
+        <ConfigurationList
+          configurationKey={"theme"}
+          entries={themes.map(
+            (themeSettings) => themeSettings.themeConfigurationId,
+          )}
+        />
+      </div>
+      <div>
+        <ConfigurationList
+          configurationKey={"features"}
+          entries={features.map((feat) => feat.featureId)}
+        />
+      </div>
     </PageGrid>
+  );
 };
 
 export default NLPortalConfigurationPage;

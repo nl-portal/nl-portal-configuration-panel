@@ -14,44 +14,49 @@
  * limitations under the License.
  */
 
-import {PageHeader} from "@gemeente-denhaag/page";
-import {FormattedMessage} from "react-intl";
-import {Heading2, Heading4} from "@gemeente-denhaag/typography";
+import { PageHeader } from "@gemeente-denhaag/page";
+import { FormattedMessage } from "react-intl";
+import { Heading2, Heading4 } from "@gemeente-denhaag/typography";
 import PageGrid from "../components/PageGrid.tsx";
 import BackLink from "../components/BackLink.tsx";
-import {paths} from "../constants/paths.ts";
-import {useNavigate, useParams} from "react-router-dom";
-import {themes} from "../constants/themes.tsx";
-import {useEffect} from "react";
+import { paths } from "../constants/paths.ts";
+import { useNavigate, useParams } from "react-router-dom";
+import { themes } from "../constants/themes.tsx";
+import { useEffect } from "react";
 import styles from "../styles/Configuration.module.scss";
 
 const ThemePage = () => {
-        const {themeConfigurationId} = useParams();
-        const navigate = useNavigate();
-        const theme = themes.find(it => it.themeConfigurationId == themeConfigurationId);
+  const { themeConfigurationId } = useParams();
+  const navigate = useNavigate();
+  const theme = themes.find(
+    (it) => it.themeConfigurationId == themeConfigurationId,
+  );
 
-        useEffect(() => {
-            if (!theme) navigate(paths.configuration)
-        }, [])
+  useEffect(() => {
+    if (!theme) navigate(paths.configuration);
+  }, []);
 
-        return <PageGrid>
-            <PageHeader>
-                <BackLink href={paths.configuration} children={
-                    <Heading4>
-                        <FormattedMessage id={"action.back"}></FormattedMessage>
-                    </Heading4>
-                }>
-                </BackLink>
-                <div className={styles["feature-config__header"]}>
-                    <Heading2><FormattedMessage id={"theme." + themeConfigurationId}/></Heading2>
-                </div>
-            </PageHeader>
-            {
-                theme?.themeConfigurationComponent &&
-                <theme.themeConfigurationComponent/>
-            }
-        </PageGrid>
-    }
-;
-
+  return (
+    <PageGrid>
+      <PageHeader>
+        <BackLink
+          href={paths.configuration}
+          children={
+            <Heading4>
+              <FormattedMessage id={"action.back"}></FormattedMessage>
+            </Heading4>
+          }
+        ></BackLink>
+        <div className={styles["feature-config__header"]}>
+          <Heading2>
+            <FormattedMessage id={"theme." + themeConfigurationId} />
+          </Heading2>
+        </div>
+      </PageHeader>
+      {theme?.themeConfigurationComponent && (
+        <theme.themeConfigurationComponent />
+      )}
+    </PageGrid>
+  );
+};
 export default ThemePage;

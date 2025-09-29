@@ -14,63 +14,57 @@
  * limitations under the License.
  */
 import _ from "lodash";
-import {flatten} from "flat";
-import {useContext} from "react";
+import { flatten } from "flat";
+import { useContext } from "react";
 import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
-import {ConfigurationProperty} from "./useConfiguration.tsx";
+import { ConfigurationProperty } from "./useConfiguration.tsx";
 
 const useConfigurationPropertyMapperHook = () => {
-    const {clientSettings} = useContext(ConfigPanelSettingsContext);
-    const parseProperties = (
-        properties: ConfigurationProperty[],
-        prefix?: string
-    ): object => {
-        const constructedConfig = {}
+  const { clientSettings } = useContext(ConfigPanelSettingsContext);
+  const parseProperties = (
+    properties: ConfigurationProperty[],
+    prefix?: string,
+  ): object => {
+    const constructedConfig = {};
 
-        properties.forEach(({propertyKey, propertyValue}) => {
-            _.set(constructedConfig, propertyKey, propertyValue)
-        })
+    properties.forEach(({ propertyKey, propertyValue }) => {
+      _.set(constructedConfig, propertyKey, propertyValue);
+    });
 
-        return prefix ? _.get(constructedConfig, prefix) : constructedConfig
-    }
+    return prefix ? _.get(constructedConfig, prefix) : constructedConfig;
+  };
 
-    const toProperties = (
-        configuration: object = {},
-        prefix?: string,
-        application: string = clientSettings.applicationName || "",
-    ): ConfigurationProperty[] => {
-        const configurationProperties: ConfigurationProperty[] = []
-        const flattenedProperties: object = flatten(configuration, {safe: true});
+  const toProperties = (
+    configuration: object = {},
+    prefix?: string,
+    application: string = clientSettings.applicationName || "",
+  ): ConfigurationProperty[] => {
+    const configurationProperties: ConfigurationProperty[] = [];
+    const flattenedProperties: object = flatten(configuration, { safe: true });
 
-        Object.entries(flattenedProperties).map(([key, value]) => {
-                if (value !== undefined && Array.isArray(value)) {
-                    configurationProperties.push(
-                        {
-                            propertyKey: prefix ? `${prefix}.${key}` : key,
-                            propertyValue: value.join(", "),
-                            application: application
-                        }
-                    )
-                }
-                else if (value !== undefined && typeof value !== "object") {
-                    configurationProperties.push(
-                        {
-                            propertyKey: prefix ? `${prefix}.${key}` : key,
-                            propertyValue: value.toString(),
-                            application: application
-                        }
-                    )
-                }
-            }
-        )
+    Object.entries(flattenedProperties).map(([key, value]) => {
+      if (value !== undefined && Array.isArray(value)) {
+        configurationProperties.push({
+          propertyKey: prefix ? `${prefix}.${key}` : key,
+          propertyValue: value.join(", "),
+          application: application,
+        });
+      } else if (value !== undefined && typeof value !== "object") {
+        configurationProperties.push({
+          propertyKey: prefix ? `${prefix}.${key}` : key,
+          propertyValue: value.toString(),
+          application: application,
+        });
+      }
+    });
 
-        return configurationProperties
-    }
+    return configurationProperties;
+  };
 
-    return {
-        parseProperties,
-        toProperties
-    }
-}
+  return {
+    parseProperties,
+    toProperties,
+  };
+};
 
 export default useConfigurationPropertyMapperHook;

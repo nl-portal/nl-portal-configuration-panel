@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import {Navigate} from "react-router-dom";
-import {paths} from "./paths.ts";
+import { Navigate } from "react-router-dom";
+import { paths } from "./paths.ts";
 import FeaturePage from "../pages/FeaturePage.tsx";
 import NLPortalConfigurationPage from "../pages/NLPortalConfigurationPage.tsx";
 import ThemePage from "../pages/ThemePage.tsx";
 
 export const routes = [
-    {
-        path: paths.configuration,
-        element: <NLPortalConfigurationPage/>,
-    },
-    {
-        path: paths.feature(),
-        element: <FeaturePage/>,
-    },
-    {
-        path: paths.theme(),
-        element: <ThemePage/>,
-    },
-    {
-        path: "*",
-        element: <Navigate to={paths.configuration}/>,
-    },
+  {
+    path: paths.configuration,
+    element: <NLPortalConfigurationPage />,
+  },
+  {
+    path: paths.feature(),
+    element: <FeaturePage />,
+  },
+  {
+    path: paths.theme(),
+    element: <ThemePage />,
+  },
+  {
+    path: "*",
+    element: <Navigate to={paths.configuration} />,
+  },
 ];

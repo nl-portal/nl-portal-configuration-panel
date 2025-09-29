@@ -18,12 +18,12 @@ import ThemeSettings from "../interfaces/ThemeConfiguration.ts";
 import ThemeStyleConfiguration from "../components/theme-components/ThemeStyleConfiguration.tsx";
 
 export const themes: ThemeSettings[] = [
-    {
-        themeConfigurationId: 'logo',
-        themeConfigurationComponent: ThemeLogoConfiguration,
-    },
-    {
-        themeConfigurationId: 'style',
-        themeConfigurationComponent: ThemeStyleConfiguration,
-    },
-]
+  {
+    themeConfigurationId: "logo",
+    themeConfigurationComponent: ThemeLogoConfiguration,
+  },
+  {
+    themeConfigurationId: "style",
+    themeConfigurationComponent: ThemeStyleConfiguration,
+  },
+];

@@ -15,15 +15,13 @@
  */
 
 import { Button } from "@gemeente-denhaag/button";
-import {useAuth} from "react-oidc-context";
+import { useAuth } from "react-oidc-context";
 
 const LogoutButton = () => {
-  const auth  = useAuth();
+  const auth = useAuth();
   const logout = () => auth.signoutRedirect();
 
-  return (
-      <Button onClick={logout}>Log out</Button>
-  )
+  return <Button onClick={logout}>Log out</Button>;
 };
 
 export default LogoutButton;

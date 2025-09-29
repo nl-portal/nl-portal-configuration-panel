@@ -15,13 +15,14 @@
  */
 
 export interface ConfigPanelPaths {
-    configuration: string;
-    feature: (featureId?: string) => string;
-    theme: (themeItemId?: string) => string;
+  configuration: string;
+  feature: (featureId?: string) => string;
+  theme: (themeItemId?: string) => string;
 }
 
 export const paths: ConfigPanelPaths = {
-    configuration: "/configuration",
-    feature: (featureId = ":featureId") => `/features/${featureId}`,
-    theme: (themeConfigurationId = ":themeConfigurationId") => `/theme/${themeConfigurationId}`
+  configuration: "/configuration",
+  feature: (featureId = ":featureId") => `/features/${featureId}`,
+  theme: (themeConfigurationId = ":themeConfigurationId") =>
+    `/theme/${themeConfigurationId}`,
 };

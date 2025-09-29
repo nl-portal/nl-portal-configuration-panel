@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-import {defineConfig} from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [react()],
-    build: {
-        commonjsOptions: {
-            transformMixedEsModules: true
-        },
-        outDir: "build",
-        chunkSizeWarningLimit: 2000,
-        rollupOptions: {
-            output: {
-                manualChunks(id: string) {
-                    if (id.includes("@gemeente-denhaag")) return "gemeente-denhaag"
-                }
-            }
-        }
+  plugins: [react()],
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
     },
-    server: {
-        proxy: {
-            '/api': {
-                target: 'http://localhost:8090/api',
-                changeOrigin: false,
-                rewrite: (path) => path.replace(/^\/api/, ''),
-            }
-        }
-    }
-})
+    outDir: "build",
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes("@gemeente-denhaag")) return "gemeente-denhaag";
+        },
+      },
+    },
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8090/api",
+        changeOrigin: false,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
+});
