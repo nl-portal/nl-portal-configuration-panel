@@ -14,8 +14,7 @@ import { useForm } from "react-hook-form";
 interface TaakConfiguration {
   enabled?: string;
   properties?: {
-    "type-url"?: string;
-    "type-url-v2"?: string;
+    "object-type-url"?: string;
   };
 }
 
@@ -114,41 +113,21 @@ const TaakFeatureConfiguration = ({
             <Fragment>
               <FormField
                 label={
-                  <FormLabel htmlFor={"type-url"}>
-                    <FormattedMessage id={"features.taak.type-url"} />
+                  <FormLabel htmlFor={"object-type-url"}>
+                    <FormattedMessage id={"features.taak.object-type-url"} />
                   </FormLabel>
                 }
                 description={
                   <Paragraph>
                     <FormattedMessage
-                      id={"features.taak.type-url.description"}
+                      id={"features.taak.object-type-url.description"}
                     />
                   </Paragraph>
                 }
               >
                 <TextInput
-                  {...register("properties.type-url")}
-                  id="type-url"
-                  type="url"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"type-url-v2"}>
-                    <FormattedMessage id={"features.taak.type-url-v2"} />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.taak.type-url-v2.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.type-url-v2")}
-                  id="type-url-v2"
+                  {...register("properties.object-type-url")}
+                  id="object-type-url"
                   type="url"
                 />
               </FormField>

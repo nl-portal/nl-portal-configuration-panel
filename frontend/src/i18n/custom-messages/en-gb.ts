@@ -121,11 +121,8 @@ export const EN_GB_MESSAGES: Messages = {
       "The secret that should be used for authenticating requests",
     "features.taak": "Task",
     "features.taak.configuration": "Configuration",
-    "features.taak.type-url": "Task Object Type Url",
-    "features.taak.type-url.description":
-      "The url pointing towards the task object type in Objecttypen API",
-    "features.taak.type-url-v2": "External User Task Object Type Url",
-    "features.taak.type-url-v2.description":
+    "features.taak.object-type-url": "External User Task Object Type Url",
+    "features.taak.object-type-url.description":
       "The url pointing towards the external user task object type in Objecttypen API",
     "features.objectsapi": "Objects API",
     "features.objectsapi.configuration": "Configuration",
