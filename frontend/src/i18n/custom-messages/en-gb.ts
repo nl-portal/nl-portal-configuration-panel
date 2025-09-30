@@ -132,7 +132,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.objectsapi.token.description":
       "The token that should be used for authenticating requests to Objects API",
     "features.catalogiapi": "Catalogi API",
-    "features.catalogiapi.configuration": "features Configuration",
+    "features.catalogiapi.configuration": "Configuration",
     "features.catalogiapi.url": "Catalogi API Url",
     "features.catalogiapi.url.description": "The base url of the Catalogi API",
     "features.catalogiapi.client-id": "Catalogi Api Client Id",
@@ -142,7 +142,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.catalogiapi.secret.description":
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
     "features.besluitenapi": "Besluiten API",
-    "features.besluitenapi.configuration": "features Configuration",
+    "features.besluitenapi.configuration": "Configuration",
     "features.besluitenapi.url": "Besluiten API Url",
     "features.besluitenapi.url.description":
       "The base url of the Besluiten API",

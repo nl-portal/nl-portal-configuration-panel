@@ -100,7 +100,6 @@
         }
     }
 
-
     .denhaag-file {
         border-radius: var(--denhaag-border-radius);
 
@@ -110,7 +109,7 @@
     }
 
     --utrecht-heading-color: var(--rijkshuisstijl-donkerblauw);
-
+    --denhaag-link-icon-gap: var(--denhaag-space-inline-sm);
     --denhaag-page-content-main-md-margin-block-start: 3em;
     --denhaag-menu-button-font-size: var(--denhaag-typography-scale-lg-font-size);
     --denhaag-menu-button-line-height: var(
