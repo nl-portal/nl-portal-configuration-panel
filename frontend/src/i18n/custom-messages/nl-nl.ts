@@ -124,11 +124,8 @@ export const NL_NL_MESSAGES: Messages = {
     "features.taak.configuration": "Module configuratie",
     "features.taak.enable": "Geactiveerd",
     "features.taak.enable.description": "Geactiveerd",
-    "features.taak.type-url": "Taak Objecttype Url",
-    "features.taak.type-url.description":
-      "De url naar het Taak objecttype binnen Objecttypen API",
-    "features.taak.type-url-v2": "Externe Klanttaak Objecttype Url",
-    "features.taak.type-url-v2.description":
+    "features.taak.object-type-url": "Externe Klanttaak Objecttype Url",
+    "features.taak.object-type-url.description":
       "De url naar het Externe Klanttaak objecttype binnen Objecttypen API",
     "features.objectsapi": "Objecten API",
     "features.objectsapi.configuration": "Module configuratie",
