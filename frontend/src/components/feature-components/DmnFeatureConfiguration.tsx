@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
-import Fieldset, { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { FormattedMessage } from "react-intl";
 import { Heading3, Paragraph } from "@gemeente-denhaag/typography";
 import { FormField } from "@gemeente-denhaag/form-field";
@@ -8,7 +8,7 @@ import { FormLabel } from "@gemeente-denhaag/form-label";
 import styles from "../../styles/Configuration.module.scss";
 import ConfigurationForm from "../ConfigurationForm.tsx";
 import PasswordInput from "../PasswordInput.tsx";
-import TextInput from "@gemeente-denhaag/text-input";
+import { TextInput } from "@gemeente-denhaag/text-input";
 import { useForm } from "react-hook-form";
 import { RadioButton } from "@gemeente-denhaag/radio-button";
 

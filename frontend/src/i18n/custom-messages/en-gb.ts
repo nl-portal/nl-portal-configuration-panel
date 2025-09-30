@@ -81,16 +81,6 @@ export const EN_GB_MESSAGES: Messages = {
     "features.openklant2.token": "OpenKlant 2 Token",
     "features.openklant2.token.description":
       "The token that should be used for authenticating requests to Objects API",
-    "features.openklant": "OpenKlant",
-    "features.openklant.configuration": "Module configuration",
-    "features.openklant.url": "OpenKlant Api Url",
-    "features.openklant.url.description": "The base url of the Openklant API",
-    "features.openklant.client-id": "OpenKlant Api Client Id",
-    "features.openklant.client-id.description":
-      "The client id that should be used for authenticating requests",
-    "features.openklant.secret": "OpenKlant Api Secret",
-    "features.openklant.secret.description":
-      "The secret that should be used for authenticating requests",
     "features.haalcentraal-brp": "HaalCentraal BRP",
     "features.haalcentraal-brp.configuration": "Module configuration",
     "features.haalcentraal-brp.url": "HaalCentraal BRP Api Url",
@@ -132,7 +122,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.objectsapi.token.description":
       "The token that should be used for authenticating requests to Objects API",
     "features.catalogiapi": "Catalogi API",
-    "features.catalogiapi.configuration": "features Configuration",
+    "features.catalogiapi.configuration": "Configuration",
     "features.catalogiapi.url": "Catalogi API Url",
     "features.catalogiapi.url.description": "The base url of the Catalogi API",
     "features.catalogiapi.client-id": "Catalogi Api Client Id",
@@ -142,7 +132,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.catalogiapi.secret.description":
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
     "features.besluitenapi": "Besluiten API",
-    "features.besluitenapi.configuration": "features Configuration",
+    "features.besluitenapi.configuration": "Configuration",
     "features.besluitenapi.url": "Besluiten API Url",
     "features.besluitenapi.url.description":
       "The base url of the Besluiten API",

@@ -17,7 +17,7 @@
 import React, { Fragment, ReactElement } from "react";
 import styles from "./Header.module.scss";
 import classNames from "classnames";
-import ResponsiveContent from "@gemeente-denhaag/responsive-content";
+import { ResponsiveContent } from "@gemeente-denhaag/responsive-content";
 import LogoutButton from "./LogoutButton.tsx";
 import CurrentUser from "./CurrentUser.tsx";
 import LanguageSwitcher from "./LanguageSwitcher.tsx";
@@ -27,7 +27,8 @@ interface HeaderProps {
 }
 
 const Header = ({ logo }: HeaderProps) => {
-  const headerLogoElement = React.cloneElement(logo, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const headerLogoElement = React.cloneElement<any>(logo, {
     className: styles["header__logo-image"],
   });
 

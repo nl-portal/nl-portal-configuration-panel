@@ -21,7 +21,7 @@ import { Heading3, Heading4, Paragraph } from "@gemeente-denhaag/typography";
 import { FormattedMessage } from "react-intl";
 import { FormField } from "@gemeente-denhaag/form-field";
 import ActionField from "../ActionField.tsx";
-import IconButton from "@gemeente-denhaag/iconbutton";
+import { IconButton } from "@gemeente-denhaag/iconbutton";
 import { TrashIcon } from "@gemeente-denhaag/icons";
 import { Editor } from "@monaco-editor/react";
 import useThemeStyle from "../../hooks/useThemeStyle.tsx";

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import { FormattedMessage } from "react-intl";
-import styles from "./ConfigurationList.module.scss";
 import { Link } from "@gemeente-denhaag/link";
 import { Paragraph } from "@gemeente-denhaag/typography";
 import { SettingsIcon } from "@gemeente-denhaag/icons";
-import Table, { CellObject } from "./Table.tsx";
 import PortalLink from "./PortalLink.tsx";
+import styles from "./ConfigurationList.module.scss";
+import Table from "./Table.tsx";
 
 interface ConfigurationListProps {
   configurationKey: string;
@@ -31,42 +31,46 @@ const ConfigurationList = ({
   entries,
 }: ConfigurationListProps) => {
   return (
-    <Table
-      headers={[
-        {
-          key: configurationKey,
-          head: true,
-          children: (
-            <Paragraph>
-              <b>
-                <FormattedMessage id={`configuration.${configurationKey}`} />
-              </b>
-            </Paragraph>
-          ),
-        },
-      ]}
-      rows={
-        entries.map((entryId) => [
-          <span className={styles["configuration-list__header"]}>
+    <div className={styles["configuration-list"]}>
+      <Table
+        headers={[
+          {
+            key: configurationKey,
+            head: true,
+            children: (
+              <Paragraph>
+                <b>
+                  <FormattedMessage id={`configuration.${configurationKey}`} />
+                </b>
+              </Paragraph>
+            ),
+          },
+        ]}
+        rows={entries.map((entryId) => [
+          <span>
             <Paragraph>
               <FormattedMessage id={`${configurationKey}.${entryId}`} />
             </Paragraph>
           </span>,
-          <Link
-            href={`/${configurationKey}/${entryId}`}
-            icon={<SettingsIcon />}
-            Link={PortalLink}
-            iconAlign="end"
-          >
-            <div className={styles["configuration-list__value-edit"]}>
-              <Paragraph>
-                <FormattedMessage id={`configuration.configure`} />
-              </Paragraph>
-            </div>
-          </Link>,
-        ]) as unknown as CellObject[][]
-      }
-    />
+          [
+            <span>
+              <Link
+                href={`/${configurationKey}/${entryId}`}
+                icon={<SettingsIcon />}
+                Link={PortalLink}
+                iconAlign="end"
+              >
+                <div>
+                  <Paragraph>
+                    <FormattedMessage id={`configuration.configure`} />
+                  </Paragraph>
+                </div>
+              </Link>
+            </span>,
+          ],
+        ])}
+      />
+    </div>
   );
 };
 

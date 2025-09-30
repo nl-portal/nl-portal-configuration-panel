@@ -15,8 +15,8 @@
  */
 
 import React, { ForwardedRef, forwardRef, useState } from "react";
-import TextInput, { TextInputProps } from "@gemeente-denhaag/text-input";
-import IconButton from "@gemeente-denhaag/iconbutton";
+import { TextInput, TextInputProps } from "@gemeente-denhaag/text-input";
+import { IconButton } from "@gemeente-denhaag/iconbutton";
 import { HideIcon, ShowIcon } from "@gemeente-denhaag/icons";
 
 interface PasswordInputProps extends TextInputProps {

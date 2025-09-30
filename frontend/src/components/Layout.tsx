@@ -17,7 +17,7 @@
 import { FC, ReactElement } from "react";
 import { Outlet } from "react-router-dom";
 import { Page as PageWrapper } from "@gemeente-denhaag/page";
-import ResponsiveContent from "@gemeente-denhaag/responsive-content";
+import { ResponsiveContent } from "@gemeente-denhaag/responsive-content";
 import Header from "./Header";
 import { ConfigPanelPaths } from "../constants/paths.ts";
 import styles from "./Layout.module.scss";

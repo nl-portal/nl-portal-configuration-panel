@@ -39,7 +39,8 @@ const ActionField: React.ForwardRefExoticComponent<
       <FormField {...defaultProps} ref={ref}>
         <div className={styles["action-field__row"]}>
           {fieldElement}
-          {cloneElement(buttonElement, {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          {cloneElement<any>(buttonElement, {
             className: styles["action-field__button"],
           })}
         </div>

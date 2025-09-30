@@ -26,7 +26,7 @@ import { Button } from "@gemeente-denhaag/button";
 import ActionField from "../ActionField.tsx";
 import { TrashIcon } from "@gemeente-denhaag/icons";
 import styles from "../../styles/Configuration.module.scss";
-import IconButton from "@gemeente-denhaag/iconbutton";
+import { IconButton } from "@gemeente-denhaag/iconbutton";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormLabel } from "@gemeente-denhaag/form-label";
 import useUtil from "../../hooks/useUtil.tsx";

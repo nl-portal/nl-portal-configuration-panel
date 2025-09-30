@@ -34,20 +34,16 @@ const NLPortalConfigurationPage = () => {
       <Paragraph className={styles["features__sub-header"]}>
         <FormattedMessage id="configuration.subtitle" />
       </Paragraph>
-      <div>
-        <ConfigurationList
-          configurationKey={"theme"}
-          entries={themes.map(
-            (themeSettings) => themeSettings.themeConfigurationId,
-          )}
-        />
-      </div>
-      <div>
-        <ConfigurationList
-          configurationKey={"features"}
-          entries={features.map((feat) => feat.featureId)}
-        />
-      </div>
+      <ConfigurationList
+        configurationKey={"theme"}
+        entries={themes.map(
+          (themeSettings) => themeSettings.themeConfigurationId,
+        )}
+      />
+      <ConfigurationList
+        configurationKey={"features"}
+        entries={features.map((feat) => feat.featureId)}
+      />
     </PageGrid>
   );
 };
