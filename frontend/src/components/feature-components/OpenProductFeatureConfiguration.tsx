@@ -1,0 +1,191 @@
+import { Fragment, useEffect, useState } from "react";
+import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
+import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { FormattedMessage } from "react-intl";
+import { Heading3, Paragraph } from "@gemeente-denhaag/typography";
+import { FormField } from "@gemeente-denhaag/form-field";
+import { FormLabel } from "@gemeente-denhaag/form-label";
+import styles from "../../styles/Configuration.module.scss";
+import { TextInput } from "@gemeente-denhaag/text-input";
+import { useForm } from "react-hook-form";
+import ConfigurationForm from "../ConfigurationForm.tsx";
+import { RadioButton } from "@gemeente-denhaag/radio-button";
+
+interface OpenProductConfiguration {
+  enabled?: string;
+  properties?: {
+    token?: string;
+    "product-api-url"?: string;
+    "product-type-api-url"?: string;
+  };
+}
+
+interface OpenProductFeatureConfigurationProps
+  extends FeatureConfigurationProps {
+  prefillConfiguration?: OpenProductConfiguration | undefined;
+}
+
+const ProductFeatureConfiguration = ({
+  prefillConfiguration,
+  onSubmit,
+  onChange,
+}: OpenProductFeatureConfigurationProps) => {
+  const [currentConfiguration, setCurrentConfiguration] =
+    useState<OpenProductConfiguration>(prefillConfiguration || {});
+  const {
+    register,
+    watch,
+    reset,
+    formState,
+    handleSubmit,
+    getValues: getFormValue,
+  } = useForm<OpenProductConfiguration>({
+    defaultValues: { ...prefillConfiguration, enabled: "false" },
+  });
+
+  useEffect(() => {
+    if (prefillConfiguration) reset(prefillConfiguration);
+  }, [prefillConfiguration]);
+
+  useEffect(() => {
+    if (
+      onChange &&
+      currentConfiguration &&
+      formState.isDirty &&
+      formState.isValid
+    ) {
+      onChange(currentConfiguration);
+    }
+  }, [currentConfiguration]);
+
+  return (
+    <ConfigurationForm
+      className={styles["feature-config__form"]}
+      onChange={() => {
+        setCurrentConfiguration(getFormValue());
+      }}
+      onSubmit={handleSubmit(() => onSubmit)}
+      children={
+        <Fragment>
+          <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+            <Heading3>
+              <FormattedMessage
+                id={"features.openproduct.configuration"}
+              ></FormattedMessage>
+            </Heading3>
+          </FieldsetLegend>
+          <Fieldset role={"radiogroup"}>
+            <FormField
+              className={styles["form-field__radio-option"]}
+              type="radio"
+              label={
+                <FormLabel htmlFor={"enabled.true"}>
+                  <FormattedMessage
+                    id={"features.feature.enabled.true"}
+                  ></FormattedMessage>
+                </FormLabel>
+              }
+            >
+              <RadioButton
+                {...register("enabled")}
+                className="utrecht-form-field__input"
+                id={"enabled.true"}
+                value={"true"}
+              />
+            </FormField>
+            <FormField
+              className={styles["form-field__radio-option"]}
+              type="radio"
+              label={
+                <FormLabel htmlFor={"enabled.false"}>
+                  <FormattedMessage
+                    id={"features.feature.enabled.false"}
+                  ></FormattedMessage>
+                </FormLabel>
+              }
+            >
+              <RadioButton
+                {...register("enabled")}
+                className="utrecht-form-field__input"
+                id={"enabled.false"}
+                value={"false"}
+              />
+            </FormField>
+          </Fieldset>
+          {watch("enabled") === "true" && (
+            <Fragment>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"product-type-url"}>
+                    <FormattedMessage id={"features.openproduct.token"} />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.openproduct.token.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.token")}
+                  id="token"
+                  type="text"
+                />
+              </FormField>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"product-api-url"}>
+                    <FormattedMessage
+                      id={"features.openproduct.product-api-url"}
+                    />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.openproduct.product-api-url.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.product-api-url")}
+                  id="product-api-url"
+                  type="url"
+                />
+              </FormField>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"product-type-api-url"}>
+                    <FormattedMessage
+                      id={"features.openproduct.product-type-api-url"}
+                    />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={
+                        "features.openproduct.product-type-api-url.description"
+                      }
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.product-type-api-url")}
+                  id="product-type-api-url"
+                  type="url"
+                />
+              </FormField>
+            </Fragment>
+          )}
+        </Fragment>
+      }
+    ></ConfigurationForm>
+  );
+};
+
+export default ProductFeatureConfiguration;

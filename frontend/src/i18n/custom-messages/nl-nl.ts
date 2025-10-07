@@ -163,6 +163,18 @@ export const NL_NL_MESSAGES: Messages = {
       "Product verbruiksobjecttype Url",
     "features.product.product-verbruiks-object-type-url.description":
       "De url naar het Product verbruiksobjecttype binnen Objecttypen API",
+    "features.openproduct": "OpenProduct API",
+    "features.openproduct.configuration": "Module configuratie",
+    "features.openproduct.token": "OpenProduct Token",
+    "features.openproduct.token.description":
+      "Het Token om bij de OpenProduct service the autoriseren",
+    "features.openproduct.product-api-url": "OpenProduct API Url",
+    "features.openproduct.product-api-url.description":
+      "De base url van de te gebruiken OpenProduct API",
+    "features.openproduct.product-type-api-url":
+      "OpenProduct product type API Url",
+    "features.openproduct.product-type-api-url.description":
+      "De base url van de te gebruiken OpenProduct product type API",
     "features.dmn": "DMN",
     "features.dmn.configuration": "Module configuratie",
     "features.dmn.url": "Dmn API base Url",

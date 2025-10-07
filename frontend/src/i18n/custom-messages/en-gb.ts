@@ -159,6 +159,18 @@ export const EN_GB_MESSAGES: Messages = {
       "Product consumable object type Url",
     "features.product.product-verbruiks-object-type-url.description":
       "The Url towards the Product consumable object type in Objecttypen API",
+    "features.openproduct": "OpenProduct API",
+    "features.openproduct.configuration": "Module configuration",
+    "features.openproduct.token": "OpenProduct Token",
+    "features.openproduct.token.description":
+      "The token that should be used to authorize with the OpenProduct service",
+    "features.openproduct.product-api-url": "OpenProduct API Url",
+    "features.openproduct.product-api-url.description":
+      "The base url of the OpenProduct API",
+    "features.openproduct.product-type-api-url":
+      "OpenProduct product type API Url",
+    "features.openproduct.product-type-api-url.description":
+      "The base url of the OpenProduct product type API",
     "features.dmn": "DMN",
     "features.dmn.configuration": "Module Configuration",
     "features.dmn.url": "Camunda DMN API base Url",
