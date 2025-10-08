@@ -28,7 +28,7 @@ class NlPortalClient {
         restClient
             .post()
             .uri { builder ->
-                builder.path("/actuator/restart").build()
+                builder.path("/actuator/refresh").build()
             }.body(emptyMap<String, String>())
             .contentType(MediaType.APPLICATION_JSON)
             .retrieve()
