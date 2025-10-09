@@ -194,6 +194,10 @@ export const EN_GB_MESSAGES: Messages = {
     "features.zakenapi.secret": "Zaken Api Secret",
     "features.zakenapi.secret.description":
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
+    "features.zakenapi.use-nnp-kvk-query-identificators":
+      "Use NNP KVK Query Identificators",
+    "features.zakenapi.use-nnp-kvk-query-identificators.description":
+      "Use NNP KVK number as query identificator when retrieving zaken",
     "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist":
       "Case information object confidentiality whitelist",
     "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist.description":

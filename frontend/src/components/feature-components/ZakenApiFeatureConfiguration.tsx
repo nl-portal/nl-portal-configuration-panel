@@ -19,6 +19,7 @@ interface ZakenApiConfiguration {
     url?: string;
     "client-id"?: string;
     secret?: string;
+    "use-nnp-kvk-query-identificators"?: string;
     "zaak-types-ids-excluded"?: string[];
     "zaak-documenten-config"?: {
       "vertrouwelijkheidsaanduiding-whitelist"?: Vertrouwelijkheidsaanduiding[];
@@ -207,6 +208,27 @@ const ZakenApiFeatureConfiguration = ({
                 }
               >
                 <PasswordInput {...register("properties.secret")} id="secret" />
+              </FormField>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"use-nnp-kvk-query-identificators"}>
+                    <FormattedMessage
+                      id={"features.zakenapi.use-nnp-kvk-query-identificators"}
+                    />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.zakenapi.use-nnp-kvk-query-identificators.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.use-nnp-kvk-query-identificators")}
+                  id="use-nnp-kvk-query-identificators"
+                />
               </FormField>
               <FormField
                 label={
