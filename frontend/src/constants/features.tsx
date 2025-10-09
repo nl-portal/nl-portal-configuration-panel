@@ -31,6 +31,7 @@ import OgonePaymentFeatureConfiguration from "../components/feature-components/O
 import ClamAVFeatureConfiguration from "../components/feature-components/ClamAVFeatureConfiguration.tsx";
 import DirectPaymentFeatureConfiguration from "../components/feature-components/DirectPaymentFeatureConfiguration.tsx";
 import HaalCentraal2FeatureConfiguration from "../components/feature-components/HaalCentraal2FeatureConfiguration.tsx";
+import OpenProductenFeatureConfiguration from "../components/feature-components/OpenProductFeatureConfiguration.tsx";
 
 export const features: FeatureConfiguration[] = [
   {
@@ -93,6 +94,11 @@ export const features: FeatureConfiguration[] = [
     featureConfigurationPrefix: "nl-portal.config.product",
     featureComponent: ProductFeatureConfiguration,
   },
+{
+    featureId: "openproduct",
+    featureConfigurationPrefix: "nl-portal.config.openproducten",
+    featureComponent: OpenProductenFeatureConfiguration,
+},
   {
     featureId: "dmn",
     featureConfigurationPrefix: "nl-portal.config.dmn",
