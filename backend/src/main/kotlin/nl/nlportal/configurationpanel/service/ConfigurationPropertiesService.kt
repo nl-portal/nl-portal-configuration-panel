@@ -22,6 +22,7 @@ import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ConfigurationPropertiesService(
@@ -51,6 +52,7 @@ class ConfigurationPropertiesService(
             ?.apply { configRepository.deleteAll(this) }
     }
 
+    @Transactional
     fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? =
         configRepository
             .save(config)
@@ -60,6 +62,7 @@ class ConfigurationPropertiesService(
                 )
             }
 
+    @Transactional
     fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> =
         configRepository
             .saveAll(configs)
