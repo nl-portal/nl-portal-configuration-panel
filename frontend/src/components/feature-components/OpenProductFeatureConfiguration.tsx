@@ -2,12 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { FormattedMessage } from "react-intl";
-import {
-  Heading2,
-  Heading3,
-  Heading4,
-  Paragraph,
-} from "@gemeente-denhaag/typography";
+import { Heading3, Heading4, Paragraph } from "@gemeente-denhaag/typography";
 import { FormField } from "@gemeente-denhaag/form-field";
 import { FormLabel } from "@gemeente-denhaag/form-label";
 import styles from "../../styles/Configuration.module.scss";
