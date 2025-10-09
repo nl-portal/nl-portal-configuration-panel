@@ -17,6 +17,12 @@ interface OpenProductConfiguration {
     token?: string;
     "product-api-url"?: string;
     "product-type-api-url"?: string;
+    dmn: {
+      clientId?: string;
+      secret?: string;
+      username?: string;
+      password?: string;
+    };
   };
 }
 
