@@ -2,7 +2,12 @@ import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
 import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { FormattedMessage } from "react-intl";
-import { Heading3, Paragraph } from "@gemeente-denhaag/typography";
+import {
+  Heading2,
+  Heading3,
+  Heading4,
+  Paragraph,
+} from "@gemeente-denhaag/typography";
 import { FormField } from "@gemeente-denhaag/form-field";
 import { FormLabel } from "@gemeente-denhaag/form-label";
 import styles from "../../styles/Configuration.module.scss";
@@ -178,6 +183,99 @@ const ProductFeatureConfiguration = ({
                   {...register("properties.product-type-api-url")}
                   id="product-type-api-url"
                   type="url"
+                />
+              </FormField>
+              <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+                <Heading4>
+                  <FormattedMessage
+                    id={"features.openproduct.dmn"}
+                  ></FormattedMessage>
+                </Heading4>
+              </FieldsetLegend>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"dmn.clientId"}>
+                    <FormattedMessage
+                      id={"features.openproduct.dmn.clientId"}
+                    />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.openproduct.dmn.clientId.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.dmn.clientId")}
+                  id="dmn.clientId"
+                  type="text"
+                />
+              </FormField>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"dmn.secret"}>
+                    <FormattedMessage id={"features.openproduct.dmn.secret"} />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.openproduct.dmn.secret.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.dmn.secret")}
+                  id="dmn.secret"
+                  type="password"
+                />
+              </FormField>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"dmn.username"}>
+                    <FormattedMessage
+                      id={"features.openproduct.dmn.username"}
+                    />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.openproduct.dmn.username.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.dmn.username")}
+                  id="dmn.username"
+                  type="text"
+                />
+              </FormField>
+              <FormField
+                label={
+                  <FormLabel htmlFor={"dmn.password"}>
+                    <FormattedMessage
+                      id={"features.openproduct.dmn.password"}
+                    />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.openproduct.dmn.password.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <TextInput
+                  {...register("properties.dmn.password")}
+                  id="dmn.password"
+                  type="password"
                 />
               </FormField>
             </Fragment>

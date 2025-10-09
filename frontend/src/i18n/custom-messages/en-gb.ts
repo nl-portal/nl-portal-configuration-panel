@@ -18,27 +18,34 @@ import { DEFAULT_LOCALES, Messages } from "@nl-portal/nl-portal-localization";
 
 export const EN_GB_MESSAGES: Messages = {
   [DEFAULT_LOCALES.ENGLISH]: {
+    // i18n.language.*
     "i18n.language.en-GB": "English",
     "i18n.language.nl-NL": "Dutch",
+    // action.*
     "action.save": "Save",
     "action.cancel": "Cancel",
     "action.back": "Back",
     "action.delete": "Delete",
     "action.reset": "Reset",
+    // api.*
     "api.error": "Something went wrong. Please try again later.",
     "api.save.success": "Changes were successfully saved.",
     "api.upload.success": "Uploading succeeded.",
     "api.upload.error": "Something went wrong while uploading.",
+    // configuration.*
     "configuration.title": "NL Portal Configuration",
     "configuration.subtitle":
       "This is where you can configure the various features of NL Portal.",
     "configuration.configure": "Configure",
     "configuration.features": "Features",
     "configuration.theme": "Theme Configuration",
+    // features.config.*
     "features.config.loading-error":
       "Failed to load {featureId} configuration.",
+    // features.feature.*
     "features.feature.enabled.true": "Enabled",
     "features.feature.enabled.false": "Disabled",
+    // theme.logo.*
     "theme.logo": "Theme Logo",
     "theme.logo.existing-logos": "Existing Theme Logo",
     "theme.logo.existing-logos.description":
@@ -52,6 +59,7 @@ export const EN_GB_MESSAGES: Messages = {
     "theme.logo.select-file": "Select File",
     "theme.logo.no-existing-logos":
       "No logo found for current NL Portal application",
+    // theme.style.*
     "theme.style": "Theme Style",
     "theme.style.add-theme-style.label": "Add Theme Style",
     "theme.style.add-theme-style.description":
@@ -65,11 +73,13 @@ export const EN_GB_MESSAGES: Messages = {
       "Define your styles or override style tokens. <linkUrl>Click here</linkUrl> to see a list of all available NLDS tokens.",
     "theme.style.no-existing-styles":
       "No style found for current NL Portal application",
+    // features.berichten.*
     "features.berichten": "Messages",
     "features.berichten.configuration": "Configuration",
     "features.berichten.bericht-object-type-url": "Message Objecttype Url:",
     "features.berichten.bericht-object-type-url.description":
       "A url towards the Message object type in Objecttypen API",
+    // features.openklant2.*
     "features.openklant2": "OpenKlant 2",
     "features.openklant2.configuration": "Module configuration",
     "features.openklant2.klantinteracties-api-url": "Klantinteracties Api Url",
@@ -81,6 +91,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.openklant2.token": "OpenKlant 2 Token",
     "features.openklant2.token.description":
       "The token that should be used for authenticating requests to Objects API",
+    // features.haalcentraal-brp.*
     "features.haalcentraal-brp": "HaalCentraal BRP",
     "features.haalcentraal-brp.configuration": "Module configuration",
     "features.haalcentraal-brp.url": "HaalCentraal BRP Api Url",
@@ -89,6 +100,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.haalcentraal-brp.api-key": "HaalCentraal BRP Api Key",
     "features.haalcentraal-brp.api-key.description":
       "The secret that should be used for authenticating requests",
+    // features.haalcentraal-hr.*
     "features.haalcentraal-hr": "HaalCentraal HR",
     "features.haalcentraal-hr.configuration": "Module configuration",
     "features.haalcentraal-hr.url": "HaalCentraal HR Api Url",
@@ -97,6 +109,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.haalcentraal-hr.api-key": "HaalCentraal HR Api Key",
     "features.haalcentraal-hr.api-key.description":
       "The secret that should be used for authenticating requests",
+    // features.haalcentraal2.*
     "features.haalcentraal2": "HaalCentraal 2",
     "features.haalcentraal2.configuration": "Module configuration",
     "features.haalcentraal2.brp-api-url": "HaalCentraal 2 BRP Api Url",
@@ -109,11 +122,13 @@ export const EN_GB_MESSAGES: Messages = {
     "features.haalcentraal2.api-key": "HaalCentraal 2 Api Key",
     "features.haalcentraal2.api-key.description":
       "The secret that should be used for authenticating requests",
+    // features.taak.*
     "features.taak": "Task",
     "features.taak.configuration": "Configuration",
     "features.taak.object-type-url": "External User Task Object Type Url",
     "features.taak.object-type-url.description":
       "The url pointing towards the external user task object type in Objecttypen API",
+    // features.objectsapi.*
     "features.objectsapi": "Objects API",
     "features.objectsapi.configuration": "Configuration",
     "features.objectsapi.url": "Objects Api Url",
@@ -121,6 +136,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.objectsapi.token": "Objects Api Token",
     "features.objectsapi.token.description":
       "The token that should be used for authenticating requests to Objects API",
+    // features.catalogiapi.*
     "features.catalogiapi": "Catalogi API",
     "features.catalogiapi.configuration": "Configuration",
     "features.catalogiapi.url": "Catalogi API Url",
@@ -131,6 +147,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.catalogiapi.secret": "Catalogi Api Secret",
     "features.catalogiapi.secret.description":
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
+    // features.besluitenapi.*
     "features.besluitenapi": "Besluiten API",
     "features.besluitenapi.configuration": "Configuration",
     "features.besluitenapi.url": "Besluiten API Url",
@@ -142,6 +159,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.besluitenapi.secret": "Besluiten API Secret",
     "features.besluitenapi.secret.description":
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
+    // features.product.*
     "features.product": "Product",
     "features.product.configuration": "Configuration",
     "features.product.product-type-url": "Product type Url",
@@ -159,6 +177,7 @@ export const EN_GB_MESSAGES: Messages = {
       "Product consumable object type Url",
     "features.product.product-verbruiks-object-type-url.description":
       "The Url towards the Product consumable object type in Objecttypen API",
+    // features.openproduct.*
     "features.openproduct": "OpenProduct API",
     "features.openproduct.configuration": "Module configuration",
     "features.openproduct.token": "OpenProduct Token",
@@ -171,6 +190,21 @@ export const EN_GB_MESSAGES: Messages = {
       "OpenProduct product type API Url",
     "features.openproduct.product-type-api-url.description":
       "The base url of the OpenProduct product type API",
+    // features.openproduct.dmn.*
+    "features.openproduct.dmn": "DMN",
+    "features.openproduct.dmn.clientId": "Client Id",
+    "features.openproduct.dmn.clientId.description":
+      "The client id that should be used for authenticating requests (in case of Access Token Authentication)",
+    "features.openproduct.dmn.secret": "Secret",
+    "features.openproduct.dmn.secret.description":
+      "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
+    "features.openproduct.dmn.username": "Username",
+    "features.openproduct.dmn.username.description":
+      "The username that should be used for authenticating request (in case of Basic Authentication)",
+    "features.openproduct.dmn.password": "Password",
+    "features.openproduct.dmn.password.description":
+      "The password that should be used for authenticating request (in case of Basic Authentication)",
+    // features.dmn.*
     "features.dmn": "DMN",
     "features.dmn.configuration": "Module Configuration",
     "features.dmn.url": "Camunda DMN API base Url",
@@ -188,6 +222,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.dmn.password": "Password",
     "features.dmn.password.description":
       "The password that should be used for authenticating request (in case of Basic Authentication)",
+    // features.prefill.*
     "features.prefill": "Prefill",
     "features.prefill.configuration": "Module Configuration",
     "features.prefill.type-url": "Prefill objecttype Url",
@@ -196,6 +231,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.prefill.prefill-sha-version": "Prefill object SHA hash version",
     "features.prefill.prefill-sha-version.description":
       "The SHA hash version that is used to hash the prefill object",
+    // features.zakenapi.*
     "features.zakenapi": "Zaken API",
     "features.zakenapi.configuration": "Configuration",
     "features.zakenapi.url": "Zaken API Url",
@@ -206,6 +242,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.zakenapi.secret": "Zaken Api Secret",
     "features.zakenapi.secret.description":
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
+    // features.zakenapi.zaak-documenten-config.*
     "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist":
       "Case information object confidentiality whitelist",
     "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist.description":
@@ -217,6 +254,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.zakenapi.zaak-types-ids-excluded": "Exclude zaaktype uuids",
     "features.zakenapi.zaak-types-ids-excluded.description":
       "Exclude zaaktype uuid's as extra filter on the get zaken query.",
+    // features.documentenapis.*
     "features.documentenapis": "Documenten APIs",
     "features.documentenapis.configuration": "Configuration",
     "features.documentenapis.configurations.add-another":
@@ -244,6 +282,7 @@ export const EN_GB_MESSAGES: Messages = {
       "Default Documenten API configuration",
     "features.documentenapis.default-document-api.description":
       "The configuration that should be used by default",
+    // features.payment.ogone.*
     "features.payment-ogone": "Ogone Payment",
     "features.payment.ogone.configuration": "Configuration",
     "features.payment.ogone.profile": "Profile",
@@ -282,6 +321,7 @@ export const EN_GB_MESSAGES: Messages = {
       "Add another payment profile",
     "features.payment.ogone.profiles.profile-name":
       "example-ogone-payment-profile",
+    // features.payment.direct.*
     "features.payment-direct": "Direct Payment",
     "features.payment.direct.configuration": "Configuration",
     "features.payment.direct.profile": "Profile",
@@ -326,6 +366,7 @@ export const EN_GB_MESSAGES: Messages = {
       "Add another payment profile",
     "features.payment.direct.profiles.profile-name":
       "example-direct-payment-profile",
+    // features.virusscan.*
     "features.virusscan-clamav": "Clam AV Virus Scanner",
     "features.virusscan.clamav.hostname": "Hostname",
     "features.virusscan.clamav.hostname.description":
@@ -333,6 +374,7 @@ export const EN_GB_MESSAGES: Messages = {
     "features.virusscan.clamav.port": "Port",
     "features.virusscan.clamav.port.description":
       "The port the ClamAV service listens on",
+    // zaakdocument.vertrouwelijkheidsaanduiding.*
     "zaakdocument.vertrouwelijkheidsaanduiding.openbaar": "Public",
     "zaakdocument.vertrouwelijkheidsaanduiding.beperkt_openbaar":
       "Restricted public",
@@ -343,6 +385,7 @@ export const EN_GB_MESSAGES: Messages = {
     "zaakdocument.vertrouwelijkheidsaanduiding.confidentieel": "Confidential",
     "zaakdocument.vertrouwelijkheidsaanduiding.geheim": "Secret",
     "zaakdocument.vertrouwelijkheidsaanduiding.zeer_geheim": "Very secret",
+    // zaakdocument.status.*
     "zaakdocument.status.ter_vaststelling": "In editing",
     "zaakdocument.status.in_bewerking": "To be confirmed",
     "zaakdocument.status.definitief": "Definitive",
