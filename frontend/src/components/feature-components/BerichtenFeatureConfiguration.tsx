@@ -15,11 +15,10 @@
  */
 import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
-import { FieldsetLegend, Fieldset } from "@gemeente-denhaag/form-fieldset";
-import { Heading3, Paragraph } from "@gemeente-denhaag/typography";
+import { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { Heading4, Paragraph } from "@gemeente-denhaag/typography";
 import { FormattedMessage } from "react-intl";
 import { FormField } from "@gemeente-denhaag/form-field";
-import { RadioButton } from "@gemeente-denhaag/radio-button";
 import { FormLabel } from "@gemeente-denhaag/form-label";
 import { ConfigurationForm } from "../ConfigurationForm.tsx";
 import { useForm } from "react-hook-form";
@@ -27,7 +26,6 @@ import styles from "../../styles/Configuration.module.scss";
 import { TextInput } from "@gemeente-denhaag/text-input";
 
 interface BerichtenConfiguration {
-  enabled?: string;
   properties?: {
     "bericht-object-type-url"?: string;
   };
@@ -46,13 +44,12 @@ const BerichtenFeatureConfiguration = ({
     useState<BerichtenConfiguration>(prefillConfiguration || {});
   const {
     register,
-    watch,
     reset,
     formState,
     handleSubmit,
     getValues: getFormValue,
   } = useForm<BerichtenConfiguration>({
-    defaultValues: { ...prefillConfiguration, enabled: "false" },
+    defaultValues: { ...prefillConfiguration },
   });
 
   useEffect(() => {
@@ -80,76 +77,34 @@ const BerichtenFeatureConfiguration = ({
       children={
         <Fragment>
           <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-            <Heading3>
+            <Heading4>
               <FormattedMessage
-                id={"features.berichten.configuration"}
+                id={"features.feature.configuration.properties"}
               ></FormattedMessage>
-            </Heading3>
+            </Heading4>
           </FieldsetLegend>
-          <Fieldset role={"radiogroup"}>
-            <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
-              label={
-                <FormLabel htmlFor={"enabled.true"}>
-                  <FormattedMessage
-                    id={"features.feature.enabled.true"}
-                  ></FormattedMessage>
-                </FormLabel>
-              }
-            >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.true"}
-                value={"true"}
-              />
-            </FormField>
-            <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
-              label={
-                <FormLabel htmlFor={"enabled.false"}>
-                  <FormattedMessage
-                    id={"features.feature.enabled.false"}
-                  ></FormattedMessage>
-                </FormLabel>
-              }
-            >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.false"}
-                value={"false"}
-              />
-            </FormField>
-          </Fieldset>
-          {watch("enabled") === "true" && (
-            <FormField
-              label={
-                <FormLabel htmlFor={"bericht-object-type-url"}>
-                  <FormattedMessage
-                    id={"features.berichten.bericht-object-type-url"}
-                  />
-                </FormLabel>
-              }
-              description={
-                <Paragraph>
-                  <FormattedMessage
-                    id={
-                      "features.berichten.bericht-object-type-url.description"
-                    }
-                  />
-                </Paragraph>
-              }
-            >
-              <TextInput
-                {...register("properties.bericht-object-type-url")}
-                id="bericht-object-type-url"
-                type="url"
-              />
-            </FormField>
-          )}
+          <FormField
+            label={
+              <FormLabel htmlFor={"bericht-object-type-url"}>
+                <FormattedMessage
+                  id={"features.berichten.bericht-object-type-url"}
+                />
+              </FormLabel>
+            }
+            description={
+              <Paragraph>
+                <FormattedMessage
+                  id={"features.berichten.bericht-object-type-url.description"}
+                />
+              </Paragraph>
+            }
+          >
+            <TextInput
+              {...register("properties.bericht-object-type-url")}
+              id="bericht-object-type-url"
+              type="url"
+            />
+          </FormField>
         </Fragment>
       }
     ></ConfigurationForm>

@@ -18,6 +18,7 @@ package nl.nlportal.configurationpanel.service
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
+import nl.nlportal.configurationpanel.event.FeatureToggledEvent
 import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.ApplicationEventPublisher
@@ -50,6 +51,34 @@ class ConfigurationPropertiesService(
         configRepository
             .findByApplicationAndPropertyKeyStartsWith(application, featureKey)
             ?.apply { configRepository.deleteAll(this) }
+    }
+
+    fun getFeatureToggle(
+        application: String,
+        featureKey: String,
+    ): ConfigurationProperty? = configRepository.findByApplicationAndPropertyKey(application, "$featureKey.enabled")
+
+    @Transactional
+    fun setFeatureToggle(
+        application: String,
+        featureKey: String,
+        enabled: Boolean,
+    ): ConfigurationProperty? {
+        val existing = configRepository.findByApplicationAndPropertyKey(application, "$featureKey.enabled")
+
+        val payload =
+            existing?.copy(propertyValue = enabled.toString())
+                ?: ConfigurationProperty(
+                    application = application,
+                    propertyKey = "$featureKey.enabled",
+                    propertyValue = enabled.toString(),
+                )
+
+        return configRepository
+            .save(payload)
+            .also {
+                applicationEventPublisher.publishEvent(FeatureToggledEvent(listOf(it)))
+            }
     }
 
     @Transactional

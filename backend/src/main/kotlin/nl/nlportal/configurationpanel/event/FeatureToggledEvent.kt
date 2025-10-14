@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-export default interface FeatureConfigurationProps {
-  onChange?: (featureConfiguration: object) => void;
-  onToggle: (enabled: boolean) => void;
-  onValid?: (isValid: boolean) => void;
-  onSubmit?: () => void;
-  prefillConfiguration?: object;
-}
+package nl.nlportal.configurationpanel.event
+
+import nl.nlportal.configurationpanel.domain.ConfigurationProperty
+
+data class FeatureToggledEvent(
+    val configurationProperties: List<ConfigurationProperty>,
+)

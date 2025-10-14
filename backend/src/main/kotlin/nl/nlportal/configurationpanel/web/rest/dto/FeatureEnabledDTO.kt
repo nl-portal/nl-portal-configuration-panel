@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-export default interface FeatureConfigurationProps {
-  onChange?: (featureConfiguration: object) => void;
-  onToggle: (enabled: boolean) => void;
-  onValid?: (isValid: boolean) => void;
-  onSubmit?: () => void;
-  prefillConfiguration?: object;
-}
+package nl.nlportal.configurationpanel.web.rest.dto
+
+data class FeatureEnabledDTO(
+    val enabled: Boolean = false,
+)

@@ -59,6 +59,11 @@
     padding-bottom: .25em;
   }
 
+  &__toggle {
+    width: 3rem;
+    height: var(--utrecht-paragraph-lead-line-height);
+  }
+
   &__select {
     display: flex;
     inline-size: 100%;

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
-import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { FormattedMessage } from "react-intl";
 import { Heading3, Paragraph } from "@gemeente-denhaag/typography";
 import { FormField } from "@gemeente-denhaag/form-field";
@@ -9,10 +9,8 @@ import styles from "../../styles/Configuration.module.scss";
 import { TextInput } from "@gemeente-denhaag/text-input";
 import { useForm } from "react-hook-form";
 import ConfigurationForm from "../ConfigurationForm.tsx";
-import { RadioButton } from "@gemeente-denhaag/radio-button";
 
 interface ProductConfiguration {
-  enabled?: string;
   properties?: {
     "product-type-url"?: string;
     "product-instantie-type-url"?: string;
@@ -34,13 +32,12 @@ const ProductFeatureConfiguration = ({
     useState<ProductConfiguration>(prefillConfiguration || {});
   const {
     register,
-    watch,
     reset,
     formState,
     handleSubmit,
     getValues: getFormValue,
   } = useForm<ProductConfiguration>({
-    defaultValues: { ...prefillConfiguration, enabled: "false" },
+    defaultValues: { ...prefillConfiguration },
   });
 
   useEffect(() => {
@@ -70,146 +67,102 @@ const ProductFeatureConfiguration = ({
           <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
             <Heading3>
               <FormattedMessage
-                id={"features.product.configuration"}
+                id={"features.feature.configuration.properties"}
               ></FormattedMessage>
             </Heading3>
           </FieldsetLegend>
-          <Fieldset role={"radiogroup"}>
+          <Fragment>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.true"}>
-                  <FormattedMessage
-                    id={"features.feature.enabled.true"}
-                  ></FormattedMessage>
+                <FormLabel htmlFor={"product-type-url"}>
+                  <FormattedMessage id={"features.product.product-type-url"} />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.product.product-type-url.description"}
+                  />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.true"}
-                value={"true"}
+              <TextInput
+                {...register("properties.product-type-url")}
+                id="product-type-url"
+                type="url"
               />
             </FormField>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.false"}>
+                <FormLabel htmlFor={"product-instantie-type-url"}>
                   <FormattedMessage
-                    id={"features.feature.enabled.false"}
-                  ></FormattedMessage>
+                    id={"features.product.product-instantie-type-url"}
+                  />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={
+                      "features.product.product-instantie-type-url.description"
+                    }
+                  />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.false"}
-                value={"false"}
+              <TextInput
+                {...register("properties.product-instantie-type-url")}
+                id="product-instantie-type-url"
+                type="url"
               />
             </FormField>
-          </Fieldset>
-          {watch("enabled") === "true" && (
-            <Fragment>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"product-type-url"}>
-                    <FormattedMessage
-                      id={"features.product.product-type-url"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.product.product-type-url.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.product-type-url")}
-                  id="product-type-url"
-                  type="url"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"product-instantie-type-url"}>
-                    <FormattedMessage
-                      id={"features.product.product-instantie-type-url"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.product.product-instantie-type-url.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.product-instantie-type-url")}
-                  id="product-instantie-type-url"
-                  type="url"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"product-details-type-url"}>
-                    <FormattedMessage
-                      id={"features.product.product-details-type-url"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.product.product-details-type-url.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.product-details-type-url")}
-                  id="product-details-type-url"
-                  type="url"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"product-verbruiks-object-type-url"}>
-                    <FormattedMessage
-                      id={"features.product.product-verbruiks-object-type-url"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.product.product-verbruiks-object-type-url.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.product-verbruiks-object-type-url")}
-                  id="product-verbruiks-object-type-url"
-                  type="url"
-                />
-              </FormField>
-            </Fragment>
-          )}
+            <FormField
+              label={
+                <FormLabel htmlFor={"product-details-type-url"}>
+                  <FormattedMessage
+                    id={"features.product.product-details-type-url"}
+                  />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.product.product-details-type-url.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.product-details-type-url")}
+                id="product-details-type-url"
+                type="url"
+              />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"product-verbruiks-object-type-url"}>
+                  <FormattedMessage
+                    id={"features.product.product-verbruiks-object-type-url"}
+                  />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={
+                      "features.product.product-verbruiks-object-type-url.description"
+                    }
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.product-verbruiks-object-type-url")}
+                id="product-verbruiks-object-type-url"
+                type="url"
+              />
+            </FormField>
+          </Fragment>
         </Fragment>
       }
     ></ConfigurationForm>

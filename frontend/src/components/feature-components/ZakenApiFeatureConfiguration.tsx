@@ -1,20 +1,18 @@
 import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
-import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { FormattedMessage } from "react-intl";
 import { Heading3, Paragraph } from "@gemeente-denhaag/typography";
 import { FormField } from "@gemeente-denhaag/form-field";
 import { FormLabel } from "@gemeente-denhaag/form-label";
 import styles from "../../styles/Configuration.module.scss";
 import { TextInput } from "@gemeente-denhaag/text-input";
-import { RadioButton } from "@gemeente-denhaag/radio-button";
 import ConfigurationForm from "../ConfigurationForm.tsx";
 import { useForm } from "react-hook-form";
 import PasswordInput from "../PasswordInput.tsx";
 import { Select, SelectOption } from "@utrecht/component-library-react";
 
 interface ZakenApiConfiguration {
-  enabled?: string;
   properties?: {
     url?: string;
     "client-id"?: string;
@@ -62,14 +60,12 @@ const ZakenApiFeatureConfiguration = ({
   );
   const {
     register,
-    watch,
     reset,
     formState,
     handleSubmit,
     getValues: getFormValue,
   } = useForm<ZakenApiConfiguration>({
     defaultValues: {
-      enabled: "false",
       properties: {
         "zaak-documenten-config": {
           "status-whitelist": [],
@@ -109,207 +105,156 @@ const ZakenApiFeatureConfiguration = ({
           <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
             <Heading3>
               <FormattedMessage
-                id={"features.zakenapi.configuration"}
+                id={"features.feature.configuration.properties"}
               ></FormattedMessage>
             </Heading3>
           </FieldsetLegend>
-          <Fieldset role={"radiogroup"}>
+          <Fragment>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.true"}>
-                  <FormattedMessage
-                    id={"features.feature.enabled.true"}
-                  ></FormattedMessage>
+                <FormLabel htmlFor={"url"}>
+                  <FormattedMessage id={"features.zakenapi.url"} />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage id={"features.zakenapi.url.description"} />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.true"}
-                value={"true"}
+              <TextInput {...register("properties.url")} id="url" type="url" />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"client-id"}>
+                  <FormattedMessage id={"features.zakenapi.client-id"} />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.zakenapi.client-id.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput {...register("properties.client-id")} id="client-id" />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"secret"}>
+                  <FormattedMessage id={"features.zakenapi.secret"} />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.zakenapi.secret.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <PasswordInput {...register("properties.secret")} id="secret" />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"zaak-types-ids-excluded"}>
+                  <FormattedMessage
+                    id={"features.zakenapi.zaak-types-ids-excluded"}
+                  />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.zakenapi.zaak-types-ids-excluded.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.zaak-types-ids-excluded")}
+                id="zaak-types-ids-excluded"
               />
             </FormField>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.false"}>
+                <FormLabel htmlFor={"vertrouwelijkheidsaanduiding-whitelist"}>
                   <FormattedMessage
-                    id={"features.feature.enabled.false"}
-                  ></FormattedMessage>
+                    id={
+                      "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist"
+                    }
+                  />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={
+                      "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist.description"
+                    }
+                  />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.false"}
-                value={"false"}
-              />
+              <Select
+                className={styles["form-field__select"]}
+                {...register(
+                  "properties.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist",
+                )}
+                id="vertrouwelijkheidsaanduiding-whitelist"
+                multiple
+              >
+                {documentVertrouwelijkheidsaanduidingen.map((aanduiding) => (
+                  <SelectOption key={aanduiding} value={aanduiding}>
+                    <FormattedMessage
+                      id={
+                        "zaakdocument.vertrouwelijkheidsaanduiding." +
+                        aanduiding
+                      }
+                    ></FormattedMessage>
+                  </SelectOption>
+                ))}
+              </Select>
             </FormField>
-          </Fieldset>
-          {watch("enabled") === "true" && (
-            <Fragment>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"url"}>
-                    <FormattedMessage id={"features.zakenapi.url"} />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.zakenapi.url.description"}
-                    />
-                  </Paragraph>
-                }
+            <FormField
+              label={
+                <FormLabel htmlFor={"status-whitelist"}>
+                  <FormattedMessage
+                    id={
+                      "features.zakenapi.zaak-documenten-config.status-whitelist"
+                    }
+                  />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={
+                      "features.zakenapi.zaak-documenten-config.status-whitelist.description"
+                    }
+                  />
+                </Paragraph>
+              }
+            >
+              <Select
+                className={styles["form-field__select"]}
+                {...register(
+                  "properties.zaak-documenten-config.status-whitelist",
+                )}
+                id="status-whitelist"
+                multiple
               >
-                <TextInput
-                  {...register("properties.url")}
-                  id="url"
-                  type="url"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"client-id"}>
-                    <FormattedMessage id={"features.zakenapi.client-id"} />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
+                {documentStatussen.map((status) => (
+                  <SelectOption key={status} value={status}>
                     <FormattedMessage
-                      id={"features.zakenapi.client-id.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.client-id")}
-                  id="client-id"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"secret"}>
-                    <FormattedMessage id={"features.zakenapi.secret"} />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.zakenapi.secret.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <PasswordInput {...register("properties.secret")} id="secret" />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"zaak-types-ids-excluded"}>
-                    <FormattedMessage
-                      id={"features.zakenapi.zaak-types-ids-excluded"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.zakenapi.zaak-types-ids-excluded.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.zaak-types-ids-excluded")}
-                  id="zaak-types-ids-excluded"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"vertrouwelijkheidsaanduiding-whitelist"}>
-                    <FormattedMessage
-                      id={
-                        "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist"
-                      }
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.zakenapi.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <Select
-                  className={styles["form-field__select"]}
-                  {...register(
-                    "properties.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist",
-                  )}
-                  id="vertrouwelijkheidsaanduiding-whitelist"
-                  multiple
-                >
-                  {documentVertrouwelijkheidsaanduidingen.map((aanduiding) => (
-                    <SelectOption key={aanduiding} value={aanduiding}>
-                      <FormattedMessage
-                        id={
-                          "zaakdocument.vertrouwelijkheidsaanduiding." +
-                          aanduiding
-                        }
-                      ></FormattedMessage>
-                    </SelectOption>
-                  ))}
-                </Select>
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"status-whitelist"}>
-                    <FormattedMessage
-                      id={
-                        "features.zakenapi.zaak-documenten-config.status-whitelist"
-                      }
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.zakenapi.zaak-documenten-config.status-whitelist.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <Select
-                  className={styles["form-field__select"]}
-                  {...register(
-                    "properties.zaak-documenten-config.status-whitelist",
-                  )}
-                  id="status-whitelist"
-                  multiple
-                >
-                  {documentStatussen.map((status) => (
-                    <SelectOption key={status} value={status}>
-                      <FormattedMessage
-                        id={"zaakdocument.status." + status}
-                      ></FormattedMessage>
-                    </SelectOption>
-                  ))}
-                </Select>
-              </FormField>
-            </Fragment>
-          )}
+                      id={"zaakdocument.status." + status}
+                    ></FormattedMessage>
+                  </SelectOption>
+                ))}
+              </Select>
+            </FormField>
+          </Fragment>
         </Fragment>
       }
     ></ConfigurationForm>

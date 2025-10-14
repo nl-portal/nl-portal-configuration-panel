@@ -65,7 +65,6 @@ const useConfiguration = (props: UseConfigurationProps) => {
         body: JSON.stringify(configurations),
       },
     );
-
     return await response.json();
   };
   const deleteConfigurations = async (featurePrefix: string): Promise<void> => {

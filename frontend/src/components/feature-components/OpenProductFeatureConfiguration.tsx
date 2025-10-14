@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
-import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { FormattedMessage } from "react-intl";
 import { Heading3, Heading4, Paragraph } from "@gemeente-denhaag/typography";
 import { FormField } from "@gemeente-denhaag/form-field";
@@ -9,10 +9,8 @@ import styles from "../../styles/Configuration.module.scss";
 import { TextInput } from "@gemeente-denhaag/text-input";
 import { useForm } from "react-hook-form";
 import ConfigurationForm from "../ConfigurationForm.tsx";
-import { RadioButton } from "@gemeente-denhaag/radio-button";
 
 interface OpenProductConfiguration {
-  enabled?: string;
   properties?: {
     token?: string;
     "product-api-url"?: string;
@@ -40,13 +38,12 @@ const ProductFeatureConfiguration = ({
     useState<OpenProductConfiguration>(prefillConfiguration || {});
   const {
     register,
-    watch,
     reset,
     formState,
     handleSubmit,
     getValues: getFormValue,
   } = useForm<OpenProductConfiguration>({
-    defaultValues: { ...prefillConfiguration, enabled: "false" },
+    defaultValues: { ...prefillConfiguration },
   });
 
   useEffect(() => {
@@ -76,211 +73,163 @@ const ProductFeatureConfiguration = ({
           <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
             <Heading3>
               <FormattedMessage
-                id={"features.openproduct.configuration"}
+                id={"features.feature.configuration.properties"}
               ></FormattedMessage>
             </Heading3>
           </FieldsetLegend>
-          <Fieldset role={"radiogroup"}>
+          <Fragment>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.true"}>
-                  <FormattedMessage
-                    id={"features.feature.enabled.true"}
-                  ></FormattedMessage>
+                <FormLabel htmlFor={"product-type-url"}>
+                  <FormattedMessage id={"features.openproduct.token"} />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.openproduct.token.description"}
+                  />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.true"}
-                value={"true"}
+              <TextInput
+                {...register("properties.token")}
+                id="token"
+                type="text"
               />
             </FormField>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.false"}>
+                <FormLabel htmlFor={"product-api-url"}>
                   <FormattedMessage
-                    id={"features.feature.enabled.false"}
-                  ></FormattedMessage>
+                    id={"features.openproduct.product-api-url"}
+                  />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.openproduct.product-api-url.description"}
+                  />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.false"}
-                value={"false"}
+              <TextInput
+                {...register("properties.product-api-url")}
+                id="product-api-url"
+                type="url"
               />
             </FormField>
-          </Fieldset>
-          {watch("enabled") === "true" && (
-            <Fragment>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"product-type-url"}>
-                    <FormattedMessage id={"features.openproduct.token"} />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.openproduct.token.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.token")}
-                  id="token"
-                  type="text"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"product-api-url"}>
-                    <FormattedMessage
-                      id={"features.openproduct.product-api-url"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.openproduct.product-api-url.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.product-api-url")}
-                  id="product-api-url"
-                  type="url"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"product-type-api-url"}>
-                    <FormattedMessage
-                      id={"features.openproduct.product-type-api-url"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.openproduct.product-type-api-url.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.product-type-api-url")}
-                  id="product-type-api-url"
-                  type="url"
-                />
-              </FormField>
-              <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
-                <Heading4>
+            <FormField
+              label={
+                <FormLabel htmlFor={"product-type-api-url"}>
                   <FormattedMessage
-                    id={"features.openproduct.dmn"}
-                  ></FormattedMessage>
-                </Heading4>
-              </FieldsetLegend>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"dmn.clientId"}>
-                    <FormattedMessage
-                      id={"features.openproduct.dmn.clientId"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.openproduct.dmn.clientId.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.dmn.clientId")}
-                  id="dmn.clientId"
-                  type="text"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"dmn.secret"}>
-                    <FormattedMessage id={"features.openproduct.dmn.secret"} />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.openproduct.dmn.secret.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.dmn.secret")}
-                  id="dmn.secret"
-                  type="password"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"dmn.username"}>
-                    <FormattedMessage
-                      id={"features.openproduct.dmn.username"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.openproduct.dmn.username.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.dmn.username")}
-                  id="dmn.username"
-                  type="text"
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"dmn.password"}>
-                    <FormattedMessage
-                      id={"features.openproduct.dmn.password"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.openproduct.dmn.password.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.dmn.password")}
-                  id="dmn.password"
-                  type="password"
-                />
-              </FormField>
-            </Fragment>
-          )}
+                    id={"features.openproduct.product-type-api-url"}
+                  />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.openproduct.product-type-api-url.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.product-type-api-url")}
+                id="product-type-api-url"
+                type="url"
+              />
+            </FormField>
+            <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+              <Heading4>
+                <FormattedMessage
+                  id={"features.openproduct.dmn"}
+                ></FormattedMessage>
+              </Heading4>
+            </FieldsetLegend>
+            <FormField
+              label={
+                <FormLabel htmlFor={"dmn.clientId"}>
+                  <FormattedMessage id={"features.openproduct.dmn.clientId"} />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.openproduct.dmn.clientId.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.dmn.clientId")}
+                id="dmn.clientId"
+                type="text"
+              />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"dmn.secret"}>
+                  <FormattedMessage id={"features.openproduct.dmn.secret"} />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.openproduct.dmn.secret.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.dmn.secret")}
+                id="dmn.secret"
+                type="password"
+              />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"dmn.username"}>
+                  <FormattedMessage id={"features.openproduct.dmn.username"} />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.openproduct.dmn.username.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.dmn.username")}
+                id="dmn.username"
+                type="text"
+              />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"dmn.password"}>
+                  <FormattedMessage id={"features.openproduct.dmn.password"} />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.openproduct.dmn.password.description"}
+                  />
+                </Paragraph>
+              }
+            >
+              <TextInput
+                {...register("properties.dmn.password")}
+                id="dmn.password"
+                type="password"
+              />
+            </FormField>
+          </Fragment>
         </Fragment>
       }
     ></ConfigurationForm>

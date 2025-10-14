@@ -42,9 +42,11 @@ export const NL_NL_MESSAGES: Messages = {
     "features.config.loading-error":
       "Het laden van de {featureId} configuratie is mislukt.",
     // features.feature.*
-    "features.feature": "Feature",
-    "features.feature.enabled.true": "Geactiveerd",
-    "features.feature.enabled.false": "Deactiveerd",
+    "features.feature.enabled": "Geactiveerd",
+    "features.feature.enabled.description":
+      "Het in- of uitschakelen van features veroorzaakt een korte herstart van alle NL Portal-instanties die zijn geconfigureerd in de CONFIG_NOTIFY_LIST environment variable.",
+    "features.feature.configuration": "Module configuratie",
+    "features.feature.configuration.properties": "Eigenschappen",
     // theme.logo.*
     "theme.logo": "Themalogo",
     "theme.logo.existing-logos": "Bestaand themalogo",
@@ -75,13 +77,11 @@ export const NL_NL_MESSAGES: Messages = {
       "Geen stijl gevonden voor de huidige NL Portal-toepassing.",
     // features.berichten.*
     "features.berichten": "Berichten",
-    "features.berichten.configuration": "Module configuratie",
     "features.berichten.bericht-object-type-url": "Bericht Objecttype Url:",
     "features.berichten.bericht-object-type-url.description":
       "De url naar het Bericht objecttype binnen Objecttypen API",
     // features.openklant2.*
     "features.openklant2": "OpenKlant 2",
-    "features.openklant2.configuration": "Module configuratie",
     "features.openklant2.klantinteracties-api-url": "Klantinteracties Api Url",
     "features.openklant2.klantinteracties-api-url.description":
       "De base url van de te gebruiken Klantinteracties API",
@@ -93,7 +93,6 @@ export const NL_NL_MESSAGES: Messages = {
       "Het Token om bij de OpenKlant 2 service autoriseren te kunnen",
     // features.haalcentraal-brp.*
     "features.haalcentraal-brp": "HaalCentraal BRP",
-    "features.haalcentraal-brp.configuration": "Module configuratie",
     "features.haalcentraal-brp.url": "HaalCentraal BRP Api Url",
     "features.haalcentraal-brp.url.description":
       "De base url van de te gebruiken HaalCentraal BRP API",
@@ -102,7 +101,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De geheime sleutel die bij de connectie gebruikt zou moeten worden",
     // features.haalcentraal-hr.*
     "features.haalcentraal-hr": "HaalCentraal HR",
-    "features.haalcentraal-hr.configuration": "Module configuratie",
     "features.haalcentraal-hr.url": "HaalCentraal HR Api Url",
     "features.haalcentraal-hr.url.description":
       "De base url van de te gebruiken HaalCentraal BRP API",
@@ -111,7 +109,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De geheime sleutel die bij de connectie gebruikt zou moeten worden",
     // features.haalcentraal2.*
     "features.haalcentraal2": "HaalCentraal 2",
-    "features.haalcentraal2.configuration": "Module configuratie",
     "features.haalcentraal2.brp-api-url": "HaalCentraal 2 BRP Api Url",
     "features.haalcentraal2.brp-api-url.description":
       "De base url van de te gebruiken HaalCentraal 2 BRP API",
@@ -124,7 +121,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De geheime sleutel die bij de connectie gebruikt zou moeten worden",
     // features.taak.*
     "features.taak": "Taak",
-    "features.taak.configuration": "Module configuratie",
     "features.taak.enable": "Geactiveerd",
     "features.taak.enable.description": "Geactiveerd",
     "features.taak.object-type-url": "Externe Klanttaak Objecttype Url",
@@ -132,7 +128,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De url naar het Externe Klanttaak objecttype binnen Objecttypen API",
     // features.objectsapi.*
     "features.objectsapi": "Objecten API",
-    "features.objectsapi.configuration": "Module configuratie",
     "features.objectsapi.url": "Objecten Api Url",
     "features.objectsapi.url.description":
       "De base url van de te gebruiken Objecten API",
@@ -141,7 +136,6 @@ export const NL_NL_MESSAGES: Messages = {
       "Het Token om bij de Objecten API autoriseren te kunnen",
     // features.catalogiapi.*
     "features.catalogiapi": "Catalogi API",
-    "features.catalogiapi.configuration": "Module configuratie",
     "features.catalogiapi.url": "Catalogi API Url",
     "features.catalogiapi.url.description":
       "De base url van de te gebruiken Catalogi API",
@@ -153,7 +147,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De secret die bij de connectie gebruikt zou moeten worden",
     // features.besluitenapi.*
     "features.besluitenapi": "Besluiten API",
-    "features.besluitenapi.configuration": "Module configuratie",
     "features.besluitenapi.url": "Besluiten API Url",
     "features.besluitenapi.url.description":
       "De base url van de te gebruiken Besluiten API",
@@ -165,7 +158,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De secret die bij de connectie gebruikt zou moeten worden",
     // features.product.*
     "features.product": "Product",
-    "features.product.configuration": "Module configuratie",
     "features.product.product-type-url": "Producttype Url",
     "features.product.product-type-url.description":
       "De url naar het Product objecttype binnen Objecttypen API",
@@ -183,7 +175,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De url naar het Product verbruiksobjecttype binnen Objecttypen API",
     // features.openproduct.*
     "features.openproduct": "OpenProduct API",
-    "features.openproduct.configuration": "Module configuratie",
     "features.openproduct.token": "OpenProduct Token",
     "features.openproduct.token.description":
       "Het Token om bij de OpenProduct service the autoriseren",
@@ -210,7 +201,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De wachtwoord die bij de connectie gebruikt zou moeten worden (Basic Authorization)",
     // features.dmn.*
     "features.dmn": "DMN",
-    "features.dmn.configuration": "Module configuratie",
     "features.dmn.url": "Dmn API base Url",
     "features.dmn.url.description":
       "De base url van de te gebruiken Camunda DMN API",
@@ -228,7 +218,6 @@ export const NL_NL_MESSAGES: Messages = {
       "De wachtwoord die bij de connectie gebruikt zou moeten worden (Basic Authorization)",
     // features.prefill.*
     "features.prefill": "Prefill",
-    "features.prefill.configuration": "Module Configuratie",
     "features.prefill.type-url": "Prefill objecttype Url",
     "features.prefill.type-url.description":
       "De url naar het Prefill objecttype binnen Objecttypen API",
