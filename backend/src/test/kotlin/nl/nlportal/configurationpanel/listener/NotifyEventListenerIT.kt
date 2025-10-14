@@ -1,6 +1,7 @@
 package nl.nlportal.configurationpanel.listener
 
 import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
+import nl.nlportal.configurationpanel.event.FeatureToggledEvent
 import nl.nlportal.configurationpanel.notify.client.NlPortalClient
 import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.junit.jupiter.api.Tag
@@ -42,9 +43,23 @@ class NotifyEventListenerIT(
     lateinit var nlPortalClient: NlPortalClient
 
     @Test
-    fun `should notify client to restart on configuration change`() {
+    fun `should notify client to refresh on configuration change`() {
         // Given
         val event = ConfigurationPropertiesChangedEvent(emptyList())
+
+        // When
+        applicationEventPublisher.publishEvent(event)
+        TestTransaction.end()
+
+        // Then
+        verify(notifyService, times(1)).refreshNlPortalClients()
+        verify(nlPortalClient, times(2)).refreshNlPortalClient(any())
+    }
+
+    @Test
+    fun `should notify client to restart on feature toggle`() {
+        // Given
+        val event = FeatureToggledEvent(emptyList())
 
         // When
         applicationEventPublisher.publishEvent(event)
