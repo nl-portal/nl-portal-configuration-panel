@@ -41,8 +41,7 @@ class ConfigurationsResource(
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String,
-    ): List<ConfigurationProperty>? =
-        configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
+    ): List<ConfigurationProperty>? = configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
 
     @GetMapping("/v1/configurations/{application}/features/{featureKey}/enabled")
     fun getFeatureToggleByApplicationAndFeatureKeyOrNull(
