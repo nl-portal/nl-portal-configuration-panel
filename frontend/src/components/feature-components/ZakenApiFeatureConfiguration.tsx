@@ -8,6 +8,7 @@ import { FormLabel } from "@gemeente-denhaag/form-label";
 import styles from "../../styles/Configuration.module.scss";
 import { TextInput } from "@gemeente-denhaag/text-input";
 import { RadioButton } from "@gemeente-denhaag/radio-button";
+import { Checkbox } from "@gemeente-denhaag/checkbox";
 import ConfigurationForm from "../ConfigurationForm.tsx";
 import { useForm } from "react-hook-form";
 import PasswordInput from "../PasswordInput.tsx";
@@ -19,7 +20,7 @@ interface ZakenApiConfiguration {
     url?: string;
     "client-id"?: string;
     secret?: string;
-    "use-nnp-kvk-query-identificators"?: string;
+    "use-nnp-kvk-query-identificators"?: boolean;
     "zaak-types-ids-excluded"?: string[];
     "zaak-documenten-config"?: {
       "vertrouwelijkheidsaanduiding-whitelist"?: Vertrouwelijkheidsaanduiding[];
@@ -220,12 +221,14 @@ const ZakenApiFeatureConfiguration = ({
                 description={
                   <Paragraph>
                     <FormattedMessage
-                      id={"features.zakenapi.use-nnp-kvk-query-identificators.description"}
+                      id={
+                        "features.zakenapi.use-nnp-kvk-query-identificators.description"
+                      }
                     />
                   </Paragraph>
                 }
               >
-                <TextInput
+                <Checkbox
                   {...register("properties.use-nnp-kvk-query-identificators")}
                   id="use-nnp-kvk-query-identificators"
                 />
@@ -295,7 +298,7 @@ const ZakenApiFeatureConfiguration = ({
               </FormField>
               <FormField
                 label={
-                  <FormLabel htmlFor={"status-whitelist"}>
+                  <FormLabel htmlFor={"use-nnp-kvk-query-identificators"}>
                     <FormattedMessage
                       id={
                         "features.zakenapi.zaak-documenten-config.status-whitelist"
