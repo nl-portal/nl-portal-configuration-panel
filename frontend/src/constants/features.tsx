@@ -94,11 +94,11 @@ export const features: FeatureConfiguration[] = [
     featureConfigurationPrefix: "nl-portal.config.product",
     featureComponent: ProductFeatureConfiguration,
   },
-{
+  {
     featureId: "openproduct",
     featureConfigurationPrefix: "nl-portal.config.openproducten",
     featureComponent: OpenProductenFeatureConfiguration,
-},
+  },
   {
     featureId: "dmn",
     featureConfigurationPrefix: "nl-portal.config.dmn",

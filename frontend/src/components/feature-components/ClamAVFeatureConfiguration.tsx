@@ -16,19 +16,17 @@
 
 import { Fragment, useEffect, useState } from "react";
 import FeatureConfigurationProps from "../../interfaces/FeatureConfigurationProps.ts";
-import { Fieldset, FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { FormattedMessage } from "react-intl";
 import { Heading3, Paragraph } from "@gemeente-denhaag/typography";
 import { FormField } from "@gemeente-denhaag/form-field";
 import { FormLabel } from "@gemeente-denhaag/form-label";
 import styles from "../../styles/Configuration.module.scss";
-import { RadioButton } from "@gemeente-denhaag/radio-button";
 import ConfigurationForm from "../ConfigurationForm.tsx";
 import { useForm } from "react-hook-form";
 import { TextInput } from "@gemeente-denhaag/text-input";
 
 interface ClamAVConfiguration {
-  enabled?: string;
   properties?: {
     "host-name": string;
     port: number;
@@ -49,13 +47,11 @@ const ClamAVFeatureConfiguration = ({
   >(prefillConfiguration);
   const {
     register,
-    watch,
     reset,
     handleSubmit,
     getValues: getFormValue,
   } = useForm<ClamAVConfiguration>({
     defaultValues: {
-      enabled: "false",
       properties: {},
       ...prefillConfiguration,
     },
@@ -87,93 +83,51 @@ const ClamAVFeatureConfiguration = ({
           <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
             <Heading3>
               <FormattedMessage
-                id={"features.payment.ogone.configuration"}
+                id={"features.feature.configuration.properties"}
               ></FormattedMessage>
             </Heading3>
           </FieldsetLegend>
-          <Fieldset role={"radiogroup"}>
+          <Fragment>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.true"}>
-                  <FormattedMessage
-                    id={"features.feature.enabled.true"}
-                  ></FormattedMessage>
+                <FormLabel htmlFor={"host-name"}>
+                  <FormattedMessage id={"features.virusscan.clamav.hostname"} />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.virusscan.clamav.hostname.description"}
+                  />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.true"}
-                value={"true"}
+              <TextInput
+                {...register("properties.host-name")}
+                id={"host-name"}
               />
             </FormField>
             <FormField
-              className={styles["form-field__radio-option"]}
-              type="radio"
               label={
-                <FormLabel htmlFor={"enabled.false"}>
-                  <FormattedMessage
-                    id={"features.feature.enabled.false"}
-                  ></FormattedMessage>
+                <FormLabel htmlFor={"port"}>
+                  <FormattedMessage id={"features.virusscan.clamav.port"} />
                 </FormLabel>
               }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={"features.virusscan.clamav.port.description"}
+                  />
+                </Paragraph>
+              }
             >
-              <RadioButton
-                {...register("enabled")}
-                className="utrecht-form-field__input"
-                id={"enabled.false"}
-                value={"false"}
+              <TextInput
+                {...register("properties.port")}
+                id={"port"}
+                type={"number"}
               />
             </FormField>
-          </Fieldset>
-          {watch("enabled") === "true" && (
-            <Fragment>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"host-name"}>
-                    <FormattedMessage
-                      id={"features.virusscan.clamav.hostname"}
-                    />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.virusscan.clamav.hostname.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.host-name")}
-                  id={"host-name"}
-                />
-              </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"port"}>
-                    <FormattedMessage id={"features.virusscan.clamav.port"} />
-                  </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={"features.virusscan.clamav.port.description"}
-                    />
-                  </Paragraph>
-                }
-              >
-                <TextInput
-                  {...register("properties.port")}
-                  id={"port"}
-                  type={"number"}
-                />
-              </FormField>
-            </Fragment>
-          )}
+          </Fragment>
         </Fragment>
       }
     ></ConfigurationForm>

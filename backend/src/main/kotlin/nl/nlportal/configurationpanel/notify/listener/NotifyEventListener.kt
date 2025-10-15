@@ -17,15 +17,21 @@
 package nl.nlportal.configurationpanel.notify.listener
 
 import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
+import nl.nlportal.configurationpanel.event.FeatureToggledEvent
 import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
-class ConfigurationPropertiesChangedEventListener(
+class NotifyEventListener(
     private val notifyService: NotifyService,
 ) {
     @TransactionalEventListener(ConfigurationPropertiesChangedEvent::class, phase = TransactionPhase.AFTER_COMPLETION)
     fun handle(event: ConfigurationPropertiesChangedEvent) {
+        notifyService.refreshNlPortalClients()
+    }
+
+    @TransactionalEventListener(FeatureToggledEvent::class, phase = TransactionPhase.AFTER_COMPLETION)
+    fun handle(event: FeatureToggledEvent) {
         notifyService.restartNlPortalClients()
     }
 }

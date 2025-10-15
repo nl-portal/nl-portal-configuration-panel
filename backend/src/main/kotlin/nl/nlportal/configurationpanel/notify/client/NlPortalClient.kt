@@ -28,6 +28,19 @@ class NlPortalClient {
         restClient
             .post()
             .uri { builder ->
+                builder.path("/actuator/restart").build()
+            }.body(emptyMap<String, String>())
+            .contentType(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .toBodilessEntity()
+    }
+
+    fun refreshNlPortalClient(nlPortalBaseUrl: String) {
+        val restClient = RestClient.create(nlPortalBaseUrl)
+
+        restClient
+            .post()
+            .uri { builder ->
                 builder.path("/actuator/refresh").build()
             }.body(emptyMap<String, String>())
             .contentType(MediaType.APPLICATION_JSON)

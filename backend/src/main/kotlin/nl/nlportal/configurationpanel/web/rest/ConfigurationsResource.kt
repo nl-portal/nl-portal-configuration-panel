@@ -18,6 +18,7 @@ package nl.nlportal.configurationpanel.web.rest
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
+import nl.nlportal.configurationpanel.web.rest.dto.FeatureEnabledDTO
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -41,6 +42,29 @@ class ConfigurationsResource(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String,
     ): List<ConfigurationProperty>? = configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
+
+    @GetMapping("/v1/configurations/{application}/features/{featureKey}/enabled")
+    fun getFeatureToggleByApplicationAndFeatureKeyOrNull(
+        @PathVariable("application") application: String,
+        @PathVariable("featureKey") featureKey: String,
+    ): FeatureEnabledDTO =
+        configService
+            .getFeatureToggle(application, featureKey)
+            .let {
+                FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
+            }
+
+    @PostMapping("/v1/configurations/{application}/features/{featureKey}")
+    fun saveFeatureToggleByApplicationAndFeatureKeyOrNull(
+        @PathVariable("application") application: String,
+        @PathVariable("featureKey") featureKey: String,
+        @RequestBody featureEnabled: FeatureEnabledDTO,
+    ): FeatureEnabledDTO =
+        configService
+            .setFeatureToggle(application, featureKey, enabled = featureEnabled.enabled)
+            .let {
+                FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
+            }
 
     @DeleteMapping("/v1/configurations/{application}/features/{featureKey}")
     fun deleteConfigurationPropertiesByApplicationAndFeatureKey(

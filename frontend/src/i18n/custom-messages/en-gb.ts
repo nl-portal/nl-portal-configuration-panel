@@ -43,8 +43,11 @@ export const EN_GB_MESSAGES: Messages = {
     "features.config.loading-error":
       "Failed to load {featureId} configuration.",
     // features.feature.*
-    "features.feature.enabled.true": "Enabled",
-    "features.feature.enabled.false": "Disabled",
+    "features.feature.enabled": "Enabled",
+    "features.feature.enabled.description":
+      "Enabling or disabling features triggers a quick restart in any NL Portal instances configured in the CONFIG_NOTIFY_LIST environment variable.",
+    "features.feature.configuration": "Configuration",
+    "features.feature.configuration.properties": "Properties",
     // theme.logo.*
     "theme.logo": "Theme Logo",
     "theme.logo.existing-logos": "Existing Theme Logo",
@@ -75,7 +78,6 @@ export const EN_GB_MESSAGES: Messages = {
       "No style found for current NL Portal application",
     // features.berichten.*
     "features.berichten": "Messages",
-    "features.berichten.configuration": "Configuration",
     "features.berichten.bericht-object-type-url": "Message Objecttype Url:",
     "features.berichten.bericht-object-type-url.description":
       "A url towards the Message object type in Objecttypen API",
@@ -124,13 +126,11 @@ export const EN_GB_MESSAGES: Messages = {
       "The secret that should be used for authenticating requests",
     // features.taak.*
     "features.taak": "Task",
-    "features.taak.configuration": "Configuration",
     "features.taak.object-type-url": "External User Task Object Type Url",
     "features.taak.object-type-url.description":
       "The url pointing towards the external user task object type in Objecttypen API",
     // features.objectsapi.*
     "features.objectsapi": "Objects API",
-    "features.objectsapi.configuration": "Configuration",
     "features.objectsapi.url": "Objects Api Url",
     "features.objectsapi.url.description": "The base url of Objects API",
     "features.objectsapi.token": "Objects Api Token",
@@ -138,7 +138,6 @@ export const EN_GB_MESSAGES: Messages = {
       "The token that should be used for authenticating requests to Objects API",
     // features.catalogiapi.*
     "features.catalogiapi": "Catalogi API",
-    "features.catalogiapi.configuration": "Configuration",
     "features.catalogiapi.url": "Catalogi API Url",
     "features.catalogiapi.url.description": "The base url of the Catalogi API",
     "features.catalogiapi.client-id": "Catalogi Api Client Id",
@@ -149,7 +148,6 @@ export const EN_GB_MESSAGES: Messages = {
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
     // features.besluitenapi.*
     "features.besluitenapi": "Besluiten API",
-    "features.besluitenapi.configuration": "Configuration",
     "features.besluitenapi.url": "Besluiten API Url",
     "features.besluitenapi.url.description":
       "The base url of the Besluiten API",
@@ -161,7 +159,6 @@ export const EN_GB_MESSAGES: Messages = {
       "The secret that should be used for authenticating requests (in case of Access Token Authentication)",
     // features.product.*
     "features.product": "Product",
-    "features.product.configuration": "Configuration",
     "features.product.product-type-url": "Product type Url",
     "features.product.product-type-url.description":
       "The Url towards the Product object type in Objecttypen API",
@@ -233,7 +230,6 @@ export const EN_GB_MESSAGES: Messages = {
       "The SHA hash version that is used to hash the prefill object",
     // features.zakenapi.*
     "features.zakenapi": "Zaken API",
-    "features.zakenapi.configuration": "Configuration",
     "features.zakenapi.url": "Zaken API Url",
     "features.zakenapi.url.description": "The base url of the Zaken API",
     "features.zakenapi.client-id": "Zaken Api Client Id",
@@ -256,7 +252,6 @@ export const EN_GB_MESSAGES: Messages = {
       "Exclude zaaktype uuid's as extra filter on the get zaken query.",
     // features.documentenapis.*
     "features.documentenapis": "Documenten APIs",
-    "features.documentenapis.configuration": "Configuration",
     "features.documentenapis.configurations.add-another":
       "Add another configuration",
     "features.documentenapis.configurations.add-another.description":
@@ -284,7 +279,6 @@ export const EN_GB_MESSAGES: Messages = {
       "The configuration that should be used by default",
     // features.payment.ogone.*
     "features.payment-ogone": "Ogone Payment",
-    "features.payment.ogone.configuration": "Configuration",
     "features.payment.ogone.profile": "Profile",
     "features.payment.ogone.url": "Payment API URL",
     "features.payment.ogone.url.description":
@@ -323,7 +317,6 @@ export const EN_GB_MESSAGES: Messages = {
       "example-ogone-payment-profile",
     // features.payment.direct.*
     "features.payment-direct": "Direct Payment",
-    "features.payment.direct.configuration": "Configuration",
     "features.payment.direct.profile": "Profile",
     "features.payment.direct.url": "Payment API URL",
     "features.payment.direct.url.description":

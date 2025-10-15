@@ -1,6 +1,7 @@
 package nl.nlportal.configurationpanel.listener
 
 import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
+import nl.nlportal.configurationpanel.event.FeatureToggledEvent
 import nl.nlportal.configurationpanel.notify.client.NlPortalClient
 import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.junit.jupiter.api.Tag
@@ -17,17 +18,16 @@ import org.springframework.cache.CacheManager
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
+import org.springframework.test.context.transaction.TestTransaction
 import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 @Tag("integration")
 @AutoConfigureWebTestClient(timeout = "36000")
-@ActiveProfiles(profiles = ["no-notify", "jdbc"])
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ConfigurationPropertiesChangedEventListenerDisabledIT(
+class NotifyEventListenerIT(
     @Autowired private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @TestConfiguration
@@ -43,15 +43,30 @@ class ConfigurationPropertiesChangedEventListenerDisabledIT(
     lateinit var nlPortalClient: NlPortalClient
 
     @Test
-    fun `should not notify on configuration properties change`() {
+    fun `should notify client to refresh on configuration change`() {
         // Given
         val event = ConfigurationPropertiesChangedEvent(emptyList())
 
         // When
         applicationEventPublisher.publishEvent(event)
+        TestTransaction.end()
 
         // Then
-        verify(notifyService, times(0)).restartNlPortalClients()
-        verify(nlPortalClient, times(0)).restartNlPortalClient(any())
+        verify(notifyService, times(1)).refreshNlPortalClients()
+        verify(nlPortalClient, times(2)).refreshNlPortalClient(any())
+    }
+
+    @Test
+    fun `should notify client to restart on feature toggle`() {
+        // Given
+        val event = FeatureToggledEvent(emptyList())
+
+        // When
+        applicationEventPublisher.publishEvent(event)
+        TestTransaction.end()
+
+        // Then
+        verify(notifyService, times(1)).restartNlPortalClients()
+        verify(nlPortalClient, times(2)).restartNlPortalClient(any())
     }
 }

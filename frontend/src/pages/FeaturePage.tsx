@@ -18,7 +18,12 @@ import { Button } from "@gemeente-denhaag/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { paths } from "../constants/paths";
 import { PageHeader } from "@gemeente-denhaag/page";
-import { Heading2, Heading3, Heading4 } from "@gemeente-denhaag/typography";
+import {
+  Heading2,
+  Heading3,
+  Heading4,
+  Paragraph,
+} from "@gemeente-denhaag/typography";
 import styles from "../styles/Configuration.module.scss";
 import { FormattedMessage } from "react-intl";
 import { features } from "../constants/features.tsx";
@@ -30,6 +35,11 @@ import _ from "lodash";
 import BackLink from "../components/BackLink.tsx";
 import useConfiguration from "../hooks/useConfiguration.tsx";
 import { toast } from "react-toastify";
+import useFeatureToggle from "../hooks/useFeatureToggle.tsx";
+import { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
+import { FormField } from "@gemeente-denhaag/form-field";
+import { FormLabel } from "@gemeente-denhaag/form-label";
+import { FormToggle } from "@utrecht/component-library-react";
 
 const FeaturePage = () => {
   const { featureId } = useParams();
@@ -39,6 +49,7 @@ const FeaturePage = () => {
   const {
     getConfigurations: {
       data: featureConfigurations,
+      refetch: featureConfigurationRefetch,
       isPending: featureConfigurationsLoading,
       isError: featureConfigurationsError,
     },
@@ -52,6 +63,16 @@ const FeaturePage = () => {
       isError: deleteConfigurationsError,
     },
   } = useConfiguration({ featurePrefix: feature?.featureConfigurationPrefix });
+  const {
+    getFeatureToggle: {
+      data: featureToggle,
+      isPending: featureToggleLoading,
+      isError: featureToggleError,
+    },
+    setFeatureToggle: { mutate: setFeatureToggle },
+  } = useFeatureToggle({
+    featurePrefix: feature?.featureConfigurationPrefix,
+  });
   const [prefilledConfig, setPrefilledConfig] = useState<object | undefined>(
     undefined,
   );
@@ -72,6 +93,26 @@ const FeaturePage = () => {
 
   const handleValid = (isValid: boolean) => {
     setIsValid(isValid);
+  };
+
+  const handleToggle = (enabled: boolean) => {
+    setFeatureToggle(enabled, {
+      onSuccess: () => {
+        void featureConfigurationRefetch();
+        toast(() => (
+          <Heading4>
+            <FormattedMessage id={"api.save.success"} />
+          </Heading4>
+        ));
+      },
+      onError: () => {
+        toast(() => (
+          <Heading4>
+            <FormattedMessage id={"api.error"} />
+          </Heading4>
+        ));
+      },
+    });
   };
 
   const handleSubmit = () => {
@@ -140,7 +181,7 @@ const FeaturePage = () => {
     if (!feature) navigate(paths.configuration);
   }, [feature]);
 
-  if (featureConfigurationsLoading) {
+  if (featureConfigurationsLoading && featureToggleLoading) {
     return (
       <section>
         <Skeleton height={60} />
@@ -148,7 +189,7 @@ const FeaturePage = () => {
     );
   }
 
-  if (featureConfigurationsError)
+  if (featureConfigurationsError || featureToggleError)
     return (
       <>
         <BackLink
@@ -187,6 +228,42 @@ const FeaturePage = () => {
           </Heading2>
         </div>
       </PageHeader>
+      {featureToggle && (
+        <div className={styles["feature-config__content"]}>
+          <div className={styles["feature-config__form"]}>
+            <>
+              <FieldsetLegend className="utrecht-form-fieldset__legend--distanced">
+                <Heading3>
+                  <FormattedMessage
+                    id={`features.feature.configuration`}
+                  ></FormattedMessage>
+                </Heading3>
+              </FieldsetLegend>
+              <FormField
+                label={
+                  <FormLabel>
+                    <FormattedMessage id={"features.feature.enabled"} />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={"features.feature.enabled.description"}
+                    />
+                  </Paragraph>
+                }
+              >
+                <FormToggle
+                  id={"feature-toggle"}
+                  className={styles["form-field__toggle"]}
+                  onChange={(e) => handleToggle(e.currentTarget.checked)}
+                  defaultChecked={featureToggle.enabled}
+                ></FormToggle>
+              </FormField>
+            </>
+          </div>
+        </div>
+      )}
       <div className={styles["feature-config__content"]}>
         {feature?.featureComponent &&
           featureConfigurations &&
@@ -195,6 +272,7 @@ const FeaturePage = () => {
             onChange: (formData: object) => {
               handleChange(formData);
             },
+            onToggle: (enabled) => handleToggle(enabled),
             onValid: (isValid) => handleValid(isValid),
             onSubmit: () => handleSubmit(),
           })}

@@ -29,7 +29,7 @@ class NotifyService(
 ) {
     fun restartNlPortalClients() {
         logger.info {
-            "Configuration properties changed. Sending restart signal to " +
+            "Feature toggled. Sending restart signal to " +
                 "${notifyConfigurationProperties.notifyList.size} client(s)."
         }
         notifyConfigurationProperties.notifyList.forEach {
@@ -37,6 +37,20 @@ class NotifyService(
                 nlPortalClient.restartNlPortalClient(it)
             } catch (e: RestClientException) {
                 logger.debug(e) { "Failed to restart NL Portal Client at url $it" }
+            }
+        }
+    }
+
+    fun refreshNlPortalClients() {
+        logger.info {
+            "Configuration properties changed. Sending refresh signal to " +
+                "${notifyConfigurationProperties.notifyList.size} client(s)."
+        }
+        notifyConfigurationProperties.notifyList.forEach {
+            try {
+                nlPortalClient.refreshNlPortalClient(it)
+            } catch (e: RestClientException) {
+                logger.debug(e) { "Failed to refresh NL Portal Client at url $it" }
             }
         }
     }

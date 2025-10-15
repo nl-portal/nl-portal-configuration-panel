@@ -16,7 +16,7 @@
 
 package nl.nlportal.configurationpanel.notify.configuration
 
-import nl.nlportal.configurationpanel.notify.listener.ConfigurationPropertiesChangedEventListener
+import nl.nlportal.configurationpanel.notify.listener.NotifyEventListener
 import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -28,6 +28,5 @@ import org.springframework.context.annotation.Configuration
 class ConfigurationPanelNotifyConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = "configuration-panel.notify", name = ["notify-on-changes"], havingValue = "true")
-    fun configurationPropertiesChangedEventListener(notifyService: NotifyService): ConfigurationPropertiesChangedEventListener =
-        ConfigurationPropertiesChangedEventListener(notifyService)
+    fun configurationPropertiesChangedEventListener(notifyService: NotifyService): NotifyEventListener = NotifyEventListener(notifyService)
 }
