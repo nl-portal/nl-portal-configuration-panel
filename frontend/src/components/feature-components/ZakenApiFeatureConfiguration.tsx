@@ -8,11 +8,11 @@ import { FormLabel } from "@gemeente-denhaag/form-label";
 import styles from "../../styles/Configuration.module.scss";
 import { TextInput } from "@gemeente-denhaag/text-input";
 import { RadioButton } from "@gemeente-denhaag/radio-button";
-import { Checkbox } from "@gemeente-denhaag/checkbox";
 import ConfigurationForm from "../ConfigurationForm.tsx";
 import { useForm } from "react-hook-form";
 import PasswordInput from "../PasswordInput.tsx";
 import { Select, SelectOption } from "@utrecht/component-library-react";
+import { Checkbox } from "@gemeente-denhaag/checkbox";
 
 interface ZakenApiConfiguration {
   enabled?: string;
@@ -210,29 +210,67 @@ const ZakenApiFeatureConfiguration = ({
               >
                 <PasswordInput {...register("properties.secret")} id="secret" />
               </FormField>
-              <FormField
-                label={
-                  <FormLabel htmlFor={"use-nnp-kvk-query-identificators"}>
+              <Fieldset role={"radiogroup"}>
+                <FieldsetLegend>
+                  <FormLabel>
                     <FormattedMessage
                       id={"features.zakenapi.use-nnp-kvk-query-identificators"}
                     />
                   </FormLabel>
-                }
-                description={
-                  <Paragraph>
-                    <FormattedMessage
-                      id={
-                        "features.zakenapi.use-nnp-kvk-query-identificators.description"
-                      }
-                    />
-                  </Paragraph>
-                }
-              >
-                <Checkbox
-                  {...register("properties.use-nnp-kvk-query-identificators")}
-                  id="use-nnp-kvk-query-identificators"
-                />
-              </FormField>
+                </FieldsetLegend>
+                <Paragraph>
+                  <FormattedMessage
+                    id={
+                      "features.zakenapi.use-nnp-kvk-query-identificators.description"
+                    }
+                  />
+                </Paragraph>
+                <FormField
+                  label={
+                    <FormLabel htmlFor={"use-nnp-kvk-query-identificators"}>
+                      <FormattedMessage
+                        id={
+                          "features.zakenapi.use-nnp-kvk-query-identificators"
+                        }
+                      />
+                    </FormLabel>
+                  }
+                  description={
+                    <Paragraph>
+                      <FormattedMessage
+                        id={
+                          "features.zakenapi.use-nnp-kvk-query-identificators.description"
+                        }
+                      />
+                    </Paragraph>
+                  }
+                >
+                  <Checkbox
+                    {...register("properties.use-nnp-kvk-query-identificators")}
+                    id="use-nnp-kvk-query-identificators"
+                  />
+                </FormField>
+                <FormField
+                  className={styles["form-field__radio-option"]}
+                  type="radio"
+                  label={
+                    <FormLabel
+                      htmlFor={"use-nnp-kvk-query-identificators.false"}
+                    >
+                      <FormattedMessage
+                        id={"features.feature.enabled.false"}
+                      ></FormattedMessage>
+                    </FormLabel>
+                  }
+                >
+                  <RadioButton
+                    {...register("properties.use-nnp-kvk-query-identificators")}
+                    className="utrecht-form-field__input"
+                    id={"use-nnp-kvk-query-identificators.false"}
+                    value={"false"}
+                  />
+                </FormField>
+              </Fieldset>
               <FormField
                 label={
                   <FormLabel htmlFor={"zaak-types-ids-excluded"}>
