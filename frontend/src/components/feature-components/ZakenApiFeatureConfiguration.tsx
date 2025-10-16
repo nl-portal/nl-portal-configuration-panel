@@ -11,12 +11,14 @@ import ConfigurationForm from "../ConfigurationForm.tsx";
 import { useForm } from "react-hook-form";
 import PasswordInput from "../PasswordInput.tsx";
 import { Select, SelectOption } from "@utrecht/component-library-react";
+import { Checkbox } from "@gemeente-denhaag/checkbox";
 
 interface ZakenApiConfiguration {
   properties?: {
     url?: string;
     "client-id"?: string;
     secret?: string;
+    "use-nnp-kvk-query-identificators"?: boolean;
     "zaak-types-ids-excluded"?: string[];
     "zaak-documenten-config"?: {
       "vertrouwelijkheidsaanduiding-whitelist"?: Vertrouwelijkheidsaanduiding[];
@@ -155,6 +157,29 @@ const ZakenApiFeatureConfiguration = ({
               }
             >
               <PasswordInput {...register("properties.secret")} id="secret" />
+            </FormField>
+            <FormField
+              label={
+                <FormLabel htmlFor={"use-nnp-kvk-query-identificators"}>
+                  <FormattedMessage
+                    id={"features.zakenapi.use-nnp-kvk-query-identificators"}
+                  />
+                </FormLabel>
+              }
+              description={
+                <Paragraph>
+                  <FormattedMessage
+                    id={
+                      "features.zakenapi.use-nnp-kvk-query-identificators.description"
+                    }
+                  />
+                </Paragraph>
+              }
+            >
+              <Checkbox
+                {...register("properties.use-nnp-kvk-query-identificators")}
+                id="use-nnp-kvk-query-identificators"
+              />
             </FormField>
             <FormField
               label={
