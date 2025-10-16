@@ -22,6 +22,7 @@ interface ZakenApiConfiguration {
     secret?: string;
     "use-nnp-kvk-query-identificators"?: boolean;
     "zaak-types-ids-excluded"?: string[];
+    "use-nnp-kvk-query-identificators"?: boolean;
     "zaak-documenten-config"?: {
       "vertrouwelijkheidsaanduiding-whitelist"?: Vertrouwelijkheidsaanduiding[];
       "status-whitelist"?: DocumentStatus[];
@@ -292,6 +293,30 @@ const ZakenApiFeatureConfiguration = ({
                 <TextInput
                   {...register("properties.zaak-types-ids-excluded")}
                   id="zaak-types-ids-excluded"
+                />
+              </FormField>
+
+              <FormField
+                label={
+                  <FormLabel htmlFor={"use-nnp-kvk-query-identificators"}>
+                    <FormattedMessage
+                      id={"features.zakenapi.use-nnp-kvk-query-identificators"}
+                    />
+                  </FormLabel>
+                }
+                description={
+                  <Paragraph>
+                    <FormattedMessage
+                      id={
+                        "features.zakenapi.use-nnp-kvk-query-identificators.description"
+                      }
+                    />
+                  </Paragraph>
+                }
+              >
+                <Checkbox
+                  {...register("properties.use-nnp-kvk-query-identificators")}
+                  id="use-nnp-kvk-query-identificators"
                 />
               </FormField>
               <FormField
