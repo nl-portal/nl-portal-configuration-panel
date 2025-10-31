@@ -7,8 +7,8 @@ The following software has to be installed to be able to use this application
 | Run latest prebuilt app images | Build and run app images | Run from source |
 |--------------------------------|--------------------------|-----------------|
 | Docker Desktop                 | Docker Desktop           | Docker Desktop  |
-|                                | NodeJS 20                | NodeJS 20       |
-|                                | PNPM                     | PNPM            |
+|                                |                          | NodeJS 20       |
+|                                |                          | PNPM            |
 
 ## Dependencies
 
@@ -19,6 +19,7 @@ Refer to the following table for version compatibility between the Configuration
 |         | Configuration Panel | NL Portal (Libraries/App) |
 |---------|---------------------|---------------------------|
 | Version | 1.0.0               | 2.0.2                     |
+| Version | 2.0.0               | 3.0.0                     |
 
 ## Running the application
 
@@ -43,21 +44,11 @@ docker compose --profile remote up -d
 ### By building and running docker images
 
 You can choose to build docker images of the backend and frontend for running locally
-instead of in a development environment by following these steps:
+instead of in a development environment by running the following command:
 
-1. Build the backend app
-   ```shell
-   cd backend
-   ./gradlew bootJar
-   ```
-2. Build the frontend app
-   ```shell
-   pnpm -C frontend i && pnpm -C frontend build
-   ```
-3. Build and compose the images with docker
-   ```shell
-   docker compose --profile local up -d --build
-   ```
+```shell
+docker compose --profile local up -d --build
+```
 
 ### From source
 
@@ -93,8 +84,7 @@ configured as well.
           JSON Key Set. Used to authenticate incoming REST API requests.
         * `CONFIG_CACHE_TTL` - Used to set the duration at which the configuration cache is evicted in milliseconds.
         * `CONFIG_SERVER_TOKEN` - The token that should be used to authenticate configuration queries. Every NL Portal
-          needs to have this
-          value set for their Spring Cloud Configuration Client.
+          needs to have this value set for their Spring Cloud Configuration Client.
     * Optional
         * `LOGLEVEL` - Shorthand for `LOGGING_LEVEL_ROOT`. Used to set the stdout loglevel of the application.
           Default: `INFO`

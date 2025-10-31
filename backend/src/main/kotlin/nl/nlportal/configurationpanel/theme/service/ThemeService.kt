@@ -16,7 +16,7 @@
 
 package nl.nlportal.configurationpanel.theme.service
 
-import nl.nlportal.configurationpanel.event.ThemeLogoChangedEvent
+import nl.nlportal.configurationpanel.theme.event.ThemeLogoChangedEvent
 import nl.nlportal.configurationpanel.event.ThemeStyleChangedEvent
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyle

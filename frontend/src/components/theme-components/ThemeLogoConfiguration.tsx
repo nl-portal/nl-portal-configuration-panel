@@ -131,15 +131,6 @@ const ThemeLogoConfiguration = () => {
                     }
                   >
                     <div>
-                      <input
-                        id={"upload-theme-logo"}
-                        type={"file"}
-                        onChange={handleFileUpload}
-                        accept={"image/*"}
-                        multiple={false}
-                        disabled={uploadThemeLogo.isPending}
-                        style={{ display: "none" }}
-                      />
                       <Button
                         className={styles["feature-config__button"]}
                         onClick={() => {
@@ -199,24 +190,49 @@ const ThemeLogoConfiguration = () => {
                       }
                       key={`logo-${index}`}
                     >
-                      <File
-                        name={logo.filename.substring(
-                          0,
-                          logo.filename.lastIndexOf("."),
-                        )}
-                        href={logo.filename}
-                        size={formatBytes(logo.size, 2)}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          getThemeLogoContent.mutate(logo);
-                        }}
-                        className={styles["form-field__denhaag_file"]}
-                      />
+                      <ActionField
+                        field={
+                          <File
+                            name={logo.filename.substring(
+                              0,
+                              logo.filename.lastIndexOf("."),
+                            )}
+                            href={logo.filename}
+                            size={formatBytes(logo.size, 2)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              getThemeLogoContent.mutate(logo);
+                            }}
+                            className={styles["form-field__denhaag_file"]}
+                          />
+                        }
+                        button={
+                          <Button
+                            className={styles["feature-config__button"]}
+                            onClick={() => {
+                              document
+                                .getElementById("upload-theme-logo")
+                                ?.click();
+                            }}
+                          >
+                            <FormattedMessage id={"theme.logo.replace-file"} />
+                          </Button>
+                        }
+                      ></ActionField>
                     </FormField>
                   </section>
                 ))}
               </>
             )}
+            <input
+              id={"upload-theme-logo"}
+              type={"file"}
+              onChange={handleFileUpload}
+              accept={"image/*"}
+              multiple={false}
+              disabled={uploadThemeLogo.isPending}
+              style={{ display: "none" }}
+            />
           </>
         }
       ></ConfigurationForm>

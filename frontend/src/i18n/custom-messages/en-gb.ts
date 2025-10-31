@@ -60,6 +60,7 @@ export const EN_GB_MESSAGES: Messages = {
     "theme.logo.upload-theme-logo.description":
       "Upload an image file to use as the logo of the current NL Portal application.",
     "theme.logo.select-file": "Select File",
+    "theme.logo.replace-file": "Replace",
     "theme.logo.no-existing-logos":
       "No logo found for current NL Portal application",
     // theme.style.*

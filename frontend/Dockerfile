@@ -1,9 +1,19 @@
-FROM nginx:stable-alpine-slim
+FROM --platform=$BUILDPLATFORM node:22-alpine AS build
+
+COPY . .
+ENV CI=true
+RUN npm i -g pnpm && pnpm i && pnpm build
+
+FROM nginx:stable-alpine-slim AS image
 
 RUN rm /etc/nginx/conf.d/default.conf
 
-COPY ./build /usr/share/nginx/html
-COPY /conf/nginx.conf /etc/nginx/templates/nginx.conf.template
-COPY --chmod=+x entrypoint.sh /docker-entrypoint.d/entrypoint.sh
+COPY --from=build ./build /usr/share/nginx/html
+COPY --from=build /conf/nginx.conf /etc/nginx/templates/nginx.conf.template
+COPY --chmod=+x --from=build entrypoint.sh /docker-entrypoint.d/entrypoint.sh
+
+EXPOSE 8080
+
+LABEL org.opencontainers.image.description="NL Portal Configuration Panel Frontend."
 
 CMD ["nginx", "-g", "daemon off;"]
