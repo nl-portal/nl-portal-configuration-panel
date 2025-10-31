@@ -17,11 +17,11 @@
 package nl.nlportal.configurationpanel.theme.listener
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
-import nl.nlportal.configurationpanel.event.ThemeLogoChangedEvent
 import nl.nlportal.configurationpanel.event.ThemeStyleChangedEvent
 import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
+import nl.nlportal.configurationpanel.theme.event.ThemeLogoChangedEvent
 import nl.nlportal.configurationpanel.theme.event.ThemeLogoDeletedEvent
 import nl.nlportal.configurationpanel.theme.event.ThemeStyleDeletedEvent
 import org.springframework.transaction.event.TransactionPhase
@@ -31,7 +31,7 @@ class ThemeEventListener(
     private val configurationPropertiesService: ConfigurationPropertiesService,
 ) {
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    fun handleThemeStyleChangedEvent(event: ThemeLogoChangedEvent) {
+    fun handleThemeLogoChangedEvent(event: ThemeLogoChangedEvent) {
         configurationPropertiesService.saveConfigurationProperty(
             ConfigurationProperty(
                 propertyKey = "nl-portal.config.theme.logo",

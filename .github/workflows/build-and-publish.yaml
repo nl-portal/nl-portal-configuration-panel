@@ -7,10 +7,10 @@ on:
             - "release/*"
 env:
     GITHUB_REGISTRY: ghcr.io
-    DOCKER_IMAGE_NAME: configuration-panel
     GITHUB_NAMESPACE: nl-portal
+    APP_NAME: configuration-panel
     JAVA_VERSION: "21"
-    NODE_VERSION: "20.x"
+    NODE_VERSION: "22.x"
 jobs:
     prepare-variables:
         runs-on: ubuntu-latest
@@ -42,88 +42,24 @@ jobs:
                     ts=$(date +'%Y%m%d%H%M')
                     echo "BACKEND_SNAPSHOT_VERSION=${{ steps.detect-scope.outputs.SCOPE == 'RC' && '${be_version}-${ts}-RC' || '${branch}-${ts}-${sha}-SHAPSHOT' }}" >> "$GITHUB_OUTPUT"
                     echo "FRONTEND_SNAPSHOT_VERSION=${{ steps.detect-scope.outputs.SCOPE == 'RC' && '${fe_version}-${ts}-RC' || '${branch}-${ts}-${sha}-SHAPSHOT' }}" >> "$GITHUB_OUTPUT"
-    build-be:
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: "backend"
-        needs:
-            - prepare-variables
-        if: ${{ needs.prepare-variables.outputs.scope != 'UNKNOWN' }}
-        steps:
-            -   uses: actions/checkout@v4
-            -   name: Set up JDK ${{ env.JAVA_VERSION }}
-                uses: actions/setup-java@v4
-                with:
-                    java-version: "${{ env.JAVA_VERSION }}"
-                    distribution: "temurin"
-            -   name: Set up gradle
-                uses: gradle/actions/setup-gradle@v4
-            -   name: Build with Gradle
-                run: ./gradlew build
-            -   name: Prepare dist folder
-                run: mkdir deployment | mv build/ Dockerfile deployment/
-            -   name: Archive dist folder
-                uses: actions/upload-artifact@v4
-                with:
-                    name: configuration-panel-backend-dist
-                    path: backend/deployment/
-                    retention-days: 1
-    build-fe:
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: "frontend"
-        needs:
-            - prepare-variables
-        if: ${{ needs.prepare-variables.outputs.scope != 'UNKNOWN' }}
-        steps:
-            -   uses: actions/checkout@v4
-            -   name: Set up Node.js ${{ env.NODE_VERSION }}
-                uses: actions/setup-node@v4
-                with:
-                    node-version: ${{ env.NODE_VERSION }}
-            -   name: Install
-                run: npm install -g pnpm && pnpm install
-            -   name: Build
-                run: pnpm build
-            -   name: Prepare dist folder
-                run: mkdir deployment | mv build/ conf/ entrypoint.sh Dockerfile deployment/
-            -   name: Archive dist folder
-                uses: actions/upload-artifact@v4
-                with:
-                    name: configuration-panel-frontend-dist
-                    path: frontend/deployment/
-                    retention-days: 1
-    publish-be:
+    build-and-publish-be:
         runs-on: ubuntu-latest
         needs:
             - prepare-variables
-            - build-be
         if: ${{ needs.prepare-variables.outputs.scope != 'UNKNOWN' }}
         permissions:
             contents: read
             packages: write
             id-token: write
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v4
-                with:
-                    fetch-depth: 1
-
             -   name: Install Cosign
-                uses: sigstore/cosign-installer@v3.5.0
+                uses: sigstore/cosign-installer@v4.0.0
 
             -   name: Set up QEMU
                 uses: docker/setup-qemu-action@v3
 
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@v3
-
-            -   name: Download dist artifact
-                uses: actions/download-artifact@v4
-                with:
-                    name: configuration-panel-backend-dist
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
@@ -138,7 +74,7 @@ jobs:
             -   id: docker_meta
                 uses: docker/metadata-action@v5
                 with:
-                    images: ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.DOCKER_IMAGE_NAME }}-backend
+                    images: ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.APP_NAME }}-backend
                     tags: |
                         type=raw,value=latest,enable={{is_default_branch}}
                         type=raw,value=${{ needs.prepare-variables.outputs.backend-tag }}
@@ -149,8 +85,9 @@ jobs:
                 with:
                     file: Dockerfile
                     platforms: linux/arm64, linux/amd64
-                    context: .
+                    context: "{{defaultContext}}:backend"
                     push: true
+                    provenance: false
                     tags: ${{ steps.docker_meta.outputs.tags }}
                     labels: ${{ steps.docker_meta.outputs.labels }}
 
@@ -168,14 +105,13 @@ jobs:
             -   name: Verify the images
                 run: |
                     branch=${GITHUB_REF##*/}
-                    cosign verify ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.DOCKER_IMAGE_NAME }}:${{ needs.prepare-variables.outputs.image-tag }} \
-                       --certificate-identity https://github.com/${{ env.GITHUB_NAMESPACE }}/${{ env.DOCKER_IMAGE_NAME }}/.github/workflows/cicd.yaml@refs/heads/${branch} \
-                       --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
-    publish-fe:
+                    cosign verify ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.APP_NAME }}-backend:${{ needs.prepare-variables.outputs.image-tag }} \
+                       --certificate-identity https://github.com/${GITHUB_WORKFLOW_REF} \
+                       --certificate-oidc-issuer https://token.actions.githubusercontent.com
+    build-and-publish-fe:
         runs-on: ubuntu-latest
         needs:
             - prepare-variables
-            - build-fe
         if: ${{ needs.prepare-variables.outputs.scope != 'UNKNOWN' }}
         permissions:
             contents: read
@@ -183,21 +119,13 @@ jobs:
             id-token: write
         steps:
             -   name: Install Cosign
-                uses: sigstore/cosign-installer@v3.5.0
+                uses: sigstore/cosign-installer@v4.0.0
 
             -   name: Set up QEMU
                 uses: docker/setup-qemu-action@v3
 
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@v3
-
-            -   name: Download dist artifact
-                uses: actions/download-artifact@v4
-                with:
-                    name: configuration-panel-frontend-dist
-
-            -   name: Display structure of downloaded files
-                run: pwd && ls -R
 
             -   name: 'Login to github packages'
                 uses: docker/login-action@v1
@@ -212,7 +140,7 @@ jobs:
             -   id: docker_meta
                 uses: docker/metadata-action@v5
                 with:
-                    images: ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.DOCKER_IMAGE_NAME }}-frontend
+                    images: ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.APP_NAME }}-frontend
                     tags: |
                         type=raw,value=latest,enable={{is_default_branch}}
                         type=raw,value=${{ needs.prepare-variables.outputs.frontend-tag }}
@@ -223,8 +151,9 @@ jobs:
                 with:
                     file: Dockerfile
                     platforms: linux/arm64, linux/amd64
-                    context: .
+                    context: "{{defaultContext}}:frontend"
                     push: true
+                    provenance: false
                     tags: ${{ steps.docker_meta.outputs.tags }}
                     labels: ${{ steps.docker_meta.outputs.labels }}
 
@@ -241,7 +170,6 @@ jobs:
 
             -   name: Verify the images
                 run: |
-                    branch=${GITHUB_REF##*/}
-                    cosign verify ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.DOCKER_IMAGE_NAME }}:${{ needs.prepare-variables.outputs.image-tag }} \
-                       --certificate-identity https://github.com/${{ env.GITHUB_NAMESPACE }}/${{ env.DOCKER_IMAGE_NAME }}/.github/workflows/cicd.yaml@refs/heads/${branch} \
-                       --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
+                    cosign verify ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_NAMESPACE }}/${{ env.APP_NAME }}-frontend:${{ needs.prepare-variables.outputs.image-tag }} \
+                       --certificate-identity https://github.com/${GITHUB_WORKFLOW_REF} \
+                       --certificate-oidc-issuer https://token.actions.githubusercontent.com

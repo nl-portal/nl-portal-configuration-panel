@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package nl.nlportal.configurationpanel.event
+package nl.nlportal.configurationpanel.theme.event
 
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 

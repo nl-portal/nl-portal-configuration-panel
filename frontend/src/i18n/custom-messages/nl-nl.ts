@@ -59,6 +59,7 @@ export const NL_NL_MESSAGES: Messages = {
     "theme.logo.upload-theme-logo.description":
       "Upload een afbeeldingsbestand om te gebruiken als logo van de huidige NL Portal-toepassing.",
     "theme.logo.select-file": "Bestand selecteren",
+    "theme.logo.replace-file": "Vervangen",
     "theme.logo.no-existing-logos":
       "Geen logo gevonden voor de huidige NL Portal-toepassing.",
     // theme.style.*

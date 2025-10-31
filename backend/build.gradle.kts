@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 /*
@@ -27,10 +28,12 @@ val apacheTikaVersion by project.properties
 val mockitoAgent = configurations.create("mockitoAgent")
 
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.4.6"
-    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm")
+    kotlin("plugin.spring")
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 java {
@@ -44,6 +47,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-cache")
@@ -64,6 +68,12 @@ dependencies {
 
     implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
+    // CVE-2025-48924
+    implementation("org.apache.commons:commons-lang3:3.18.0")
+
+    // CVE-2020-36843
+    // Does not affect this application. No fix available.
+
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -75,28 +85,42 @@ dependencies {
     mockitoAgent("org.mockito:mockito-core:5.16.1") { isTransitive = false }
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 kotlin {
     compilerOptions {
+        jvmTarget = JVM_21
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
 
-// localhost env vars
 tasks.bootRun {
-    environment.putAll(
+    // overrides for running from sources
+    val developmentEnv =
         mapOf(
             "SERVER_PORT" to "8090",
             "DATABASE_URL" to "jdbc:postgresql://localhost:54322/nl-portal-config",
-            "DATABASE_USERNAME" to "config",
-            "DATABASE_PASSWORD" to "password",
-            "LOGLEVEL" to "INFO",
             "JWKS_URI" to "http://localhost:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs",
-            "CONFIG_CACHE_TTL" to "30000",
-            "CONFIG_SERVER_PREFIX" to "/configuration",
-            "CONFIG_SERVER_TOKEN" to "VerySecretToken",
-            "CONFIG_NOTIFY_ENABLED" to "true",
             "CONFIG_NOTIFY_LIST" to "http://localhost:8080/",
-        ),
+        )
+
+    environment.putAll(
+        project
+            .file("../imports/backend.env")
+            .takeIf { it.exists() && it.isFile }
+            ?.readLines()
+            ?.filterNot { it.startsWith("#") || it.startsWith("//") || it.isEmpty() }
+            ?.associate { line ->
+                val entry = line.split("=", limit = 2)
+                entry.first() to entry.last()
+            }?.plus(developmentEnv)
+            ?: developmentEnv,
     )
 }
 
