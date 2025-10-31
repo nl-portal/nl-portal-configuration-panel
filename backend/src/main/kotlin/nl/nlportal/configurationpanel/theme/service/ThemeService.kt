@@ -16,10 +16,10 @@
 
 package nl.nlportal.configurationpanel.theme.service
 
-import nl.nlportal.configurationpanel.theme.event.ThemeLogoChangedEvent
 import nl.nlportal.configurationpanel.event.ThemeStyleChangedEvent
 import nl.nlportal.configurationpanel.theme.domain.ThemeLogo
 import nl.nlportal.configurationpanel.theme.domain.ThemeStyle
+import nl.nlportal.configurationpanel.theme.event.ThemeLogoChangedEvent
 import nl.nlportal.configurationpanel.theme.event.ThemeLogoDeletedEvent
 import nl.nlportal.configurationpanel.theme.event.ThemeStyleDeletedEvent
 import nl.nlportal.configurationpanel.theme.repository.ThemeLogoRepository

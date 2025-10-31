@@ -28,7 +28,6 @@ pluginManagement {
 
         id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
     }
-
 }
 
 rootProject.name = "backend"
