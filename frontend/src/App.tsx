@@ -36,8 +36,8 @@ function App() {
       <OidcWrapper
         authority={config.OIDC_URL}
         client_id={config.OIDC_CLIENT_ID}
-        redirect_uri={config.OIDC_REDIRECT_URI}
-        post_logout_redirect_uri={config.OIDC_POST_LOGOUT_REDIRECT_URI}
+        redirect_uri={config.OIDC_REDIRECT_URL}
+        post_logout_redirect_uri={config.OIDC_POST_LOGOUT_REDIRECT_URL}
       >
         <QueryClientProvider client={queryClient}>
           <ConfigPanelSettingsContext.Provider
