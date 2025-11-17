@@ -105,9 +105,9 @@ configured as well.
         * `OIDC_URL` - OIDC Authority/Oauth2 Provider URL.
         * `OIDC_CLIENT_ID` - The Client ID of the client that will be used for the authentication flow at the OIDC
           Authority.
-        * `OIDC_REDIRECT_URI` - The post authentication target URL where the OIDC Authority should redirect the user.
+        * `OIDC_REDIRECT_URL` - The post authentication target URL where the OIDC Authority should redirect the user.
           Should be set to the base URL of this application.
-        * `OIDC_POST_LOGOUT_REDIRECT_URI` - The post logout target URL where the OIDC Authority should redirect the
+        * `OIDC_POST_LOGOUT_REDIRECT_URL` - The post logout target URL where the OIDC Authority should redirect the
           user.
         * `CLIENT_APPLICATION_NAME` - The name of the Spring Boot application whose configuration is being provided by
           this application. Example: `nl-portal-app`.
