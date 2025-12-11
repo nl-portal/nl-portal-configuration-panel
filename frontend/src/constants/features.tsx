@@ -56,7 +56,7 @@ export const features: FeatureConfiguration[] = [
   },
   {
     featureId: "objectsapi",
-    featureConfigurationPrefix: "nl-portal.config.objectsapi",
+    featureConfigurationPrefix: "nl-portal.config.objectenapi",
     featureComponent: ObjectsApiFeatureConfiguration,
   },
   {
