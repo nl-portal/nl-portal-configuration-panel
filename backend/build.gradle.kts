@@ -33,7 +33,8 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
 
-    id("org.jlleitschuh.gradle.ktlint")
+    // Checkstyle
+    id("com.diffplug.spotless")
 }
 
 java {
@@ -52,16 +53,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.security:spring-security-oauth2-jose:$springSecurityOauth2Version")
-    implementation("org.springframework.security:spring-security-oauth2-resource-server:$springSecurityOauth2Version")
+    implementation("org.springframework.security:spring-security-oauth2-jose")
+    implementation("org.springframework.boot:spring-boot-starter-security-oauth2-resource-server")
     implementation("org.springframework.cloud:spring-cloud-config-server:$springCloudServerVersion")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:$springCloudBootstrapVersion")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.liquibase:liquibase-core")
     implementation("org.ehcache:ehcache:$ehcacheVersion")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-62:$hypersistenceVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("org.apache.tika:tika-core:$apacheTikaVersion")
@@ -69,18 +69,17 @@ dependencies {
     implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
     // CVE-2025-48924
-    implementation("org.apache.commons:commons-lang3:3.18.0")
+    implementation("org.apache.commons:commons-lang3:3.20.0")
 
     // CVE-2020-36843
     // Does not affect this application. No fix available.
 
-    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webclient-test")
+    testImplementation("org.springframework.boot:spring-boot-webtestclient")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("org.mockito:mockito-core:5.16.1")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
-    testImplementation("com.h2database:h2:2.3.232")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:6.3.0")
+    testImplementation("com.h2database:h2:2.4.240")
 
     mockitoAgent("org.mockito:mockito-core:5.16.1") { isTransitive = false }
 }

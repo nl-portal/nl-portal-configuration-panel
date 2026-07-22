@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
 
-@Component
+/*@Component
 class SpringContextProvider : ApplicationContextAware {
     override fun setApplicationContext(applicationContext: ApplicationContext) {
         context = applicationContext
@@ -33,4 +33,4 @@ class SpringContextProvider : ApplicationContextAware {
 
         fun getProperty(propertyPath: String): String? = context.environment.getProperty(propertyPath)
     }
-}
+}*/
