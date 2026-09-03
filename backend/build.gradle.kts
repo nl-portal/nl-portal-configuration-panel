@@ -22,7 +22,7 @@ val hypersistenceVersion by project.properties
 val postgresVersion by project.properties
 val springCloudServerVersion by project.properties
 val springCloudBootstrapVersion by project.properties
-val springSecurityOauth2Version by project.properties
+//val springSecurityOauth2Version by project.properties
 val kotlinLoggingVersion by project.properties
 val apacheTikaVersion by project.properties
 val mockitoAgent = configurations.create("mockitoAgent")
