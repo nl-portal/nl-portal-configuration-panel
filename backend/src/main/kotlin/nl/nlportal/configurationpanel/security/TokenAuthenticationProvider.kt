@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 class TokenAuthenticationProvider(
     private val configurationToken: String,
 ) : AuthenticationProvider {
-    override fun authenticate(authentication: Authentication?): Authentication {
+    override fun authenticate(authentication: Authentication): Authentication? {
         val credentials = authentication?.principal?.toString()
 
         if (credentials == null) {
@@ -38,5 +38,5 @@ class TokenAuthenticationProvider(
         }
     }
 
-    override fun supports(authentication: Class<*>?): Boolean = authentication == PreAuthenticatedAuthenticationToken::class.java
+    override fun supports(authentication: Class<*>): Boolean = authentication == PreAuthenticatedAuthenticationToken::class.java
 }

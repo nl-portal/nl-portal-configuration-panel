@@ -29,7 +29,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
@@ -67,7 +67,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
         http: HttpSecurity,
     ): SecurityFilterChain {
         http
-            .securityMatcher(AntPathRequestMatcher("/api/v1/**"))
+            .securityMatcher("/api/v1/**")
             .authorizeHttpRequests { request ->
                 request.anyRequest().authenticated()
             }.csrf { it.disable() }
@@ -85,7 +85,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
         http: HttpSecurity,
     ): SecurityFilterChain {
         http
-            .securityMatcher(AntPathRequestMatcher("$configServerBasePath/**"))
+            .securityMatcher("$configServerBasePath/**")
             .authorizeHttpRequests { request ->
                 request.anyRequest().authenticated()
             }.csrf { it.disable() }
@@ -103,7 +103,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
             setPrincipalRequestHeader("X-Config-Token")
             setExceptionIfHeaderMissing(false)
             setRequiresAuthenticationRequestMatcher(
-                AntPathRequestMatcher("$configServerBasePath/**"),
+                PathPatternRequestMatcher.withDefaults().matcher(("$configServerBasePath/**")),
             )
             setAuthenticationManager(authenticationManager)
         }

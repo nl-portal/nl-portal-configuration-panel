@@ -15,10 +15,14 @@
  */
 
 pluginManagement {
-    val kotlinVersion: String by settings
-    val springBootVersion: String by settings
-    val springDependencyManagementVersion: String by settings
-    val ktlintVersion: String by settings
+    val kotlinVersion: String =
+        providers.gradleProperty("kotlinVersion").get()
+    val springBootVersion: String =
+        providers.gradleProperty("springBootVersion").get()
+    val springDependencyManagementVersion: String =
+        providers.gradleProperty("springDependencyManagementVersion").get()
+    val spotlessVersion: String =
+        providers.gradleProperty("spotlessVersion").get()
 
     plugins {
         kotlin("jvm") version kotlinVersion
@@ -26,7 +30,7 @@ pluginManagement {
         id("org.springframework.boot") version springBootVersion
         id("io.spring.dependency-management") version springDependencyManagementVersion
 
-        id("org.jlleitschuh.gradle.ktlint") version ktlintVersion
+        id("com.diffplug.spotless") version spotlessVersion apply false
     }
 }
 

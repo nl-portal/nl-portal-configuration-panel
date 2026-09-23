@@ -2,7 +2,7 @@ spring:
     cloud:
         config:
           server:
-              prefix: "configuration"
+              prefix: "/configuration"
     liquibase:
         enabled: false
     datasource:
@@ -13,7 +13,6 @@ spring:
             resourceserver:
                 jwt:
                     jwk-set-uri: http://localhost:8082
-
 ---
 
 configuration-panel:

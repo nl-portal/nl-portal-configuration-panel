@@ -17,7 +17,7 @@
 package nl.nlportal.configurationpanel.configuration
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer
+import org.springframework.boot.cache.autoconfigure.CacheManagerCustomizer
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager
