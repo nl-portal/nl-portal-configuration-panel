@@ -17,40 +17,62 @@
 import { useContext } from "react";
 import { useAuth } from "react-oidc-context";
 import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export type FeatureToggle = {
   enabled: boolean;
 };
 
-export interface UsefeatureToggleProps {
-  applicationName?: string;
-  featurePrefix?: string;
-  refetchInterval?: number | false | undefined;
-}
-
-const useFeatureToggle = (props: UsefeatureToggleProps) => {
+/** Query options for a module's `<prefix>.enabled` toggle, shared so toggles are cached per prefix. */
+export const useFeatureToggleQueryOptions = () => {
   const auth = useAuth();
   const { configPanelSettings, clientSettings } = useContext(
     ConfigPanelSettingsContext,
   );
 
-  const getFeatureToggle = async (): Promise<FeatureToggle> => {
-    const response = await fetch(
-      `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${props.featurePrefix}/enabled`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + auth.user?.access_token,
+  return (featurePrefix: string) => ({
+    queryKey: [
+      "getFeatureToggle",
+      clientSettings.applicationName,
+      featurePrefix,
+    ],
+    queryFn: async (): Promise<FeatureToggle> => {
+      const response = await fetch(
+        `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${featurePrefix}/enabled`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + auth.user?.access_token,
+          },
         },
-      },
-    );
-    return await response.json();
-  };
-  const setFeatureToggle = async (enabled: boolean): Promise<void> => {
+      );
+      if (!response.ok) throw new Error(`Failed to load ${featurePrefix}`);
+      return await response.json();
+    },
+  });
+};
+
+export interface UseFeatureToggleProps {
+  featurePrefix: string;
+  /** Sections without an `enabled` property skip the query. */
+  hasToggle: boolean;
+}
+
+const useFeatureToggle = ({
+  featurePrefix,
+  hasToggle,
+}: UseFeatureToggleProps) => {
+  const auth = useAuth();
+  const queryClient = useQueryClient();
+  const { configPanelSettings, clientSettings } = useContext(
+    ConfigPanelSettingsContext,
+  );
+  const queryOptions = useFeatureToggleQueryOptions()(featurePrefix);
+
+  const setFeatureToggle = async (enabled: boolean): Promise<FeatureToggle> => {
     const response = await fetch(
-      `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${props.featurePrefix}`,
+      `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${featurePrefix}`,
       {
         method: "POST",
         headers: {
@@ -61,18 +83,17 @@ const useFeatureToggle = (props: UsefeatureToggleProps) => {
         body: JSON.stringify({ enabled: enabled }),
       },
     );
-
+    if (!response.ok) throw new Error(`Failed to toggle ${featurePrefix}`);
     return await response.json();
   };
 
   return {
-    getFeatureToggle: useQuery({
-      queryKey: ["getFeatureToggle"],
-      queryFn: getFeatureToggle,
-    }),
+    getFeatureToggle: useQuery({ ...queryOptions, enabled: hasToggle }),
     setFeatureToggle: useMutation({
-      mutationKey: ["setFeatureToggle"],
+      mutationKey: ["setFeatureToggle", featurePrefix],
       mutationFn: setFeatureToggle,
+      onSuccess: (data) =>
+        queryClient.setQueryData(queryOptions.queryKey, data),
     }),
   };
 };

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { FormattedMessage } from "react-intl";
 import { Link } from "@gemeente-denhaag/link";
 import { Paragraph } from "@gemeente-denhaag/typography";
@@ -21,53 +22,66 @@ import PortalLink from "./PortalLink.tsx";
 import styles from "./ConfigurationList.module.scss";
 import Table from "./Table.tsx";
 
-interface ConfigurationListProps {
-  configurationKey: string;
-  entries: string[];
+export interface ConfigurationListEntry {
+  id: string;
+  href: string;
+  label: string;
+  hintKey?: string;
 }
 
-const ConfigurationList = ({
-  configurationKey,
-  entries,
-}: ConfigurationListProps) => {
+interface ConfigurationListProps {
+  titleKey: string;
+  entries: ConfigurationListEntry[];
+}
+
+const ConfigurationList = ({ titleKey, entries }: ConfigurationListProps) => {
   return (
     <div className={styles["configuration-list"]}>
       <Table
         headers={[
           {
-            key: configurationKey,
+            key: titleKey,
             head: true,
             children: (
               <Paragraph>
                 <b>
-                  <FormattedMessage id={`configuration.${configurationKey}`} />
+                  <FormattedMessage id={titleKey} />
                 </b>
               </Paragraph>
             ),
           },
+          // Second header cell, so the header line spans both columns.
+          { head: true, className: styles["configuration-list__action"] },
         ]}
-        rows={entries.map((entryId) => [
-          <span>
+        rows={entries.map((entry) => [
+          <span key={`${entry.id}-label`}>
             <Paragraph>
-              <FormattedMessage id={`${configurationKey}.${entryId}`} />
+              {entry.label}
+              {entry.hintKey && (
+                <>
+                  {" "}
+                  <small className={styles["configuration-list__hint"]}>
+                    (<FormattedMessage id={entry.hintKey} />)
+                  </small>
+                </>
+              )}
             </Paragraph>
           </span>,
-          [
-            <span>
+          {
+            className: styles["configuration-list__action"],
+            children: (
               <Link
-                href={`/${configurationKey}/${entryId}`}
+                href={entry.href}
                 icon={<SettingsIcon />}
                 Link={PortalLink}
                 iconAlign="end"
               >
-                <div>
-                  <Paragraph>
-                    <FormattedMessage id={`configuration.configure`} />
-                  </Paragraph>
-                </div>
+                <Paragraph>
+                  <FormattedMessage id={`configuration.configure`} />
+                </Paragraph>
               </Link>
-            </span>,
-          ],
+            ),
+          },
         ])}
       />
     </div>

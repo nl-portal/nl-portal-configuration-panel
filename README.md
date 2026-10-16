@@ -7,10 +7,9 @@ The following software has to be installed to be able to use this application
 | Run latest prebuilt app images | Build and run app images | Run from source |
 |--------------------------------|--------------------------|-----------------|
 | Docker Desktop                 | Docker Desktop           | Docker Desktop  |
-|                                |                          | NodeJS 20       |
-|                                |                          | PNPM            |
-
-## Dependencies
+|                                |                          | Node.js 24      |
+|                                |                          | pnpm 11         |
+|                                |                          | Java 21         |
 
 ## Compatibility
 
@@ -20,42 +19,43 @@ Refer to the following table for version compatibility between the Configuration
 |---------|---------------------|---------------------------|
 | Version | 1.0.0               | 2.0.2                     |
 | Version | 2.0.0               | 3.0.0                     |
+| Version | 3.0.0               | 4.0.0                     |
+
+Configuration Panel 3.0.0 also keeps serving the configuration NL Portal 3.x reads, so you can upgrade the panel first
+and NL Portal at your own pace. The panel's main page lists the keys kept for older NL Portal versions; delete them once
+every connected NL Portal instance runs the newer version.
+
+Deleting a kept key does not notify connected NL Portal instances (no `actuator/refresh`). An older instance that is
+still running keeps the deleted value until it restarts or its configuration is refreshed, and only then loses it. So a
+key deleted too early shows up at the next restart, not right away: check every instance's version before deleting.
 
 ## Running the application
 
-Follow one of the following to start up the application:
+The Docker Compose setup has three run modes, chosen with the `RUN_MODE` environment variable:
 
-* [Run latest prebuilt app images](#by-pulling-and-running-latest-prebuilt-docker-images)
-* [Build and run app images](#by-building-and-running-docker-images)
-* [Run from source](#from-source)
+| `RUN_MODE`          | Started by compose                         | Panel                                             |
+|---------------------|--------------------------------------------|---------------------------------------------------|
+| `sources` (default) | database (54322), Keycloak (8083)          | run `./gradlew bootRun` (8090) and `pnpm dev` yourself |
+| `local`             | the above, plus the panel behind a router  | built from this checkout                          |
+| `remote`            | the above, plus the panel behind a router  | the published `3.0` images                        |
 
-Once started, the application will become available at http://localhost:3001. The default user credentials
-for this application are `admin:admin`.
+Once started, the application is available at http://localhost:3001. The default user credentials are `admin:admin`.
 
 ### By pulling and running latest prebuilt docker images
 
-Running the latest public docker images can be done via your favourite IDE by running the `docker-compose` file with
-the `remote` profile or by running the following command in your terminal:
-
 ```shell
-docker compose --profile remote up -d
+RUN_MODE=remote docker compose up -d
 ```
 
 ### By building and running docker images
 
-You can choose to build docker images of the backend and frontend for running locally
-instead of in a development environment by running the following command:
-
 ```shell
-docker compose --profile local up -d --build
+RUN_MODE=local docker compose up -d --build
 ```
 
 ### From source
 
-Start up the backend and frontend from within their respective directories through an IDE (only do step 1) or via the
-following shell commands:
-
-1. Compose the database and keycloak services
+1. Compose the database and Keycloak
    ```shell
    docker compose up -d
    ```
@@ -64,11 +64,29 @@ following shell commands:
    cd frontend
    pnpm i && pnpm dev
    ```
-3. Start the backend
+3. Configure and start the backend. `bootRun` reads only `backend/.env.properties`:
    ```shell
    cd backend
+   cp .env.properties.example .env.properties
    ./gradlew bootRun
    ```
+
+### Side by side with NL Portal
+
+The panel's ports don't clash with the NL Portal monorepo's Docker Compose stack (the panel's Keycloak runs on 8083), so
+both can run at the same time.
+Start the NL Portal stack without its `config` profile, and point the NL Portal backend at the panel:
+
+```properties
+CONFIGURATION_PANEL_ENABLED=true
+CONFIGURATION_PANEL_URI=http://localhost:8090/configuration
+CONFIGURATION_PANEL_TOKEN=VerySecretToken
+CONFIGURATION_PANEL_APPLICATION_NAME=nl-portal-app
+```
+
+Use `http://host.docker.internal:8090/configuration` as the URI when NL Portal runs in a container. The token must match
+the panel's `CONFIG_SERVER_TOKEN`. The panel notifies the NL Portal backend on `http://localhost:8080` of changes (see
+`CONFIG_NOTIFY_LIST`).
 
 ## Environment Variables
 
@@ -113,7 +131,7 @@ configured as well.
           this application. Example: `nl-portal-app`.
     * Optional
         * `CONFIG_PANEL_REST_API_URL` - The frontend app relies on requests made to `/api` being routed to the backend,
-          either via ingress or a custom router (see example [docker-compose.yml](docker-compose.yaml)). Set this to the
+          either via ingress or a custom router (see example [compose.local.yaml](compose.local.yaml)). Set this to the
           base URL of the backend REST API should the backend and frontend be running on different hosts without
           routing.
 
@@ -121,8 +139,8 @@ configured as well.
 
 ### Via environment variables
 
-Configure the following environment variables according to your infrastructure, be it local or remote to affect the
-example docker-compose setup.
+Configure the following environment variables according to your infrastructure, be it local or remote, to adapt the
+example Docker Compose setup.
 
-* [nl-portal-app-backend environment variables](imports/backend.env)
-* [nl-portal-app-frontend environment variables](imports/frontend.env)
+* [Configuration Panel backend environment variables](imports/backend.env)
+* [Configuration Panel frontend environment variables](imports/frontend.env)

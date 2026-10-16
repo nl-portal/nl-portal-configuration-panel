@@ -34,7 +34,7 @@ class ThemeEventListener(
     fun handleThemeLogoChangedEvent(event: ThemeLogoChangedEvent) {
         configurationPropertiesService.saveConfigurationProperty(
             ConfigurationProperty(
-                propertyKey = "nl-portal.config.theme.logo",
+                propertyKey = ThemeLogo.THEME_LOGO_CONFIGURATION_PROPERTY_KEY,
                 propertyValue = event.themeLogo.asBase64DataUri(),
                 application = event.themeLogo.application,
                 profile = event.themeLogo.profile,
@@ -47,7 +47,7 @@ class ThemeEventListener(
     fun handleThemeStyleChangedEvent(event: ThemeStyleChangedEvent) {
         configurationPropertiesService.saveConfigurationProperty(
             ConfigurationProperty(
-                propertyKey = "nl-portal.config.theme.style",
+                propertyKey = ThemeStyle.THEME_STYLE_CONFIGURATION_PROPERTY_KEY,
                 propertyValue = event.themeStyle.styles,
                 application = event.themeStyle.application,
                 profile = event.themeStyle.profile,
@@ -57,18 +57,16 @@ class ThemeEventListener(
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    fun handleThemeLogoDeletedEvent(event: ThemeLogoDeletedEvent) =
-        configurationPropertiesService
-            .deleteConfigurationPropertiesByApplicationAndFeatureKey(
-                application = event.themeLogo.application,
-                featureKey = ThemeLogo.THEME_LOGO_CONFIGURATION_PROPERTY_KEY,
-            )
+    fun handleThemeLogoDeletedEvent(event: ThemeLogoDeletedEvent) = configurationPropertiesService
+        .deleteConfigurationPropertiesByApplicationAndFeatureKey(
+            application = event.themeLogo.application,
+            featureKey = ThemeLogo.THEME_LOGO_CONFIGURATION_PROPERTY_KEY,
+        )
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    fun handleThemeStyleDeletedEvent(event: ThemeStyleDeletedEvent) =
-        configurationPropertiesService
-            .deleteConfigurationPropertiesByApplicationAndFeatureKey(
-                application = event.themeStyle.application,
-                featureKey = ThemeStyle.THEME_STYLE_CONFIGURATION_PROPERTY_KEY,
-            )
+    fun handleThemeStyleDeletedEvent(event: ThemeStyleDeletedEvent) = configurationPropertiesService
+        .deleteConfigurationPropertiesByApplicationAndFeatureKey(
+            application = event.themeStyle.application,
+            featureKey = ThemeStyle.THEME_STYLE_CONFIGURATION_PROPERTY_KEY,
+        )
 }

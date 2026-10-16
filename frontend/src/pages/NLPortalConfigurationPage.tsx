@@ -15,15 +15,45 @@
  */
 
 import { PageHeader } from "@gemeente-denhaag/page";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { Heading2, Paragraph } from "@gemeente-denhaag/typography";
 import styles from "./NLPortalConfigurationPage.module.scss";
-import ConfigurationList from "../components/ConfigurationList.tsx";
-import { features } from "../constants/features.tsx";
+import ConfigurationList, {
+  ConfigurationListEntry,
+} from "../components/ConfigurationList.tsx";
 import PageGrid from "../components/PageGrid.tsx";
-import { themes } from "../constants/themes.tsx";
+import UpgradeNotice from "../components/UpgradeNotice.tsx";
+import {
+  frontendSections,
+  moduleSections,
+  themeSections,
+} from "../constants/sections.tsx";
+import { paths } from "../constants/paths.ts";
+import {
+  ConfigSection,
+  ConfigSectionKind,
+  sectionTitle,
+} from "../interfaces/ConfigSection.ts";
+
+const toEntry = (
+  intl: IntlShape,
+  section: ConfigSection,
+): ConfigurationListEntry => ({
+  id: section.id,
+  href:
+    section.kind === ConfigSectionKind.THEME
+      ? paths.theme(section.id)
+      : paths.feature(section.id),
+  label: sectionTitle(intl, section),
+  hintKey: section.hintKey,
+});
 
 const NLPortalConfigurationPage = () => {
+  const intl = useIntl();
+  const features = [...moduleSections].sort((a, b) =>
+    a.title.localeCompare(b.title),
+  );
+
   return (
     <PageGrid>
       <PageHeader>
@@ -34,15 +64,16 @@ const NLPortalConfigurationPage = () => {
       <Paragraph className={styles["features__sub-header"]}>
         <FormattedMessage id="configuration.subtitle" />
       </Paragraph>
+      <UpgradeNotice />
       <ConfigurationList
-        configurationKey={"theme"}
-        entries={themes.map(
-          (themeSettings) => themeSettings.themeConfigurationId,
+        titleKey="configuration.portal-interface"
+        entries={[...frontendSections, ...themeSections].map((section) =>
+          toEntry(intl, section),
         )}
       />
       <ConfigurationList
-        configurationKey={"features"}
-        entries={features.map((feat) => feat.featureId)}
+        titleKey="configuration.features"
+        entries={features.map((section) => toEntry(intl, section))}
       />
     </PageGrid>
   );

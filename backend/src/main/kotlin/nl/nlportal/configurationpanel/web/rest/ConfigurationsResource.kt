@@ -19,12 +19,17 @@ package nl.nlportal.configurationpanel.web.rest
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import nl.nlportal.configurationpanel.web.rest.dto.FeatureEnabledDTO
+import nl.nlportal.configurationpanel.web.rest.dto.RetiredConfigurationKeyDTO
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -47,24 +52,22 @@ class ConfigurationsResource(
     fun getFeatureToggleByApplicationAndFeatureKeyOrNull(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String,
-    ): FeatureEnabledDTO =
-        configService
-            .getFeatureToggle(application, featureKey)
-            .let {
-                FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
-            }
+    ): FeatureEnabledDTO = configService
+        .getFeatureToggle(application, featureKey)
+        .let {
+            FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
+        }
 
     @PostMapping("/v1/configurations/{application}/features/{featureKey}")
     fun saveFeatureToggleByApplicationAndFeatureKeyOrNull(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String,
         @RequestBody featureEnabled: FeatureEnabledDTO,
-    ): FeatureEnabledDTO =
-        configService
-            .setFeatureToggle(application, featureKey, enabled = featureEnabled.enabled)
-            .let {
-                FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
-            }
+    ): FeatureEnabledDTO = configService
+        .setFeatureToggle(application, featureKey, enabled = featureEnabled.enabled)
+        .let {
+            FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
+        }
 
     @DeleteMapping("/v1/configurations/{application}/features/{featureKey}")
     fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
@@ -72,6 +75,34 @@ class ConfigurationsResource(
         @PathVariable("featureKey") featureKey: String,
     ) {
         configService.deleteConfigurationPropertiesByApplicationAndFeatureKey(application, featureKey)
+    }
+
+    @GetMapping("/v1/configurations/{application}/retired")
+    fun getRetiredConfigurationKeys(
+        @PathVariable("application") application: String,
+    ): List<RetiredConfigurationKeyDTO> = configService
+        .getRetiredConfigurationProperties(application)
+        .map { RetiredConfigurationKeyDTO(propertyKey = it.propertyKey, retiredIn = it.retiredIn!!) }
+
+    // The key is a query parameter: retired keys can contain "/" (CP 2.0.0 profile names), and the firewall rejects
+    // an encoded slash in the path.
+    @DeleteMapping("/v1/configurations/{application}/retired", params = ["propertyKey"])
+    fun deleteRetiredConfigurationKey(
+        @PathVariable("application") application: String,
+        @RequestParam("propertyKey") propertyKey: String,
+    ): ResponseEntity<Void> = if (configService.deleteRetiredConfigurationProperty(application, propertyKey)) {
+        ResponseEntity.noContent().build()
+    } else {
+        ResponseEntity.notFound().build()
+    }
+
+    @DeleteMapping("/v1/configurations/{application}/retired", params = ["retiredIn"])
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteRetiredConfigurationKeys(
+        @PathVariable("application") application: String,
+        @RequestParam("retiredIn") retiredIn: String,
+    ) {
+        configService.deleteRetiredConfigurationProperties(application, retiredIn)
     }
 
     @PostMapping("/v1/configurations")

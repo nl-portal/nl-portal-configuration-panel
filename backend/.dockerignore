@@ -1,0 +1,7 @@
+.gradle
+.idea
+.env.properties
+build/*
+!build/libs/
+build/libs/*
+!build/libs/backend.jar

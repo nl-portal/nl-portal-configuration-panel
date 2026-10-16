@@ -13,52 +13,69 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import _ from "lodash";
 import { flatten } from "flat";
 import { useContext } from "react";
 import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
 import { ConfigurationProperty } from "./useConfiguration.tsx";
 
+const coerce = (value: string): string | boolean => {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return value;
+};
+
+const isEmpty = (value: unknown) =>
+  value === undefined ||
+  value === null ||
+  value === "" ||
+  (Array.isArray(value) && value.length === 0);
+
 const useConfigurationPropertyMapperHook = () => {
   const { clientSettings } = useContext(ConfigPanelSettingsContext);
+
+  /** Builds an object from property rows; `"true"`/`"false"` become booleans. */
   const parseProperties = (
     properties: ConfigurationProperty[],
     prefix?: string,
-  ): object => {
+  ): object | undefined => {
     const constructedConfig = {};
 
     properties.forEach(({ propertyKey, propertyValue }) => {
-      _.set(constructedConfig, propertyKey, propertyValue);
+      _.set(constructedConfig, propertyKey, coerce(propertyValue));
     });
 
     return prefix ? _.get(constructedConfig, prefix) : constructedConfig;
   };
 
+  /**
+   * Flattens an object to property rows. Empty strings and empty lists are skipped: no value
+   * means NL Portal's default applies. `false` and `0` are kept.
+   */
   const toProperties = (
     configuration: object = {},
     prefix?: string,
     application: string = clientSettings.applicationName || "",
   ): ConfigurationProperty[] => {
-    const configurationProperties: ConfigurationProperty[] = [];
-    const flattenedProperties: object = flatten(configuration, { safe: true });
+    const flattenedProperties: Record<string, unknown> = flatten(
+      configuration,
+      {
+        safe: true,
+      },
+    );
 
-    Object.entries(flattenedProperties).map(([key, value]) => {
-      if (value !== undefined && Array.isArray(value)) {
-        configurationProperties.push({
-          propertyKey: prefix ? `${prefix}.${key}` : key,
-          propertyValue: value.join(", "),
-          application: application,
-        });
-      } else if (value !== undefined && typeof value !== "object") {
-        configurationProperties.push({
-          propertyKey: prefix ? `${prefix}.${key}` : key,
-          propertyValue: value.toString(),
-          application: application,
-        });
-      }
-    });
-
-    return configurationProperties;
+    return Object.entries(flattenedProperties)
+      .filter(
+        ([, value]) =>
+          !isEmpty(value) &&
+          (Array.isArray(value) || typeof value !== "object"),
+      )
+      .map(([key, value]) => ({
+        propertyKey: prefix ? `${prefix}.${key}` : key,
+        propertyValue: Array.isArray(value) ? value.join(", ") : String(value),
+        application,
+      }));
   };
 
   return {

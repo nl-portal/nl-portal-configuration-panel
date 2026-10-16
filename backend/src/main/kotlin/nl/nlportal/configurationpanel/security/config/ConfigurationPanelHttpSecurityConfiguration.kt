@@ -45,8 +45,7 @@ class ConfigurationPanelHttpSecurityConfiguration {
     ): AuthenticationProvider = TokenAuthenticationProvider(configurationToken)
 
     @Bean
-    fun configurationPanelAuthenticationManager(authenticationProviders: List<AuthenticationProvider>): AuthenticationManager =
-        ProviderManager(authenticationProviders)
+    fun configurationPanelAuthenticationManager(authenticationProviders: List<AuthenticationProvider>): AuthenticationManager = ProviderManager(authenticationProviders)
 
     @Bean
     fun corsConfigurationSource(
@@ -98,13 +97,12 @@ class ConfigurationPanelHttpSecurityConfiguration {
 
     fun configurationServerRequestHeaderAuthenticationFilter(
         authenticationManager: AuthenticationManager,
-    ): RequestHeaderAuthenticationFilter =
-        RequestHeaderAuthenticationFilter().apply {
-            setPrincipalRequestHeader("X-Config-Token")
-            setExceptionIfHeaderMissing(false)
-            setRequiresAuthenticationRequestMatcher(
-                PathPatternRequestMatcher.withDefaults().matcher(("$configServerBasePath/**")),
-            )
-            setAuthenticationManager(authenticationManager)
-        }
+    ): RequestHeaderAuthenticationFilter = RequestHeaderAuthenticationFilter().apply {
+        setPrincipalRequestHeader("X-Config-Token")
+        setExceptionIfHeaderMissing(false)
+        setRequiresAuthenticationRequestMatcher(
+            PathPatternRequestMatcher.withDefaults().matcher("$configServerBasePath/**"),
+        )
+        setAuthenticationManager(authenticationManager)
+    }
 }

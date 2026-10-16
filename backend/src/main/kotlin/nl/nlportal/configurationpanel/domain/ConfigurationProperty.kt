@@ -38,4 +38,7 @@ data class ConfigurationProperty(
     val label: String? = null,
     @Column(name = "modified_on")
     val modifiedOn: Instant? = Instant.now(),
+    /** The NL Portal version that stopped reading this key. Only Liquibase changelogs set it. */
+    @Column(name = "retired_in", insertable = false, updatable = false)
+    val retiredIn: String? = null,
 )

@@ -1,0 +1,49 @@
+name: _stage-fe
+
+on:
+    workflow_call:
+        inputs:
+            version:
+                description: "The channel-decorated version to stamp."
+                type: string
+                required: true
+            nodeVersion:
+                type: string
+                default: "24"
+
+permissions:
+    contents: read
+
+jobs:
+    stage:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+            -   name: Set up Node.js ${{ inputs.nodeVersion }}
+                uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+                with:
+                    node-version: ${{ inputs.nodeVersion }}
+            -   name: Install
+                working-directory: frontend
+                run: npm install -g pnpm@11 && pnpm install --frozen-lockfile
+            -   name: Lint
+                working-directory: frontend
+                run: pnpm lint
+            -   name: Stamp version in place
+                working-directory: frontend
+                env:
+                    VERSION: ${{ inputs.version }}
+                run: |
+                    sed -i 's/"version": "0.0.0"/"version": "'"${VERSION}"'"/' package.json
+            -   name: Build
+                working-directory: frontend
+                run: pnpm build
+            -   name: Package stage bundle
+                working-directory: frontend
+                run: tar -cf frontend-stage.tar build
+            -   name: Upload stage bundle
+                uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+                with:
+                    name: frontend-stage
+                    path: frontend/frontend-stage.tar
+                    retention-days: 1

@@ -42,14 +42,13 @@ class ThemeLogoConfigurationResource(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<List<ThemeLogoDTO>> =
-        ResponseEntity.ok(
-            themeService
-                .getThemeLogos(application, profile, label)
-                .map { themeLogo ->
-                    ThemeLogoDTO.fromThemeLogo(themeLogo)
-                },
-        )
+    ): ResponseEntity<List<ThemeLogoDTO>> = ResponseEntity.ok(
+        themeService
+            .getThemeLogos(application, profile, label)
+            .map { themeLogo ->
+                ThemeLogoDTO.fromThemeLogo(themeLogo)
+            },
+    )
 
     @GetMapping("/v1/theme/{application}/logo/{id}")
     fun getThemeLogoContentById(
@@ -58,6 +57,7 @@ class ThemeLogoConfigurationResource(
     ): ResponseEntity<ByteArray> {
         return when (val logo = themeService.getThemeLogoByIdOrNull(id)) {
             null -> return ResponseEntity.notFound().build()
+
             else ->
                 ResponseEntity
                     .ok()
@@ -82,12 +82,11 @@ class ThemeLogoConfigurationResource(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<ThemeLogoDTO> =
-        themeService
-            .saveThemeLogo(file, application, profile, label)
-            .let { themeLogo ->
-                ResponseEntity.ok(
-                    ThemeLogoDTO.fromThemeLogo(themeLogo),
-                )
-            }
+    ): ResponseEntity<ThemeLogoDTO> = themeService
+        .saveThemeLogo(file, application, profile, label)
+        .let { themeLogo ->
+            ResponseEntity.ok(
+                ThemeLogoDTO.fromThemeLogo(themeLogo),
+            )
+        }
 }

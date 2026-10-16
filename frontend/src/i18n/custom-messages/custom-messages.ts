@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Messages } from "@nl-portal/nl-portal-localization";
+import { Messages } from "../locales.ts";
 import { NL_NL_MESSAGES } from "./nl-nl";
 import { EN_GB_MESSAGES } from "./en-gb";
 

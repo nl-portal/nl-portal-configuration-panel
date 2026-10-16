@@ -21,12 +21,14 @@ import { Paragraph } from "@gemeente-denhaag/typography";
 
 const CurrentUser = () => {
   const auth = useAuth();
+  const name =
+    auth.user?.profile.given_name || auth.user?.profile.email || "User";
 
   return (
     <div className={classNames(styles["user-name"])}>
       <Paragraph className={styles["user-name__paragraph"]}>
-        <span translate="no">
-          {auth.user?.profile.given_name || auth.user?.profile.email || "User"}
+        <span translate="no" title={name}>
+          {name}
         </span>
       </Paragraph>
     </div>

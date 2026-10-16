@@ -36,21 +36,46 @@ class ConfigurationPropertiesService(
         propertyKey: String,
     ): ConfigurationProperty? = configRepository.findByApplicationAndPropertyKey(application, propertyKey)
 
-    fun getConfigurationPropertiesByApplicationOrNull(application: String): List<ConfigurationProperty>? =
-        configRepository.findByApplication(application)
+    fun getConfigurationPropertiesByApplicationOrNull(application: String): List<ConfigurationProperty>? = configRepository.findByApplicationAndRetiredInIsNull(application)
 
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         application: String,
         featureKey: String,
-    ): List<ConfigurationProperty>? = configRepository.findByApplicationAndPropertyKeyStartsWith(application, featureKey)
+    ): List<ConfigurationProperty>? = configRepository.findByApplicationAndPropertyKeyStartsWithAndRetiredInIsNull(application, featureKey)
 
     fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
         application: String,
         featureKey: String,
     ) {
         configRepository
-            .findByApplicationAndPropertyKeyStartsWith(application, featureKey)
+            .findByApplicationAndPropertyKeyStartsWithAndRetiredInIsNull(application, featureKey)
             ?.apply { configRepository.deleteAll(this) }
+    }
+
+    fun getRetiredConfigurationProperties(application: String): List<ConfigurationProperty> = configRepository.findByApplicationAndRetiredInIsNotNullOrderByRetiredInAscPropertyKeyAsc(application)
+
+    /**
+     * Deletes one retired row. Returns false when the key doesn't exist or isn't retired.
+     * Publishes no change event: the NL Portal versions that still read retired keys are not notified.
+     */
+    @Transactional
+    fun deleteRetiredConfigurationProperty(
+        application: String,
+        propertyKey: String,
+    ): Boolean {
+        val retired =
+            configRepository.findByApplicationAndPropertyKeyAndRetiredInIsNotNull(application, propertyKey)
+                ?: return false
+        configRepository.delete(retired)
+        return true
+    }
+
+    @Transactional
+    fun deleteRetiredConfigurationProperties(
+        application: String,
+        retiredIn: String,
+    ) {
+        configRepository.deleteAll(configRepository.findRetiredByApplicationAndVersion(application, retiredIn))
     }
 
     fun getFeatureToggle(
@@ -82,22 +107,20 @@ class ConfigurationPropertiesService(
     }
 
     @Transactional
-    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? =
-        configRepository
-            .save(config)
-            .also {
-                applicationEventPublisher.publishEvent(
-                    ConfigurationPropertiesChangedEvent(listOf(it)),
-                )
-            }
+    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? = configRepository
+        .save(config)
+        .also {
+            applicationEventPublisher.publishEvent(
+                ConfigurationPropertiesChangedEvent(listOf(it)),
+            )
+        }
 
     @Transactional
-    fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> =
-        configRepository
-            .saveAll(configs)
-            .also {
-                applicationEventPublisher.publishEvent(
-                    ConfigurationPropertiesChangedEvent(it),
-                )
-            }
+    fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> = configRepository
+        .saveAll(configs)
+        .also {
+            applicationEventPublisher.publishEvent(
+                ConfigurationPropertiesChangedEvent(it),
+            )
+        }
 }

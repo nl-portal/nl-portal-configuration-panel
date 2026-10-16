@@ -30,13 +30,12 @@ data class ThemeStyleDTO(
 ) {
     companion object {
         @JvmStatic
-        fun fromThemeStyle(themeStyle: ThemeStyle) =
-            ThemeStyleDTO(
-                styleId = themeStyle.id,
-                styles = themeStyle.styles,
-                application = themeStyle.application,
-                profile = themeStyle.profile,
-                label = themeStyle.label,
-            )
+        fun fromThemeStyle(themeStyle: ThemeStyle) = ThemeStyleDTO(
+            styleId = themeStyle.id,
+            styles = themeStyle.styles,
+            application = themeStyle.application,
+            profile = themeStyle.profile,
+            label = themeStyle.label,
+        )
     }
 }

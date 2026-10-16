@@ -1,0 +1,143 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright 2025 Ritense BV, the Netherlands.
+  ~
+  ~ Licensed under EUPL, Version 1.2 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--
+  NL Portal 4.0 moved or removed some configuration keys:
+  - the document whitelists moved from `zakenapi.properties.zaak-documenten-config` to `documentenapis.properties`;
+  - the theme logo and style moved from `nl-portal.config.theme` to `nl-portal.frontend.theme`;
+  - Haal Centraal BRP and Ogone payment were removed;
+  - `nl-portal.config.openproducten` was a typo of configuration panel 2.0.0 that no NL Portal version reads.
+
+  Moved keys are copied to their new name, as they are. The old rows stay, because NL Portal 3.x instances
+  connected to the same panel keep reading them; the config server serves every row of an application.
+  `retired_in` marks the NL Portal version that stopped reading a key. The panel no longer edits retired rows
+  and lists them on its main page, where the operator deletes them once every instance runs that version.
+
+  `openproducten` is retired without a copy: copying it to `nl-portal.config.openproduct` would activate settings
+  on running NL Portal 3.x instances that never reached them before.
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="add-retired-in" author="Ritense">
+        <addColumn tableName="nlp_configuration">
+            <column name="retired_in" type="varchar(20)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="copy-vertrouwelijkheidsaanduiding-whitelist" author="Ritense">
+        <sql>
+            INSERT INTO nlp_configuration (property_key, property_value, application, profile, label, modified_on)
+            SELECT 'nl-portal.config.documentenapis.properties.vertrouwelijkheidsaanduiding-whitelist', property_value, application, profile, label, CURRENT_TIMESTAMP
+            FROM nlp_configuration
+            WHERE property_key = 'nl-portal.config.zakenapi.properties.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist'
+              AND NOT EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.config.documentenapis.properties.vertrouwelijkheidsaanduiding-whitelist');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM nlp_configuration
+                WHERE property_key = 'nl-portal.config.documentenapis.properties.vertrouwelijkheidsaanduiding-whitelist'
+                  AND EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.config.zakenapi.properties.zaak-documenten-config.vertrouwelijkheidsaanduiding-whitelist');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="copy-status-whitelist" author="Ritense">
+        <sql>
+            INSERT INTO nlp_configuration (property_key, property_value, application, profile, label, modified_on)
+            SELECT 'nl-portal.config.documentenapis.properties.status-whitelist', property_value, application, profile, label, CURRENT_TIMESTAMP
+            FROM nlp_configuration
+            WHERE property_key = 'nl-portal.config.zakenapi.properties.zaak-documenten-config.status-whitelist'
+              AND NOT EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.config.documentenapis.properties.status-whitelist');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM nlp_configuration
+                WHERE property_key = 'nl-portal.config.documentenapis.properties.status-whitelist'
+                  AND EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.config.zakenapi.properties.zaak-documenten-config.status-whitelist');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="copy-theme-logo" author="Ritense">
+        <sql>
+            INSERT INTO nlp_configuration (property_key, property_value, application, profile, label, modified_on)
+            SELECT 'nl-portal.frontend.theme.logo', property_value, application, profile, label, CURRENT_TIMESTAMP
+            FROM nlp_configuration
+            WHERE property_key = 'nl-portal.config.theme.logo'
+              AND NOT EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.frontend.theme.logo');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM nlp_configuration
+                WHERE property_key = 'nl-portal.frontend.theme.logo'
+                  AND EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.config.theme.logo');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="copy-theme-style" author="Ritense">
+        <sql>
+            INSERT INTO nlp_configuration (property_key, property_value, application, profile, label, modified_on)
+            SELECT 'nl-portal.frontend.theme.style', property_value, application, profile, label, CURRENT_TIMESTAMP
+            FROM nlp_configuration
+            WHERE property_key = 'nl-portal.config.theme.style'
+              AND NOT EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.frontend.theme.style');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM nlp_configuration
+                WHERE property_key = 'nl-portal.frontend.theme.style'
+                  AND EXISTS (SELECT 1 FROM nlp_configuration WHERE property_key = 'nl-portal.config.theme.style');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <!-- NL Portal passes the profile language to Worldline as is; Worldline and NL Portal (also 3.x) use nl_NL / en_GB. -->
+    <changeSet id="map-payment-direct-language" author="Ritense">
+        <sql>
+            UPDATE nlp_configuration SET property_value = REPLACE(property_value, '-', '_')
+            WHERE property_key LIKE 'nl-portal.config.payment.direct.properties.configurations.%.language'
+              AND property_value IN ('nl-NL', 'en-GB');
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE nlp_configuration SET property_value = REPLACE(property_value, '_', '-')
+                WHERE property_key LIKE 'nl-portal.config.payment.direct.properties.configurations.%.language'
+                  AND property_value IN ('nl_NL', 'en_GB');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="retire-nl-portal-3-keys" author="Ritense">
+        <sql>
+            UPDATE nlp_configuration SET retired_in = '4.0'
+            WHERE property_key LIKE 'nl-portal.config.zakenapi.properties.zaak-documenten-config.%'
+               OR property_key LIKE 'nl-portal.config.theme.%'
+               OR property_key LIKE 'nl-portal.config.openproducten.%'
+               OR property_key LIKE 'nl-portal.config.haalcentraal.brp.%'
+               OR property_key LIKE 'nl-portal.config.payment.ogone.%';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE nlp_configuration SET retired_in = NULL WHERE retired_in = '4.0';
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

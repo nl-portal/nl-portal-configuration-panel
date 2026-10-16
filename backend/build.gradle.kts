@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 /*
  * Copyright 2025 Ritense BV, the Netherlands.
  *
@@ -17,12 +14,13 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
  * limitations under the License.
  */
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 val ehcacheVersion by project.properties
-val hypersistenceVersion by project.properties
 val postgresVersion by project.properties
 val springCloudServerVersion by project.properties
 val springCloudBootstrapVersion by project.properties
-//val springSecurityOauth2Version by project.properties
 val kotlinLoggingVersion by project.properties
 val apacheTikaVersion by project.properties
 val mockitoAgent = configurations.create("mockitoAgent")
@@ -53,13 +51,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.security:spring-security-oauth2-jose")
     implementation("org.springframework.boot:spring-boot-starter-security-oauth2-resource-server")
     implementation("org.springframework.cloud:spring-cloud-config-server:$springCloudServerVersion")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:$springCloudBootstrapVersion")
 
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.boot:spring-boot-liquibase")
     implementation("org.liquibase:liquibase-core")
     implementation("org.ehcache:ehcache:$ehcacheVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
@@ -84,12 +82,28 @@ dependencies {
     mockitoAgent("org.mockito:mockito-core:5.16.1") { isTransitive = false }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+val ktlintRules =
+    mapOf(
+        "ktlint_standard_import-ordering" to "disabled",
+        "ktlint_standard_property-naming" to "disabled",
+        "ktlint_standard_max-line-length" to "disabled",
+        "ktlint_standard_no-wildcard-imports" to "disabled",
+        "ktlint_standard_package-name" to "disabled",
+        "ij_kotlin_allow_trailing_comma_on_call_site" to "true",
+        "ij_kotlin_allow_trailing_comma" to "true",
+        "insert_final_newline" to "true",
+    )
+
+spotless {
+    kotlin {
+        ktlint().editorConfigOverride(ktlintRules)
+        licenseHeaderFile("licenses/kt.template")
     }
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint().editorConfigOverride(ktlintRules)
+        licenseHeaderFile("licenses/kts.template", "\\w.*")
+    }
 }
 
 kotlin {
@@ -100,27 +114,25 @@ kotlin {
 }
 
 tasks.bootRun {
-    // overrides for running from sources
-    val developmentEnv =
-        mapOf(
-            "SERVER_PORT" to "8090",
-            "DATABASE_URL" to "jdbc:postgresql://localhost:54322/nl-portal-config",
-            "JWKS_URI" to "http://localhost:8082/auth/realms/nlportalconfig/protocol/openid-connect/certs",
-            "CONFIG_NOTIFY_LIST" to "http://localhost:8080/",
+    // Running from sources reads only backend/.env.properties (copy it from .env.properties.example).
+    val envFile = project.file(".env.properties")
+    doFirst {
+        if (!envFile.isFile) {
+            throw GradleException(
+                "Missing ${envFile.path}. Copy .env.properties.example to .env.properties and adjust it for your machine.",
+            )
+        }
+        environment.putAll(
+            envFile
+                .readLines()
+                .map { it.trim() }
+                .filterNot { it.isEmpty() || it.startsWith("#") || it.startsWith("//") }
+                .associate { line ->
+                    val parts = line.split("=", limit = 2)
+                    parts[0].trim() to parts.getOrElse(1) { "" }.trim()
+                },
         )
-
-    environment.putAll(
-        project
-            .file("../imports/backend.env")
-            .takeIf { it.exists() && it.isFile }
-            ?.readLines()
-            ?.filterNot { it.startsWith("#") || it.startsWith("//") || it.isEmpty() }
-            ?.associate { line ->
-                val entry = line.split("=", limit = 2)
-                entry.first() to entry.last()
-            }?.plus(developmentEnv)
-            ?: developmentEnv,
-    )
+    }
 }
 
 tasks.withType<Test> {

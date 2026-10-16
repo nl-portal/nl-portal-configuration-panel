@@ -65,6 +65,6 @@ data class ThemeStyle(
     }
 
     companion object {
-        const val THEME_STYLE_CONFIGURATION_PROPERTY_KEY = "nl-portal.config.theme.styles"
+        const val THEME_STYLE_CONFIGURATION_PROPERTY_KEY = "nl-portal.frontend.theme.style"
     }
 }

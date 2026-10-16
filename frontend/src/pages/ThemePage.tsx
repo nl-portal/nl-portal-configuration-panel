@@ -17,24 +17,18 @@
 import { PageHeader } from "@gemeente-denhaag/page";
 import { FormattedMessage } from "react-intl";
 import { Heading2, Heading4 } from "@gemeente-denhaag/typography";
+import { Navigate, useParams } from "react-router";
 import PageGrid from "../components/PageGrid.tsx";
 import BackLink from "../components/BackLink.tsx";
 import { paths } from "../constants/paths.ts";
-import { useNavigate, useParams } from "react-router-dom";
-import { themes } from "../constants/themes.tsx";
-import { useEffect } from "react";
+import { themeSections } from "../constants/sections.tsx";
 import styles from "../styles/Configuration.module.scss";
 
 const ThemePage = () => {
   const { themeConfigurationId } = useParams();
-  const navigate = useNavigate();
-  const theme = themes.find(
-    (it) => it.themeConfigurationId == themeConfigurationId,
-  );
+  const theme = themeSections.find((it) => it.id === themeConfigurationId);
 
-  useEffect(() => {
-    if (!theme) navigate(paths.configuration);
-  }, []);
+  if (!theme) return <Navigate to={paths.configuration} replace />;
 
   return (
     <PageGrid>
@@ -49,13 +43,11 @@ const ThemePage = () => {
         ></BackLink>
         <div className={styles["feature-config__header"]}>
           <Heading2>
-            <FormattedMessage id={"theme." + themeConfigurationId} />
+            <FormattedMessage id={theme.titleKey} />
           </Heading2>
         </div>
       </PageHeader>
-      {theme?.themeConfigurationComponent && (
-        <theme.themeConfigurationComponent />
-      )}
+      <theme.component />
     </PageGrid>
   );
 };

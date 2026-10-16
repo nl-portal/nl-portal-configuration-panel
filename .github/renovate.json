@@ -1,0 +1,34 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended"
+    ],
+    "schedule": [
+        "* 18-23 * * 0"
+    ],
+    "automerge": false,
+    "dependencyDashboard": true,
+    "minimumReleaseAge": "1 day",
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": ["* 18-23 * * 0"]
+    },
+    "packageRules": [
+        {
+            "description": "Only allow minor, patch and digest updates; major upgrades are handled manually.",
+            "matchUpdateTypes": ["major"],
+            "enabled": false
+        },
+        {
+            "description": "Batch all non-major updates into a single weekly PR to reduce notification noise.",
+            "matchUpdateTypes": ["minor", "patch", "digest"],
+            "groupName": "all non-major dependencies",
+            "groupSlug": "all-minor-patch"
+        },
+        {
+            "description": "Trusted first-party/design-system scopes: skip the release-age cooldown, mirroring frontend/pnpm-workspace.yaml minimumReleaseAgeExclude.",
+            "matchPackageNames": ["@gemeente-denhaag/*", "@utrecht/*"],
+            "minimumReleaseAge": "0 days"
+        }
+    ]
+}

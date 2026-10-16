@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { paths } from "./paths.ts";
 import FeaturePage from "../pages/FeaturePage.tsx";
 import NLPortalConfigurationPage from "../pages/NLPortalConfigurationPage.tsx";

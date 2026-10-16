@@ -14,76 +14,139 @@
  * limitations under the License.
  */
 
-// based on https://shared.ecom-psp.com/v2/docs/guides/e-Commerce/SHA-OUT_params.txt
-export enum SHAOutParameter {
-  AAVADDRESS = "AAVADDRESS",
-  AAVCHECK = "AAVCHECK",
-  AAVMAIL = "AAVMAIL",
-  AAVNAME = "AAVNAME",
-  AAVPHONE = "AAVPHONE",
-  AAVZIP = "AAVZIP",
-  ACCEPTANCE = "ACCEPTANCE",
-  ALIAS = "ALIAS",
-  AMOUNT = "AMOUNT",
-  BIC = "BIC",
-  BIN = "BIN",
-  BRAND = "BRAND",
-  CARDNO = "CARDNO",
-  CCCTY = "CCCTY",
-  CN = "CN",
-  COLLECTOR_BIC = "COLLECTOR_BIC",
-  COLLECTOR_IBAN = "COLLECTOR_IBAN",
-  COMPLETIONID = "COMPLETIONID",
-  COMPLUS = "COMPLUS",
-  CREATION_STATUS = "CREATION_STATUS",
-  CREDITDEBIT = "CREDITDEBIT",
-  CURRENCY = "CURRENCY",
-  CVCCHECK = "CVCCHECK",
-  DCC_COMMPERCENTAGE = "DCC_COMMPERCENTAGE",
-  DCC_CONVAMOUNT = "DCC_CONVAMOUNT",
-  DCC_CONVCCY = "DCC_CONVCCY",
-  DCC_EXCHRATE = "DCC_EXCHRATE",
-  DCC_EXCHRATESOURCE = "DCC_EXCHRATESOURCE",
-  DCC_EXCHRATETS = "DCC_EXCHRATETS",
-  DCC_INDICATOR = "DCC_INDICATOR",
-  DCC_MARGINPERCENTAGE = "DCC_MARGINPERCENTAGE",
-  DCC_VALIDHOURS = "DCC_VALIDHOURS",
-  DEVICEID = "DEVICEID",
-  DIGESTCARDNO = "DIGESTCARDNO",
-  ECI = "ECI",
-  ED = "ED",
-  EMAIL = "EMAIL",
-  ENCCARDNO = "ENCCARDNO",
-  FXAMOUNT = "FXAMOUNT",
-  FXCURRENCY = "FXCURRENCY",
-  IP = "IP",
-  IPCTY = "IPCTY",
-  MANDATEID = "MANDATEID",
-  MOBILEMODE = "MOBILEMODE",
-  NBREMAILUSAGE = "NBREMAILUSAGE",
-  NBRIPUSAGE = "NBRIPUSAGE",
-  NBRIPUSAGE_ALLTX = "NBRIPUSAGE_ALLTX",
-  NBRUSAGE = "NBRUSAGE",
-  NCERROR = "NCERROR",
-  ORDERID = "ORDERID",
-  PAYID = "PAYID",
-  PAYIDSUB = "PAYIDSUB",
-  PAYMENT_REFERENCE = "PAYMENT_REFERENCE",
-  PM = "PM",
-  REQUESTCOMPLETIONID = "REQUESTCOMPLETIONID",
-  SCO_CATEGORY = "SCO_CATEGORY",
-  SCORING = "SCORING",
-  SEQUENCETYPE = "SEQUENCETYPE",
-  SIGNDATE = "SIGNDATE",
-  STATUS = "STATUS",
-  SUBBRAND = "SUBBRAND",
-  SUBSCRIPTION_ID = "SUBSCRIPTION_ID",
-  TICKET = "TICKET",
-  TRXDATE = "TRXDATE",
-  VC = "VC",
-}
+import { EnumOption } from "../interfaces/ConfigSection.ts";
 
-export enum language {
-  dutch = "nl-NL",
-  english = "en-GB",
-}
+// Enum values mirror the Kotlin constant names (Spring binds properties by constant name),
+// not their JSON values. Source files are in the NL Portal backend (`rc/4.0.0`).
+
+const options = (prefix: string, values: string[]): EnumOption[] =>
+  values.map((value) => ({ value, labelKey: `${prefix}.${value}` }));
+
+// core/src/main/kotlin/nl/nlportal/core/util/ShaVersion.kt (bound as a String by PrefillConfig)
+export const SHA_VERSION: EnumOption[] = [
+  { value: "SHA1" },
+  { value: "SHA256" },
+  { value: "SHA512" },
+];
+
+// zgw/verificatie/src/main/kotlin/nl/nlportal/verificatie/graphql/domain/VerificatieType.kt
+export const VERIFICATIE_TYPE: EnumOption[] = options(
+  "enums.verificatie-type",
+  ["TELEFOONNUMMER", "EMAIL", "OVERIG"],
+);
+
+// zgw/documenten-api/src/main/kotlin/nl/nlportal/documentenapi/domain/Vertrouwelijkheid.kt
+export const VERTROUWELIJKHEIDSAANDUIDING: EnumOption[] = options(
+  "enums.vertrouwelijkheidsaanduiding",
+  [
+    "OPENBAAR",
+    "BEPERKT_OPENBAAR",
+    "INTERN",
+    "ZAAKVERTROUWELIJK",
+    "VERTROUWELIJK",
+    "CONFIDENTIEEL",
+    "GEHEIM",
+    "ZEER_GEHEIM",
+    "GEEN",
+  ],
+);
+
+// zgw/documenten-api/src/main/kotlin/nl/nlportal/documentenapi/domain/DocumentStatus.kt
+export const DOCUMENT_STATUS: EnumOption[] = options("enums.document-status", [
+  "IN_BEWERKING",
+  "TER_VASTSTELLING",
+  "DEFINITIEF",
+  "GEARCHIVEERD",
+  "GEEN_STATUS",
+]);
+
+// payment-direct/.../autoconfiguration/DirectPaymentModuleConfiguration.kt (a String, passed to Worldline as is)
+export const LANGUAGE: EnumOption[] = options("i18n.language", [
+  "nl_NL",
+  "en_GB",
+]);
+
+// payment-direct `sha-out-parameters` is a List<String>; values from
+// https://shared.ecom-psp.com/v2/docs/guides/e-Commerce/SHA-OUT_params.txt
+export const SHA_OUT_PARAMETER: EnumOption[] = [
+  "AAVADDRESS",
+  "AAVCHECK",
+  "AAVMAIL",
+  "AAVNAME",
+  "AAVPHONE",
+  "AAVZIP",
+  "ACCEPTANCE",
+  "ALIAS",
+  "AMOUNT",
+  "BIC",
+  "BIN",
+  "BRAND",
+  "CARDNO",
+  "CCCTY",
+  "CN",
+  "COLLECTOR_BIC",
+  "COLLECTOR_IBAN",
+  "COMPLETIONID",
+  "COMPLUS",
+  "CREATION_STATUS",
+  "CREDITDEBIT",
+  "CURRENCY",
+  "CVCCHECK",
+  "DCC_COMMPERCENTAGE",
+  "DCC_CONVAMOUNT",
+  "DCC_CONVCCY",
+  "DCC_EXCHRATE",
+  "DCC_EXCHRATESOURCE",
+  "DCC_EXCHRATETS",
+  "DCC_INDICATOR",
+  "DCC_MARGINPERCENTAGE",
+  "DCC_VALIDHOURS",
+  "DEVICEID",
+  "DIGESTCARDNO",
+  "ECI",
+  "ED",
+  "EMAIL",
+  "ENCCARDNO",
+  "FXAMOUNT",
+  "FXCURRENCY",
+  "IP",
+  "IPCTY",
+  "MANDATEID",
+  "MOBILEMODE",
+  "NBREMAILUSAGE",
+  "NBRIPUSAGE",
+  "NBRIPUSAGE_ALLTX",
+  "NBRUSAGE",
+  "NCERROR",
+  "ORDERID",
+  "PAYID",
+  "PAYIDSUB",
+  "PAYMENT_REFERENCE",
+  "PM",
+  "REQUESTCOMPLETIONID",
+  "SCO_CATEGORY",
+  "SCORING",
+  "SEQUENCETYPE",
+  "SIGNDATE",
+  "STATUS",
+  "SUBBRAND",
+  "SUBSCRIPTION_ID",
+  "TICKET",
+  "TRXDATE",
+  "VC",
+].map((value) => ({ value }));
+
+/**
+ * Spring binds enum constants leniently (case and `-`/`_` insensitive), so stored values such as
+ * `beperkt_openbaar` still bind. Maps a stored value to the matching option, if any.
+ */
+export const matchOption = (
+  options: EnumOption[],
+  stored: string,
+): EnumOption | undefined => {
+  const normalize = (value: string) =>
+    value.trim().toUpperCase().replace(/-/g, "_");
+  return options.find(
+    (option) => normalize(option.value) === normalize(stored),
+  );
+};

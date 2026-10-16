@@ -22,5 +22,6 @@
 
     <include file="changelog/20240206-add-config-table.xml" relativeToChangelogFile="true"/>
     <include file="changelog/20250819-add-theme-tables.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/20261014-nlp4-config-keys.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
