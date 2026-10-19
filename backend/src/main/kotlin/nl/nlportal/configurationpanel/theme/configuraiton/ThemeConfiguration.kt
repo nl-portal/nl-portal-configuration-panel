@@ -24,6 +24,5 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class ThemeConfiguration {
     @Bean
-    fun themeEventListener(configurationPropertiesService: ConfigurationPropertiesService): ThemeEventListener =
-        ThemeEventListener(configurationPropertiesService)
+    fun themeEventListener(configurationPropertiesService: ConfigurationPropertiesService): ThemeEventListener = ThemeEventListener(configurationPropertiesService)
 }

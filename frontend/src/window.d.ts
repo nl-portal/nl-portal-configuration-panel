@@ -23,5 +23,6 @@ export declare global {
     OIDC_POST_LOGOUT_REDIRECT_URL: string;
     CLIENT_APPLICATION_NAME: string;
     CONFIG_PANEL_REST_API_URL: string;
+    MonacoEnvironment?: import("monaco-editor").Environment;
   }
 }

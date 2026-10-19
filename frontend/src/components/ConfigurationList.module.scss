@@ -32,3 +32,14 @@
     }
   }
 }
+
+.configuration-list__hint {
+  color: var(--denhaag-color-grey-4, #555);
+}
+
+// Shrinks to its content and keeps the configure link against the right edge.
+.configuration-list__action {
+  inline-size: 1%;
+  text-align: end;
+  white-space: nowrap;
+}

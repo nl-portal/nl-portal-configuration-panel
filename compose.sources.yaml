@@ -1,0 +1,3 @@
+# RUN_MODE=sources: no panel containers. Run the backend with `./gradlew bootRun` (8090, reads
+# backend/.env.properties) and the frontend with `pnpm dev` (3001).
+services: {}

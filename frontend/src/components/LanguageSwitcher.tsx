@@ -16,7 +16,7 @@
 
 import { Button } from "@gemeente-denhaag/button";
 import { FormattedMessage } from "react-intl";
-import { LocaleContext } from "@nl-portal/nl-portal-localization";
+import LocaleContext from "../i18n/LocaleContext.tsx";
 import { useContext } from "react";
 import MobileMenuButton from "./MobileMenuButton";
 

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useContext, useEffect, useState } from "react";
+
+import React, { useContext } from "react";
 import { FieldsetLegend } from "@gemeente-denhaag/form-fieldset";
 import { Heading3, Heading4, Paragraph } from "@gemeente-denhaag/typography";
 import { FormattedMessage } from "react-intl";
@@ -46,7 +47,7 @@ const ThemeLogoConfiguration = () => {
     uploadThemeLogo,
     deleteThemeLogo,
   } = useThemeLogo();
-  const [currentLogos, setCurrentLogos] = useState<ThemeLogo[]>([]);
+  const currentLogos: ThemeLogo[] = themeLogos ?? [];
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -67,12 +68,6 @@ const ThemeLogoConfiguration = () => {
       },
     });
   };
-
-  useEffect(() => {
-    if (themeLogos) {
-      setCurrentLogos(themeLogos);
-    }
-  }, [themeLogos]);
 
   if (themeLogosLoading)
     return (

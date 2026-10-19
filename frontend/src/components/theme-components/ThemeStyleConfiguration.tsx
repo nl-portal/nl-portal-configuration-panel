@@ -23,7 +23,7 @@ import { FormField } from "@gemeente-denhaag/form-field";
 import ActionField from "../ActionField.tsx";
 import { IconButton } from "@gemeente-denhaag/iconbutton";
 import { TrashIcon } from "@gemeente-denhaag/icons";
-import { Editor } from "@monaco-editor/react";
+import CodeEditor from "../CodeEditor.tsx";
 import useThemeStyle from "../../hooks/useThemeStyle.tsx";
 import { useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -61,7 +61,6 @@ const ThemeStyleConfiguration = () => {
     });
   };
   const handleUpdateThemeStyle = (styleId: string, styles: string) => {
-    console.log(`updating style with id ${styleId}:`, styles);
     updateThemeStyle({ styleId, styles });
     setDirtyStyles("");
   };
@@ -198,7 +197,7 @@ const ThemeStyleConfiguration = () => {
                       }
                       key={`style-${index}}`}
                     >
-                      <Editor
+                      <CodeEditor
                         value={
                           dirtyStyles ||
                           updateThemeStylesData?.styles ||

@@ -80,7 +80,7 @@ data class ThemeLogo(
     }
 
     companion object {
-        const val THEME_LOGO_CONFIGURATION_PROPERTY_KEY = "nl-portal.config.theme.logo"
+        const val THEME_LOGO_CONFIGURATION_PROPERTY_KEY = "nl-portal.frontend.theme.logo"
 
         @JvmStatic
         fun fromMultipartFile(
@@ -88,15 +88,14 @@ data class ThemeLogo(
             application: String,
             profile: String? = null,
             label: String? = null,
-        ): ThemeLogo =
-            ThemeLogo(
-                filename = requireNotNull(file.originalFilename) { "file name must not be null" },
-                mimetype = Tika().detect(file.bytes),
-                size = file.size,
-                content = file.bytes,
-                application = application,
-                profile = profile,
-                label = label,
-            )
+        ): ThemeLogo = ThemeLogo(
+            filename = requireNotNull(file.originalFilename) { "file name must not be null" },
+            mimetype = Tika().detect(file.bytes),
+            size = file.size,
+            content = file.bytes,
+            application = application,
+            profile = profile,
+            label = label,
+        )
     }
 }

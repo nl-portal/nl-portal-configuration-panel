@@ -15,7 +15,7 @@
  */
 
 import { FC, ReactElement } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { Page as PageWrapper } from "@gemeente-denhaag/page";
 import { ResponsiveContent } from "@gemeente-denhaag/responsive-content";
 import Header from "./Header";
@@ -37,8 +37,9 @@ const LayoutComponent: FC<LayoutComponentProps> = ({ headerLogo, paths }) => {
         autoClose={3000}
         closeOnClick={true}
       />
+      {/* Outside the sidebar grid: on small screens the header is part of the page flow. */}
+      <Header logo={headerLogo} />
       <ResponsiveContent className="denhaag-page-content denhaag-responsive-content--sidebar">
-        <Header logo={headerLogo} />
         <main
           className={styles["layout-content"] + " denhaag-page-content__main"}
         >

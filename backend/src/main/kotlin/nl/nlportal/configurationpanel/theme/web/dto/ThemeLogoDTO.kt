@@ -32,15 +32,14 @@ data class ThemeLogoDTO(
 ) {
     companion object {
         @JvmStatic
-        fun fromThemeLogo(themeLogo: ThemeLogo): ThemeLogoDTO =
-            ThemeLogoDTO(
-                logoId = themeLogo.id,
-                filename = themeLogo.filename,
-                size = themeLogo.size,
-                contentType = themeLogo.mimetype,
-                application = themeLogo.application,
-                profile = themeLogo.profile,
-                label = themeLogo.label,
-            )
+        fun fromThemeLogo(themeLogo: ThemeLogo): ThemeLogoDTO = ThemeLogoDTO(
+            logoId = themeLogo.id,
+            filename = themeLogo.filename,
+            size = themeLogo.size,
+            contentType = themeLogo.mimetype,
+            application = themeLogo.application,
+            profile = themeLogo.profile,
+            label = themeLogo.label,
+        )
     }
 }

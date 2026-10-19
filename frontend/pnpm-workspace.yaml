@@ -1,0 +1,27 @@
+# Edit this file by hand. Using `pnpm config` reformats the file and removes all comments.
+packages:
+  - "."
+
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+
+# Configure pnpm so peer dependencies must be explicitly added instead of being automatically installed.
+autoInstallPeers: false
+
+# Configure pnpm so it only installs package versions that have been published on the npm registry for at least 24 hours
+# (1440 minutes). This helps mitigate the risk of supply chain attacks by avoiding newly published, potentially
+# malicious versions.
+minimumReleaseAge: 1440
+
+# Make an exception for trusted packages
+minimumReleaseAgeExclude:
+  - "@gemeente-denhaag/*"
+  - "@utrecht/*"
+
+# Configure pnpm to save exact version numbers (not including ^ or ~) in package.json.
+saveExact: true
+savePrefix: ""
+
+# Configure pnpm to not fail when there are missing or invalid peer dependencies in the tree.
+strictPeerDependencies: false

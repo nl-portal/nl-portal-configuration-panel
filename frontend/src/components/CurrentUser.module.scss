@@ -17,9 +17,10 @@
 @use "../styles/mixins";
 
 .user-name {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
 
@@ -36,7 +37,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - var(--nlportal-space-inline-4xl, 3rem));
+  max-width: 100%;
 
   @include mixins.breakpoint(tablet) {
     max-width: var(--nlportal-header-user-name-max-width-tablet, 275px);

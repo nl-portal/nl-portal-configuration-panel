@@ -41,9 +41,8 @@ class ThemeService(
         application: String,
         profile: String?,
         label: String?,
-    ): List<ThemeLogo> =
-        themeLogoRepository
-            .findAllByApplicationAndProfileAndLabel(application, profile, label)
+    ): List<ThemeLogo> = themeLogoRepository
+        .findAllByApplicationAndProfileAndLabel(application, profile, label)
 
     fun getThemeLogoByIdOrNull(logoId: UUID): ThemeLogo? = themeLogoRepository.findByIdOrNull(logoId)
 
@@ -99,9 +98,8 @@ class ThemeService(
         application: String,
         profile: String?,
         label: String?,
-    ): List<ThemeStyle> =
-        themeStyleRepository
-            .findAllByApplicationAndProfileAndLabel(application, profile, label)
+    ): List<ThemeStyle> = themeStyleRepository
+        .findAllByApplicationAndProfileAndLabel(application, profile, label)
 
     @Transactional
     fun createThemeStyle(

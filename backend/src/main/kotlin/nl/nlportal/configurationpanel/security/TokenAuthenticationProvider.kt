@@ -24,18 +24,12 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 class TokenAuthenticationProvider(
     private val configurationToken: String,
 ) : AuthenticationProvider {
-    override fun authenticate(authentication: Authentication): Authentication? {
-        val credentials = authentication?.principal?.toString()
+    override fun authenticate(authentication: Authentication): Authentication {
+        val credentials =
+            authentication.principal?.toString()
+                ?: throw AuthenticationCredentialsNotFoundException("Bad Request Credentials")
 
-        if (credentials == null) {
-            throw AuthenticationCredentialsNotFoundException("Bad Request Credentials")
-        } else {
-            if (credentials == configurationToken) {
-                return ApiTokenAuthentication(authenticated = true, token = credentials)
-            } else {
-                return ApiTokenAuthentication(authenticated = false, token = credentials)
-            }
-        }
+        return ApiTokenAuthentication(authenticated = credentials == configurationToken, token = credentials)
     }
 
     override fun supports(authentication: Class<*>): Boolean = authentication == PreAuthenticatedAuthenticationToken::class.java

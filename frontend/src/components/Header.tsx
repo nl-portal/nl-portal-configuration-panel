@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import React, { Fragment, ReactElement } from "react";
+import React, { ReactElement } from "react";
 import styles from "./Header.module.scss";
-import classNames from "classnames";
 import { ResponsiveContent } from "@gemeente-denhaag/responsive-content";
 import LogoutButton from "./LogoutButton.tsx";
 import CurrentUser from "./CurrentUser.tsx";
@@ -33,42 +32,22 @@ const Header = ({ logo }: HeaderProps) => {
   });
 
   return (
-    <div
-      className={styles["header-container"]}
-      ref={null}
-      style={{ marginBlockStart: 0 }}
-    >
-      <div
-        className={classNames(styles["header-wrapper"], {
-          [styles["header-wrapper--fullscreen"]]: false,
-        })}
-      >
+    <div className={styles["header-container"]}>
+      <div className={styles["header-wrapper"]}>
         <header className={styles.header}>
-          <div
-            className={classNames(styles.header, {
-              [styles["header--fullscreen"]]: false,
-            })}
-          >
+          <div className={styles.header}>
             <ResponsiveContent className={styles.header__inner}>
-              <div
-                className={classNames(styles["header__logo-container"], {
-                  [styles["header__logo-container--fullscreen"]]: false,
-                })}
-              >
+              <div className={styles["header__logo-container"]}>
                 {headerLogoElement}
               </div>
               <div className={styles["header__elements-desktop"]}>
-                <Fragment>
-                  <div className={styles["header__element--large-spacing"]}>
-                    <CurrentUser />
-                  </div>
-                  <div className={styles["header__element--medium-spacing"]}>
-                    <LogoutButton />
-                  </div>
-                  <div className={styles["header__element--medium-spacing"]}>
-                    <LanguageSwitcher />
-                  </div>
-                </Fragment>
+                <div className={styles["header__element--start"]}>
+                  <LanguageSwitcher />
+                </div>
+                <CurrentUser />
+                <div className={styles["header__element--end"]}>
+                  <LogoutButton />
+                </div>
               </div>
             </ResponsiveContent>
           </div>

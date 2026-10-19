@@ -18,19 +18,34 @@ package nl.nlportal.configurationpanel.repository
 
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
 interface ConfigurationsRepository : JpaRepository<ConfigurationProperty, String> {
-    fun findByApplication(application: String): List<ConfigurationProperty>?
+    fun findByApplicationAndRetiredInIsNull(application: String): List<ConfigurationProperty>?
 
     fun findByApplicationAndPropertyKey(
         application: String,
         propertyKey: String,
     ): ConfigurationProperty?
 
-    fun findByApplicationAndPropertyKeyStartsWith(
+    fun findByApplicationAndPropertyKeyStartsWithAndRetiredInIsNull(
         application: String,
         propertyKeyPrefix: String,
     ): List<ConfigurationProperty>?
+
+    fun findByApplicationAndRetiredInIsNotNullOrderByRetiredInAscPropertyKeyAsc(application: String): List<ConfigurationProperty>
+
+    fun findByApplicationAndPropertyKeyAndRetiredInIsNotNull(
+        application: String,
+        propertyKey: String,
+    ): ConfigurationProperty?
+
+    // Spring Data would read the `In` of `retiredIn` as an operator, so this one is spelled out.
+    @Query("SELECT c FROM ConfigurationProperty c WHERE c.application = :application AND c.retiredIn = :retiredIn")
+    fun findRetiredByApplicationAndVersion(
+        application: String,
+        retiredIn: String,
+    ): List<ConfigurationProperty>
 }

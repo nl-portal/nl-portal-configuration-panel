@@ -17,7 +17,7 @@
 import { useContext } from "react";
 import { useAuth } from "react-oidc-context";
 import ConfigPanelSettingsContext from "../contexts/ConfigPanelSettingsContext.tsx";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, UseQueryResult } from "@tanstack/react-query";
 
 export type ConfigurationProperty = {
   propertyKey: string;
@@ -26,20 +26,39 @@ export type ConfigurationProperty = {
 };
 
 export interface UseConfigurationProps {
-  applicationName?: string;
-  featurePrefix?: string;
-  refetchInterval?: number | false | undefined;
+  /** Prefixes to read; their rows are concatenated. */
+  featurePrefixes: string[];
 }
 
-const useConfiguration = (props: UseConfigurationProps) => {
+// Module level, so react-query only re-runs it when a query result changes.
+const combineConfigurations = (
+  results: UseQueryResult<ConfigurationProperty[]>[],
+) => ({
+  data: results.every((result) => result.data !== undefined)
+    ? results.flatMap((result) => result.data ?? [])
+    : undefined,
+  isPending: results.some((result) => result.isPending),
+  isError: results.some((result) => result.isError),
+});
+
+export const configurationsQueryKey = (
+  applicationName: string | undefined,
+  featurePrefix: string,
+) => ["getConfigurations", applicationName, featurePrefix];
+
+const useConfiguration = ({ featurePrefixes }: UseConfigurationProps) => {
   const auth = useAuth();
   const { configPanelSettings, clientSettings } = useContext(
     ConfigPanelSettingsContext,
   );
+  const baseUrl = `${configPanelSettings.restApiUrl || ""}/v1/configurations`;
+  const application = clientSettings.applicationName || "";
 
-  const getConfigurations = async (): Promise<ConfigurationProperty[]> => {
+  const getConfigurations = async (
+    featurePrefix: string,
+  ): Promise<ConfigurationProperty[]> => {
     const response = await fetch(
-      `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${props.featurePrefix}`,
+      `${baseUrl}/${application}/features/${featurePrefix}`,
       {
         method: "GET",
         headers: {
@@ -48,28 +67,34 @@ const useConfiguration = (props: UseConfigurationProps) => {
         },
       },
     );
-    return await response.json();
+    if (!response.ok) throw new Error(`Failed to load ${featurePrefix}`);
+    const configurations: ConfigurationProperty[] = await response.json();
+    return configurations.map(
+      ({ propertyKey, propertyValue, application }) => ({
+        propertyKey,
+        propertyValue,
+        application,
+      }),
+    );
   };
-  const storeConfigrations = async (
+  const storeConfigurations = async (
     configurations: ConfigurationProperty[] = [],
   ): Promise<ConfigurationProperty[]> => {
-    const response = await fetch(
-      `${configPanelSettings.restApiUrl || ""}/v1/configurations`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + auth.user?.access_token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(configurations),
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + auth.user?.access_token,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(configurations),
+    });
+    if (!response.ok) throw new Error("Failed to store configurations");
     return await response.json();
   };
   const deleteConfigurations = async (featurePrefix: string): Promise<void> => {
-    await fetch(
-      `${configPanelSettings.restApiUrl || ""}/v1/configurations/${clientSettings.applicationName || ""}/features/${featurePrefix}`,
+    const response = await fetch(
+      `${baseUrl}/${application}/features/${featurePrefix}`,
       {
         method: "DELETE",
         headers: {
@@ -77,29 +102,22 @@ const useConfiguration = (props: UseConfigurationProps) => {
         },
       },
     );
+    if (!response.ok) throw new Error(`Failed to delete ${featurePrefix}`);
   };
 
+  const getConfigurationsResult = useQueries({
+    queries: featurePrefixes.map((featurePrefix) => ({
+      queryKey: configurationsQueryKey(application, featurePrefix),
+      queryFn: () => getConfigurations(featurePrefix),
+    })),
+    combine: combineConfigurations,
+  });
+
   return {
-    getConfigurations: useQuery({
-      queryKey: ["getConfigurations"],
-      queryFn: getConfigurations,
-      select: (
-        configurations: ConfigurationProperty[],
-      ): ConfigurationProperty[] => {
-        return configurations.map(
-          ({ propertyKey, propertyValue, application }) => {
-            return {
-              propertyKey: propertyKey,
-              propertyValue: propertyValue,
-              application: application,
-            };
-          },
-        );
-      },
-    }),
-    storeConfigrations: useMutation({
-      mutationKey: ["storeConfigrations"],
-      mutationFn: storeConfigrations,
+    getConfigurations: getConfigurationsResult,
+    storeConfigurations: useMutation({
+      mutationKey: ["storeConfigurations"],
+      mutationFn: storeConfigurations,
     }),
     deleteConfigurations: useMutation({
       mutationKey: ["deleteConfigurations"],

@@ -1,0 +1,33 @@
+# RUN_MODE=local: the panel built from this checkout, behind a router on http://localhost:3001.
+services:
+    configuration-panel-router:
+        image: nginx:stable-alpine-slim
+        depends_on:
+            - configuration-panel-backend
+            - configuration-panel-frontend
+        ports:
+            - "3001:8080"
+        volumes:
+            - "./imports/router/templates/:/etc/nginx/templates/"
+        environment:
+            CONFIG_PANEL_BACKEND_HOST: http://configuration-panel-backend:8080
+            CONFIG_PANEL_FRONTEND_HOST: http://configuration-panel-frontend:8080
+
+    configuration-panel-backend:
+        build: backend/
+        depends_on:
+            - configuration-panel-database
+        ports:
+            - "8090:8080"
+        env_file: ./imports/backend.env
+        # Reaches an NL Portal backend on the host (CONFIG_NOTIFY_LIST).
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    configuration-panel-frontend:
+        build: frontend/
+        depends_on:
+            - configuration-panel-backend
+        ports:
+            - "8091:8080"
+        env_file: ./imports/frontend.env

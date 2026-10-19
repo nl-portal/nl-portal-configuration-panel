@@ -16,7 +16,12 @@
 
 @use "../styles/mixins";
 
-.layout-content{
-  margin-block-start: 5rem;
+.layout-content {
+  margin-block-start: 1.5rem;
+
+  // From tablet up the header is fixed, so the content starts below it.
+  @include mixins.breakpoint(tablet) {
+    margin-block-start: 5rem;
+  }
 }
 

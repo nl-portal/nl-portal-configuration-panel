@@ -41,14 +41,13 @@ class ThemeStyleConfigurationResource(
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<List<ThemeStyleDTO>> =
-        ResponseEntity.ok(
-            themeService
-                .getThemeStyles(application, profile, label)
-                .map { themeStyle ->
-                    ThemeStyleDTO.fromThemeStyle(themeStyle)
-                },
-        )
+    ): ResponseEntity<List<ThemeStyleDTO>> = ResponseEntity.ok(
+        themeService
+            .getThemeStyles(application, profile, label)
+            .map { themeStyle ->
+                ThemeStyleDTO.fromThemeStyle(themeStyle)
+            },
+    )
 
     @DeleteMapping("/v1/theme/{application}/style/{id}")
     fun deleteThemeStyleById(
@@ -63,14 +62,13 @@ class ThemeStyleConfigurationResource(
     fun createThemeStyle(
         @PathVariable application: String,
         @RequestBody themeStyleRequest: ThemeStyleDTO,
-    ): ResponseEntity<ThemeStyleDTO> =
-        themeService
-            .createThemeStyle(themeStyleRequest.styles, application, themeStyleRequest.profile, themeStyleRequest.label)
-            .let { themeStyle ->
-                ResponseEntity.ok(
-                    ThemeStyleDTO.fromThemeStyle(themeStyle),
-                )
-            }
+    ): ResponseEntity<ThemeStyleDTO> = themeService
+        .createThemeStyle(themeStyleRequest.styles, application, themeStyleRequest.profile, themeStyleRequest.label)
+        .let { themeStyle ->
+            ResponseEntity.ok(
+                ThemeStyleDTO.fromThemeStyle(themeStyle),
+            )
+        }
 
     @Transactional
     @PutMapping("/v1/theme/{application}/style/{id}", consumes = ["text/css;characterset=utf-8"])
@@ -78,12 +76,11 @@ class ThemeStyleConfigurationResource(
         @PathVariable application: String,
         @PathVariable id: UUID,
         @RequestBody styles: String,
-    ): ResponseEntity<ThemeStyleDTO> =
-        themeService
-            .updateThemeStyleById(id, styles)
-            ?.let { themeStyle ->
-                ResponseEntity.ok(
-                    ThemeStyleDTO.fromThemeStyle(themeStyle),
-                )
-            } ?: ResponseEntity.notFound().build()
+    ): ResponseEntity<ThemeStyleDTO> = themeService
+        .updateThemeStyleById(id, styles)
+        ?.let { themeStyle ->
+            ResponseEntity.ok(
+                ThemeStyleDTO.fromThemeStyle(themeStyle),
+            )
+        } ?: ResponseEntity.notFound().build()
 }

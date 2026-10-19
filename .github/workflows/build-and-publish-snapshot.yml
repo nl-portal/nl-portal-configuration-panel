@@ -1,0 +1,82 @@
+name: Build and Publish Snapshot
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+concurrency:
+    group: snapshot-${{ github.ref }}
+    cancel-in-progress: false
+
+permissions:
+    contents: read
+
+jobs:
+    prepare:
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.v.outputs.version }}
+            latest: ${{ steps.v.outputs.latest }}
+        steps:
+            -   uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+            -   name: Compute snapshot version
+                id: v
+                env:
+                    DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+                run: |
+                    base=$(cat version.txt)
+                    branch="${GITHUB_REF_NAME//[^a-zA-Z0-9]/-}"
+                    sha="${GITHUB_SHA::8}"
+                    ts=$(date +%s)
+                    version="${base}-${branch}-${ts}-${sha}-SNAPSHOT"
+                    echo "version=${version}" >> "$GITHUB_OUTPUT"
+                    if [ "${GITHUB_REF_NAME}" = "${DEFAULT_BRANCH}" ]; then
+                      echo "latest=true" >> "$GITHUB_OUTPUT"
+                    fi
+                    echo "::notice::Snapshot version ${version}"
+
+    stage-be:
+        needs: prepare
+        uses: ./.github/workflows/_stage-be.yml
+        with:
+            version: ${{ needs.prepare.outputs.version }}
+
+    stage-fe:
+        needs: prepare
+        uses: ./.github/workflows/_stage-fe.yml
+        with:
+            version: ${{ needs.prepare.outputs.version }}
+
+    image-be:
+        needs: [prepare, stage-be]
+        permissions:
+            contents: read
+            packages: write
+            id-token: write
+        uses: ./.github/workflows/_build-app-image.yml
+        with:
+            stack: backend
+            push: true
+            primaryTag: ghcr.io/nl-portal/configuration-panel-backend:${{ needs.prepare.outputs.version }}
+            tags: |
+                ghcr.io/nl-portal/configuration-panel-backend:${{ needs.prepare.outputs.version }}
+                ${{ needs.prepare.outputs.latest == 'true' && 'ghcr.io/nl-portal/configuration-panel-backend:latest' || '' }}
+        secrets: inherit
+
+    image-fe:
+        needs: [prepare, stage-fe]
+        permissions:
+            contents: read
+            packages: write
+            id-token: write
+        uses: ./.github/workflows/_build-app-image.yml
+        with:
+            stack: frontend
+            push: true
+            primaryTag: ghcr.io/nl-portal/configuration-panel-frontend:${{ needs.prepare.outputs.version }}
+            tags: |
+                ghcr.io/nl-portal/configuration-panel-frontend:${{ needs.prepare.outputs.version }}
+                ${{ needs.prepare.outputs.latest == 'true' && 'ghcr.io/nl-portal/configuration-panel-frontend:latest' || '' }}
+        secrets: inherit
