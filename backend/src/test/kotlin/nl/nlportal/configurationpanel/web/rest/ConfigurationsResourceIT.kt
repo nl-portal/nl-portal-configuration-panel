@@ -26,6 +26,7 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.cache.CacheManager
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager
 import org.springframework.context.annotation.Bean
+import org.springframework.http.MediaType
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -55,6 +56,7 @@ class ConfigurationsResourceIT(
                 .withTokenValue(token)
                 .header("alg", "none")
                 .subject("tester")
+                .claim("realm_access", mapOf("roles" to if (token == NO_ROLE_TOKEN) emptyList() else listOf("ROLE_ADMIN")))
                 .build()
         }
     }
@@ -169,6 +171,98 @@ class ConfigurationsResourceIT(
             .isUnauthorized
     }
 
+    @Test
+    fun `retired endpoints require an allowed authority`() {
+        webTestClient
+            .get()
+            .uri("/api/v1/configurations/$APPLICATION/retired")
+            .header("Authorization", "Bearer $NO_ROLE_TOKEN")
+            .exchange()
+            .expectStatus()
+            .isForbidden
+    }
+
+    @Test
+    fun `session check succeeds with an allowed authority`() {
+        webTestClient
+            .get()
+            .uri("/api/v1/session")
+            .header("Authorization", "Bearer token")
+            .exchange()
+            .expectStatus()
+            .isNoContent
+    }
+
+    @Test
+    fun `saves keys under an allowed prefix`() {
+        save(property("nl-portal.config.zakenapi.properties.client-id", "client"))
+            .expectStatus()
+            .isOk
+
+        check(count() == 4)
+    }
+
+    @Test
+    fun `rejects keys outside the allowed prefixes`() {
+        save(property("spring.datasource.url", "jdbc:postgresql://evil/db"))
+            .expectStatus()
+            .isBadRequest
+
+        check(count() == 3)
+    }
+
+    @Test
+    fun `saves nothing when one key is outside the allowed prefixes`() {
+        save(
+            property("nl-portal.config.zakenapi.properties.client-id", "client"),
+            property("logging.level.root", "DEBUG"),
+        ).expectStatus()
+            .isBadRequest
+
+        check(count() == 3)
+    }
+
+    @Test
+    fun `rejects a feature toggle outside the allowed prefixes`() {
+        webTestClient
+            .post()
+            .uri("/api/v1/configurations/$APPLICATION/features/spring")
+            .header("Authorization", "Bearer token")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(mapOf("enabled" to true))
+            .exchange()
+            .expectStatus()
+            .isBadRequest
+
+        check(count() == 3)
+    }
+
+    @Test
+    fun `rejects a feature delete outside the allowed prefixes`() {
+        webTestClient
+            .delete()
+            .uri("/api/v1/configurations/$APPLICATION/features/nl")
+            .header("Authorization", "Bearer token")
+            .exchange()
+            .expectStatus()
+            .isBadRequest
+
+        check(count() == 3)
+    }
+
+    private fun save(vararg properties: Map<String, String>) = webTestClient
+        .post()
+        .uri("/api/v1/configurations")
+        .header("Authorization", "Bearer token")
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(properties.toList())
+        .exchange()
+
+    private fun property(
+        key: String,
+        value: String,
+    ) = mapOf("propertyKey" to key, "propertyValue" to value, "application" to APPLICATION)
+
     private fun insert(
         key: String,
         value: String,
@@ -187,5 +281,6 @@ class ConfigurationsResourceIT(
 
     companion object {
         private const val APPLICATION = "nl-portal-app"
+        private const val NO_ROLE_TOKEN = "no-role"
     }
 }

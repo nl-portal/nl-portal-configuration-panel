@@ -39,6 +39,10 @@ export const NL_NL_MESSAGES: Messages = {
     "api.delete.success": "Succesvol verwijderd.",
     "api.upload.success": "Uploaden is gelukt",
     "api.upload.error": "Uploaden is mislukt.",
+    // unexpectedError.*
+    "unexpectedError.title": "Er ging iets mis",
+    "unexpectedError.description":
+      "<p>Het configuratiepaneel kan nu niet worden getoond. Mogelijk heeft u geen toegang, of is het paneel niet bereikbaar.</p><p>Neem contact op met uw systeembeheerder.</p>",
     // configuration.*
     "configuration.title": "NL Portal-configuratie",
     "configuration.subtitle": "Configureer hier de features van NL Portal.",
@@ -53,6 +57,7 @@ export const NL_NL_MESSAGES: Messages = {
     "defaults.off": "uit",
     "defaults.use-default": "(standaard van NL Portal)",
     // fields.*
+    "fields.key-ref-select.empty": "Voeg eerst een configuratie toe",
     "fields.client-id.description":
       "De client id waarmee verzoeken worden geauthenticeerd (bij Access Token Authentication).",
     "fields.secret.description":

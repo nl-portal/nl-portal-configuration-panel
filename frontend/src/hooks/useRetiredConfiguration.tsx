@@ -65,6 +65,7 @@ const useRetiredConfiguration = () => {
         if (!response.ok) throw new Error("Failed to load retired keys");
         return await response.json();
       },
+      refetchOnWindowFocus: false,
     }),
     deleteRetiredKey: useMutation({
       mutationKey: ["deleteRetiredKey"],

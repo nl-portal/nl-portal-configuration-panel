@@ -16,6 +16,7 @@
 
 package nl.nlportal.configurationpanel.security.config
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.security.TokenAuthenticationProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -62,13 +63,21 @@ class ConfigurationPanelHttpSecurityConfiguration {
 
     @Bean
     fun configurationPanelSecurityFilterChain(
-        authenticationManager: AuthenticationManager,
+        @Value("\${configuration-panel.security.authorities}") authorities: Array<String>,
         http: HttpSecurity,
     ): SecurityFilterChain {
+        if (authorities.isEmpty()) {
+            logger.warn { "configuration-panel.security.authorities is empty: nobody can use the REST API" }
+        }
+
         http
             .securityMatcher("/api/v1/**")
             .authorizeHttpRequests { request ->
-                request.anyRequest().authenticated()
+                if (authorities.isEmpty()) {
+                    request.anyRequest().denyAll()
+                } else {
+                    request.anyRequest().hasAnyAuthority(*authorities)
+                }
             }.csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer {
@@ -104,5 +113,9 @@ class ConfigurationPanelHttpSecurityConfiguration {
             PathPatternRequestMatcher.withDefaults().matcher("$configServerBasePath/**"),
         )
         setAuthenticationManager(authenticationManager)
+    }
+
+    private companion object {
+        private val logger = KotlinLogging.logger { }
     }
 }

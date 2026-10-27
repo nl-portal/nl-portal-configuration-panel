@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import _ from "lodash";
 import classNames from "classnames";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -31,6 +31,7 @@ import {
   EnumOption,
   FieldSpec,
   GroupFieldSpec,
+  KeyRefSelectFieldSpec,
 } from "../../interfaces/ConfigSection.ts";
 import { matchOption } from "../../constants/enums.ts";
 import PasswordInput from "../PasswordInput.tsx";
@@ -96,6 +97,55 @@ const GroupField = ({
     ))}
   </fieldset>
 );
+
+const KeyRefSelectField = ({
+  field,
+  path,
+  values,
+  onChange,
+}: FieldRendererProps & { field: KeyRefSelectFieldSpec }) => {
+  const intl = useIntl();
+  const id = inputId(path);
+  const value: unknown = _.get(values, path);
+  const stringValue =
+    value === undefined || value === null ? "" : String(value);
+  const parentPath = path.substring(0, path.lastIndexOf("."));
+  const refPath = parentPath ? `${parentPath}.${field.refKey}` : field.refKey;
+  const keys = Object.keys(_.get(values, refPath) ?? {});
+  const firstKey = keys[0];
+  const isStoredKey = keys.includes(stringValue);
+
+  useEffect(() => {
+    if (firstKey === undefined) {
+      if (stringValue) onChange(path, "");
+    } else if (!isStoredKey) {
+      onChange(path, firstKey);
+    }
+  }, [firstKey, isStoredKey, stringValue, path]);
+
+  return (
+    <LabeledField field={field} inputId={id}>
+      <Select
+        id={id}
+        className={configurationStyles["form-field__select"]}
+        value={keys.length === 0 ? "" : stringValue}
+        disabled={keys.length === 0}
+        onChange={(e) => onChange(path, e.target.value)}
+      >
+        {keys.length === 0 && (
+          <SelectOption value="" disabled>
+            {intl.formatMessage({ id: "fields.key-ref-select.empty" })}
+          </SelectOption>
+        )}
+        {keys.map((key) => (
+          <SelectOption key={key} value={key}>
+            {key}
+          </SelectOption>
+        ))}
+      </Select>
+    </LabeledField>
+  );
+};
 
 const FieldRenderer = (props: FieldRendererProps) => {
   const { field, path, values, onChange } = props;
@@ -246,36 +296,8 @@ const FieldRenderer = (props: FieldRendererProps) => {
         </LabeledField>
       );
     }
-    case "keyRefSelect": {
-      const parentPath = path.substring(0, path.lastIndexOf("."));
-      const refPath = parentPath
-        ? `${parentPath}.${field.refKey}`
-        : field.refKey;
-      const keys = Object.keys(_.get(values, refPath) ?? {});
-      const options = withStoredOptions(
-        keys.map((key) => ({ value: key })),
-        stringValue ? [stringValue] : [],
-      );
-      return (
-        <LabeledField field={field} inputId={id}>
-          <Select
-            id={id}
-            className={configurationStyles["form-field__select"]}
-            value={stringValue}
-            onChange={(e) => onChange(path, e.target.value)}
-          >
-            <SelectOption value="">
-              {intl.formatMessage({ id: "defaults.use-default" })}
-            </SelectOption>
-            {options.map((option) => (
-              <SelectOption key={option.value} value={option.value}>
-                {option.value}
-              </SelectOption>
-            ))}
-          </Select>
-        </LabeledField>
-      );
-    }
+    case "keyRefSelect":
+      return <KeyRefSelectField {...props} field={field} />;
     case "group":
       return <GroupField {...props} field={field} />;
     case "ssl":
