@@ -19,22 +19,28 @@ import { paths } from "./paths.ts";
 import FeaturePage from "../pages/FeaturePage.tsx";
 import NLPortalConfigurationPage from "../pages/NLPortalConfigurationPage.tsx";
 import ThemePage from "../pages/ThemePage.tsx";
+import AccessGate from "../authentication/AccessGate.tsx";
 
 export const routes = [
   {
-    path: paths.configuration,
-    element: <NLPortalConfigurationPage />,
-  },
-  {
-    path: paths.feature(),
-    element: <FeaturePage />,
-  },
-  {
-    path: paths.theme(),
-    element: <ThemePage />,
-  },
-  {
-    path: "*",
-    element: <Navigate to={paths.configuration} />,
+    element: <AccessGate />,
+    children: [
+      {
+        path: paths.configuration,
+        element: <NLPortalConfigurationPage />,
+      },
+      {
+        path: paths.feature(),
+        element: <FeaturePage />,
+      },
+      {
+        path: paths.theme(),
+        element: <ThemePage />,
+      },
+      {
+        path: "*",
+        element: <Navigate to={paths.configuration} />,
+      },
+    ],
   },
 ];

@@ -39,6 +39,10 @@ export const EN_GB_MESSAGES: Messages = {
     "api.delete.success": "Deleted successfully.",
     "api.upload.success": "Uploading succeeded.",
     "api.upload.error": "Something went wrong while uploading.",
+    // unexpectedError.*
+    "unexpectedError.title": "Something went wrong",
+    "unexpectedError.description":
+      "<p>The configuration panel cannot be displayed right now. You may not have access, or the panel is unreachable.</p><p>Please contact your system administrator.</p>",
     // configuration.*
     "configuration.title": "NL Portal Configuration",
     "configuration.subtitle":
@@ -54,6 +58,7 @@ export const EN_GB_MESSAGES: Messages = {
     "defaults.off": "off",
     "defaults.use-default": "(NL Portal default)",
     // fields.*
+    "fields.key-ref-select.empty": "Add a configuration first",
     "fields.client-id.description":
       "The client id used to authenticate requests (in case of Access Token Authentication).",
     "fields.secret.description":

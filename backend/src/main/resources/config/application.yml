@@ -47,6 +47,8 @@ spring:
             resourceserver:
                 jwt:
                     jwk-set-uri: ${JWKS_URI}
+                    authority-prefix:
+                    authorities-claim-expressions: ${CONFIG_SECURITY_JWT_AUTHORITIES_CLAIM_NAME:['realm_access']['roles']}
 
 management:
     endpoint:
@@ -65,6 +67,8 @@ configuration-panel:
         config-ttl: ${CONFIG_CACHE_TTL}
     security:
         token: ${CONFIG_SERVER_TOKEN}
+        authorities: ${CONFIG_SECURITY_API_AUTHORITIES:ROLE_ADMIN}
+        allowed-key-prefixes: ${CONFIG_SECURITY_ALLOWED_KEY_PREFIXES:nl-portal.}
         cors:
             - path: "/api/v1/**"
               config:
