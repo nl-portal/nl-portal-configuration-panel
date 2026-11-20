@@ -22,7 +22,7 @@ COPY build ./build
 # --- select the build source via BUILD_MODE; BuildKit prunes the other stage ---
 FROM build-${BUILD_MODE} AS build
 
-FROM nginxinc/nginx-unprivileged:stable-alpine AS image
+FROM public.ecr.aws/nginx/nginx-unprivileged:1.31.9-alpine AS image
 
 # Remove the default config; conf/nginx.conf listens on 8080 itself
 RUN rm /etc/nginx/conf.d/default.conf

@@ -1,22 +1,33 @@
 # Run mode (RUN_MODE): sources (default) | local | remote
 #   sources: only the database and Keycloak; run `./gradlew bootRun` (8090) and `pnpm dev` (3001) yourself.
-#   local:   also the panel, built from this checkout, behind a router on 3001.
-#   remote:  also the panel, from the published 3.0 images, behind a router on 3001.
+#   local:   also the panel, built from this checkout, on 3001.
+#   remote:  also the panel, from the published 3.0 images, on 3001.
 # Example: RUN_MODE=local docker compose up -d --build
+# Side by side with NL Portal: start this stack first, then NL Portal with NETWORK=configuration-panel.
 name: nl-portal-configuration-panel
 
 include:
     - path: "compose.${RUN_MODE:-sources}.yaml"
 
 services:
+    localhost:
+        image: alpine:latest
+        command: sleep infinity
+        ports:
+            - "54322:5432" # Configuration Panel database
+            - "127.0.0.1:8083:8083" # Keycloak
+        networks:
+            default:
+                aliases:
+                    - configuration-panel
+
     configuration-panel-database:
         image: postgres:15
+        network_mode: "service:localhost"
         environment:
             POSTGRES_USER: config
             POSTGRES_PASSWORD: password
             POSTGRES_DB: nl-portal-config
-        ports:
-            - "54322:5432"
         volumes:
             - configuration-panel-database-data:/var/lib/postgresql/data # persist data even if container shuts down
 
@@ -24,13 +35,13 @@ services:
         depends_on:
             - keycloak-database
         image: quay.io/keycloak/keycloak:26.8
-        ports:
-            - "127.0.0.1:8083:8080"
+        network_mode: "service:localhost"
         environment:
             KC_DB: postgres
-            KC_DB_URL: jdbc:postgresql://keycloak-database/keycloak
+            KC_DB_URL: jdbc:postgresql://localhost:5433/keycloak
             KC_DB_USERNAME: keycloak
             KC_DB_PASSWORD: keycloak
+            KC_HTTP_PORT: 8083
             KC_HTTP_RELATIVE_PATH: /auth
         volumes:
             - ./imports/keycloak:/opt/keycloak/data/import
@@ -38,9 +49,16 @@ services:
 
     keycloak-database:
         image: postgres:15
+        network_mode: "service:localhost"
+        command: ["postgres", "-p", "5433"]
         environment:
             POSTGRES_USER: keycloak
             POSTGRES_PASSWORD: keycloak
+
+networks:
+    default:
+        # Fixed name: NL Portal joins it with NETWORK=configuration-panel.
+        name: nl-portal-configuration-panel
 
 volumes:
     configuration-panel-database-data:

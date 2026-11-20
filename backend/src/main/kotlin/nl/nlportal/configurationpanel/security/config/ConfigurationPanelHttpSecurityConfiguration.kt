@@ -95,7 +95,15 @@ class ConfigurationPanelHttpSecurityConfiguration {
         http
             .securityMatcher("$configServerBasePath/**")
             .authorizeHttpRequests { request ->
-                request.anyRequest().authenticated()
+                // Spring Cloud Config's EncryptionController; never used, encryption is ConfigurationValueEncryptor
+                request
+                    .requestMatchers(
+                        "$configServerBasePath/encrypt/**",
+                        "$configServerBasePath/decrypt/**",
+                        "$configServerBasePath/key/**",
+                    ).denyAll()
+                    .anyRequest()
+                    .authenticated()
             }.csrf { it.disable() }
             .cors { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }

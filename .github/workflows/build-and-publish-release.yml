@@ -40,8 +40,9 @@ jobs:
             -   name: Pre-flight - release notes must exist
                 env:
                     VERSION: ${{ steps.v.outputs.version }}
+                    MAJOR: ${{ steps.v.outputs.major }}
                 run: |
-                    notes="release-notes/${VERSION}.md"
+                    notes="documentation/release-notes/${MAJOR}.x.x/${VERSION}/release-notes.md"
                     if [ ! -s "${notes}" ]; then
                       echo "::error::${notes} is missing or empty. Add the release notes on the rc branch before releasing."
                       exit 1
@@ -158,11 +159,23 @@ jobs:
                 env:
                     GH_TOKEN: ${{ steps.token.outputs.token }}
                     VERSION: ${{ needs.prepare.outputs.version }}
+                    MAJOR: ${{ needs.prepare.outputs.major }}
                 run: |
                     if gh release view "${VERSION}" > /dev/null 2>&1; then
                       echo "::notice::Release ${VERSION} already exists - skipping."
                     else
-                      gh release create "${VERSION}" --title "${VERSION}" --notes-file "release-notes/${VERSION}.md" --generate-notes
+                      # Points at the in-repo docs until the GitBook space exists
+                      docs="https://github.com/${GITHUB_REPOSITORY}/blob/${VERSION}/documentation"
+                      notes=$(printf '%s\n' \
+                        "Configuration panel ${VERSION}." \
+                        "" \
+                        "- Release notes: ${docs}/release-notes/${MAJOR}.x.x/${VERSION}/release-notes.md" \
+                        "- Documentation: https://github.com/${GITHUB_REPOSITORY}/tree/${VERSION}/documentation" \
+                        "" \
+                        "Images:" \
+                        "- \`ghcr.io/nl-portal/configuration-panel-backend:${VERSION}\`" \
+                        "- \`ghcr.io/nl-portal/configuration-panel-frontend:${VERSION}\`")
+                      gh release create "${VERSION}" --title "${VERSION}" --notes "${notes}" --generate-notes
                     fi
             -   name: Delete the release candidate branch
                 env:

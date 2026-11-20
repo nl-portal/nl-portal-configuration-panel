@@ -584,8 +584,8 @@ export const moduleSections: ModuleFeatureSection[] = [
     title: "Payment Direct",
     prefix: "nl-portal.config.payment.direct",
     enableToggle: true,
-    // DirectPaymentAutoConfiguration: the webhook service and controller need objectenapi.
-    requires: ["objectsapi"],
+    // TaakAutoConfiguration: taak payments and the webhook need objectenapi + taak + payment.direct.
+    requires: ["objectsapi", "taak"],
     fields: [
       {
         type: "url",
@@ -597,7 +597,8 @@ export const moduleSections: ModuleFeatureSection[] = [
       {
         type: "url",
         ...keys(PAYMENT_DIRECT, "webhook-url"),
-        placeholder: "https://portal.example.com/api/payment/direct/webhook",
+        placeholder:
+          "https://portal.example.com/api/public/payment/direct/postsale",
         default: null,
       },
       {
@@ -609,6 +610,11 @@ export const moduleSections: ModuleFeatureSection[] = [
       {
         type: "bool",
         ...keys(PAYMENT_DIRECT, "show-result-page"),
+        default: false,
+      },
+      {
+        type: "bool",
+        ...keys(PAYMENT_DIRECT, "accept-legacy-amount-rounding"),
         default: false,
       },
       {

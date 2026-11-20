@@ -16,10 +16,13 @@
 
 package nl.nlportal.configurationpanel.domain
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.persistence.Column
+import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import nl.nlportal.configurationpanel.crypto.ConfigurationValueConverter
 import java.time.Instant
 
 @Entity
@@ -29,6 +32,7 @@ data class ConfigurationProperty(
     @Column(name = "property_key", updatable = false, nullable = false)
     val propertyKey: String = "",
     @Column(name = "property_value", updatable = true, nullable = false)
+    @Convert(converter = ConfigurationValueConverter::class)
     val propertyValue: String = "",
     @Column(name = "application", updatable = false, nullable = false)
     val application: String = "",
@@ -41,4 +45,13 @@ data class ConfigurationProperty(
     /** The NL Portal version that stopped reading this key. Only Liquibase changelogs set it. */
     @Column(name = "retired_in", insertable = false, updatable = false)
     val retiredIn: String? = null,
-)
+) {
+    // Values can be secrets: show them only with TRACE on this logger, its package or root
+    override fun toString() = "ConfigurationProperty(propertyKey=$propertyKey, " +
+        "propertyValue=${if (logger.isTraceEnabled()) propertyValue else "[PROTECTED]"}, " +
+        "application=$application, profile=$profile, label=$label, modifiedOn=$modifiedOn, retiredIn=$retiredIn)"
+
+    private companion object {
+        private val logger = KotlinLogging.logger { }
+    }
+}

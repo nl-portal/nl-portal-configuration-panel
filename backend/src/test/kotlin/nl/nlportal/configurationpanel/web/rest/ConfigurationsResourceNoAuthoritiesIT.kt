@@ -34,7 +34,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
     properties = [
         "spring.liquibase.enabled=true",
         "spring.liquibase.change-log=classpath:/liquibase/config-master.xml",
-        "configuration-panel.security.authorities=\${CONFIG_SECURITY_API_AUTHORITIES:ROLE_ADMIN}",
+        "configuration-panel.security.authorities=\${CONFIG_SECURITY_API_AUTHORITIES:ROLE_CONFIG_PANEL_ADMIN}",
         "CONFIG_SECURITY_API_AUTHORITIES=",
     ],
 )
@@ -54,7 +54,7 @@ class ConfigurationsResourceNoAuthoritiesIT(
                 .withTokenValue(token)
                 .header("alg", "none")
                 .subject("tester")
-                .claim("realm_access", mapOf("roles" to listOf("ROLE_ADMIN")))
+                .claim("realm_access", mapOf("roles" to listOf("ROLE_CONFIG_PANEL_ADMIN")))
                 .build()
         }
     }

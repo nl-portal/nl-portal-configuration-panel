@@ -16,9 +16,12 @@ spring:
                     authority-prefix:
                     authorities-claim-expressions: "['realm_access']['roles']"
 configuration-panel:
+    encryption:
+        # Same key as the cross-repo vector in ConfigurationValueEncryptorTest
+        key: u8nzUYr3cgDzLfwQE+IWU73QbPFORBBG+hjk1XNiXuI=
     security:
-        authorities: ROLE_ADMIN
-        allowed-key-prefixes: nl-portal.
+        authorities: ROLE_CONFIG_PANEL_ADMIN
+        allowed-key-prefixes: nl-portal.config.,nl-portal.frontend.
 ---
 
 configuration-panel:
@@ -27,6 +30,10 @@ configuration-panel:
     notify:
         notify-on-changes: true
         notify-list: "http://localhost:8080, http://localhost:8081"
+        client:
+            token-uri: http://localhost:1/token
+            client-id: test-client
+            client-secret: test-secret
     security:
         token: SecretTestToken123456
 spring:

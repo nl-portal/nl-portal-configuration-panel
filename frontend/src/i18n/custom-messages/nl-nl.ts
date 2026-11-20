@@ -447,6 +447,10 @@ export const NL_NL_MESSAGES: Messages = {
     "features.payment.direct.show-result-page": "Resultaatpagina tonen",
     "features.payment.direct.show-result-page.description":
       "Toon de resultaatpagina van Worldline na de betaling",
+    "features.payment.direct.accept-legacy-amount-rounding":
+      "Afronding van NL Portal 3.x accepteren",
+    "features.payment.direct.accept-legacy-amount-rounding.description":
+      "Accepteer ook betalingen die met NL Portal 3.x zijn gestart en na de upgrade worden afgerond. Zet dit uit zodra die zijn afgerond; verdwijnt in NL Portal 5.0",
     "features.payment.direct.sha-out-parameters": "SHA-OUT parameters",
     "features.payment.direct.sha-out-parameters.description":
       "Welke SHA-OUT parameters moeten worden gevalideerd. NL Portal 4.0 leest deze instelling niet.",

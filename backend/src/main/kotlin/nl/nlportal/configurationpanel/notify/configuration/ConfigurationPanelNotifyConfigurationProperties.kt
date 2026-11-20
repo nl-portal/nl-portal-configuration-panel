@@ -17,9 +17,21 @@
 package nl.nlportal.configurationpanel.notify.configuration
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import java.time.Duration
 
 @ConfigurationProperties(prefix = "configuration-panel.notify")
 data class ConfigurationPanelNotifyConfigurationProperties(
     var notifyOnChanges: Boolean = false,
     var notifyList: List<String> = emptyList(),
-)
+    var connectTimeout: Duration = Duration.ofSeconds(5),
+    var readTimeout: Duration = Duration.ofSeconds(10),
+    var client: Client = Client(),
+) {
+    /** OAuth2 client-credentials client that gets the service token for NL Portal's actuator. */
+    data class Client(
+        var tokenUri: String? = null,
+        var clientId: String? = null,
+        var clientSecret: String? = null,
+        var scope: List<String> = emptyList(),
+    )
+}

@@ -16,10 +16,11 @@
 
 package nl.nlportal.configurationpanel.theme.web.rest
 
+import nl.nlportal.configurationpanel.exception.PropertyKeyNotAllowedException
 import nl.nlportal.configurationpanel.theme.service.ThemeService
 import nl.nlportal.configurationpanel.theme.web.dto.ThemeStyleDTO
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
 
 @RestController
@@ -54,7 +56,11 @@ class ThemeStyleConfigurationResource(
         @PathVariable application: String,
         @PathVariable id: UUID,
     ): ResponseEntity<Nothing> {
-        themeService.deleteThemeStyleById(id)
+        try {
+            themeService.deleteThemeStyleById(id)
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }
         return ResponseEntity.ok().build()
     }
 
@@ -62,25 +68,37 @@ class ThemeStyleConfigurationResource(
     fun createThemeStyle(
         @PathVariable application: String,
         @RequestBody themeStyleRequest: ThemeStyleDTO,
-    ): ResponseEntity<ThemeStyleDTO> = themeService
-        .createThemeStyle(themeStyleRequest.styles, application, themeStyleRequest.profile, themeStyleRequest.label)
-        .let { themeStyle ->
-            ResponseEntity.ok(
-                ThemeStyleDTO.fromThemeStyle(themeStyle),
-            )
+    ): ResponseEntity<ThemeStyleDTO> {
+        try {
+            return themeService
+                .createThemeStyle(themeStyleRequest.styles, application, themeStyleRequest.profile, themeStyleRequest.label)
+                .let { themeStyle ->
+                    ResponseEntity.ok(
+                        ThemeStyleDTO.fromThemeStyle(themeStyle),
+                    )
+                }
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
+    }
 
-    @Transactional
+    // Not @Transactional: ThemeService commits, so a key refused by the BEFORE_COMMIT listener is caught here
     @PutMapping("/v1/theme/{application}/style/{id}", consumes = ["text/css;characterset=utf-8"])
     fun updateThemeStyle(
         @PathVariable application: String,
         @PathVariable id: UUID,
         @RequestBody styles: String,
-    ): ResponseEntity<ThemeStyleDTO> = themeService
-        .updateThemeStyleById(id, styles)
-        ?.let { themeStyle ->
-            ResponseEntity.ok(
-                ThemeStyleDTO.fromThemeStyle(themeStyle),
-            )
-        } ?: ResponseEntity.notFound().build()
+    ): ResponseEntity<ThemeStyleDTO> {
+        try {
+            return themeService
+                .updateThemeStyleById(id, styles)
+                ?.let { themeStyle ->
+                    ResponseEntity.ok(
+                        ThemeStyleDTO.fromThemeStyle(themeStyle),
+                    )
+                } ?: ResponseEntity.notFound().build()
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }
+    }
 }
