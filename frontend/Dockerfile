@@ -4,7 +4,7 @@ COPY . .
 ENV CI=true
 RUN npm i -g pnpm && pnpm i && pnpm build
 
-FROM nginx:stable-alpine-slim AS image
+FROM nginx:1.31.9-alpine-slim AS image
 
 RUN rm /etc/nginx/conf.d/default.conf
 

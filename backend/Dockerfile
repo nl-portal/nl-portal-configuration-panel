@@ -3,7 +3,7 @@ FROM --platform=$BUILDPLATFORM eclipse-temurin:21-jdk-alpine AS build
 COPY . .
 RUN chmod +x ./gradlew && ./gradlew clean bootJar
 
-FROM eclipse-temurin:21-jre-alpine AS image
+FROM eclipse-temurin:21-jre-noble AS image
 
 COPY --from=build /build/libs/backend.jar /opt/app.jar
 
