@@ -13,6 +13,11 @@ spring:
             resourceserver:
                 jwt:
                     jwk-set-uri: http://localhost:8082
+                    authorities-claim-expressions: "['realm_access']['roles']"
+configuration-panel:
+    security:
+        authorities-enabled: false
+        authorities: ROLE_ADMIN
 
 ---
 

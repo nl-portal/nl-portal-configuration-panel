@@ -85,6 +85,14 @@
       "clientRole" : false,
       "containerId" : "c49ad262-dcad-44fd-9cd7-ea029e9fb47d",
       "attributes" : { }
+    }, {
+      "id" : "5d0c8a41-6f2e-4b7a-9e13-2c8f4a7b1d90",
+      "name" : "ROLE_ADMIN",
+      "description" : "Configuration Panel API access",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "c49ad262-dcad-44fd-9cd7-ea029e9fb47d",
+      "attributes" : { }
     } ],
     "client" : {
       "nl-portal-m2m" : [ ],
@@ -407,7 +415,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-nlportalconfig" ],
+    "realmRoles" : [ "default-roles-nlportalconfig", "ROLE_ADMIN" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {

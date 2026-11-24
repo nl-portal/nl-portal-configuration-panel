@@ -16,17 +16,23 @@
 
 package nl.nlportal.configurationpanel.security.config
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.security.TokenAuthenticationProvider
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.expression.spel.standard.SpelExpressionParser
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.oauth2.server.resource.authentication.DelegatingJwtGrantedAuthoritiesConverter
+import org.springframework.security.oauth2.server.resource.authentication.ExpressionJwtGrantedAuthoritiesConverter
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
@@ -62,14 +68,39 @@ class ConfigurationPanelHttpSecurityConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty("configuration-panel.security.authorities-enabled", havingValue = "true")
+    fun jwtAuthenticationConverter(
+        @Value("\${spring.security.oauth2.resourceserver.jwt.authorities-claim-expressions}") claimExpressions: Array<String>,
+    ): JwtAuthenticationConverter {
+        val parser = SpelExpressionParser()
+        val converters =
+            claimExpressions.filter { it.isNotBlank() }.map {
+                ExpressionJwtGrantedAuthoritiesConverter(parser.parseExpression(it)).apply { setAuthorityPrefix("") }
+            }
+        return JwtAuthenticationConverter().apply {
+            setJwtGrantedAuthoritiesConverter(DelegatingJwtGrantedAuthoritiesConverter(converters))
+        }
+    }
+
+    @Bean
     fun configurationPanelSecurityFilterChain(
         authenticationManager: AuthenticationManager,
+        @Value("\${configuration-panel.security.authorities-enabled}") authoritiesEnabled: Boolean,
+        @Value("\${configuration-panel.security.authorities}") authorities: Array<String>,
         http: HttpSecurity,
     ): SecurityFilterChain {
+        if (authoritiesEnabled && authorities.isEmpty()) {
+            logger.warn { "configuration-panel.security.authorities is empty: nobody can use the REST API" }
+        }
+
         http
             .securityMatcher(AntPathRequestMatcher("/api/v1/**"))
             .authorizeHttpRequests { request ->
-                request.anyRequest().authenticated()
+                when {
+                    !authoritiesEnabled -> request.anyRequest().authenticated()
+                    authorities.isEmpty() -> request.anyRequest().denyAll()
+                    else -> request.anyRequest().hasAnyAuthority(*authorities)
+                }
             }.csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .oauth2ResourceServer {
@@ -107,4 +138,8 @@ class ConfigurationPanelHttpSecurityConfiguration {
             )
             setAuthenticationManager(authenticationManager)
         }
+
+    private companion object {
+        private val logger = KotlinLogging.logger { }
+    }
 }
