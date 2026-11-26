@@ -56,7 +56,7 @@ class ConfigurationsResourceIT(
                 .withTokenValue(token)
                 .header("alg", "none")
                 .subject("tester")
-                .claim("realm_access", mapOf("roles" to if (token == NO_ROLE_TOKEN) emptyList() else listOf("ROLE_ADMIN")))
+                .claim("realm_access", mapOf("roles" to if (token == NO_ROLE_TOKEN) emptyList() else listOf("ROLE_CONFIG_PANEL_ADMIN")))
                 .build()
         }
     }
@@ -93,9 +93,11 @@ class ConfigurationsResourceIT(
 
     @Test
     fun `feature reads leave out retired keys`() {
+        insert("nl-portal.config.zakenapi.properties.zaak-documenten-config.status-whitelist", "DEFINITIEF", retiredIn = "4.0")
+
         webTestClient
             .get()
-            .uri("/api/v1/configurations/$APPLICATION/features/nl-portal.config")
+            .uri("/api/v1/configurations/$APPLICATION/features/nl-portal.config.zakenapi")
             .header("Authorization", "Bearer token")
             .exchange()
             .expectStatus()
@@ -203,6 +205,24 @@ class ConfigurationsResourceIT(
     }
 
     @Test
+    fun `reads saved values back as plaintext`() {
+        save(property("nl-portal.config.zakenapi.properties.client-id", "client"))
+            .expectStatus()
+            .isOk
+
+        webTestClient
+            .get()
+            .uri("/api/v1/configurations/$APPLICATION/features/nl-portal.config.zakenapi.properties.client-id")
+            .header("Authorization", "Bearer token")
+            .exchange()
+            .expectStatus()
+            .isOk
+            .expectBody()
+            .jsonPath("$[0].propertyValue")
+            .isEqualTo("client")
+    }
+
+    @Test
     fun `rejects keys outside the allowed prefixes`() {
         save(property("spring.datasource.url", "jdbc:postgresql://evil/db"))
             .expectStatus()
@@ -238,6 +258,30 @@ class ConfigurationsResourceIT(
     }
 
     @Test
+    fun `rejects keys under nl-portal outside the allowed prefixes`() {
+        save(property("nl-portal.security.x", "x"))
+            .expectStatus()
+            .isBadRequest
+
+        check(count() == 3)
+    }
+
+    @Test
+    fun `saves a feature toggle under an allowed prefix`() {
+        webTestClient
+            .post()
+            .uri("/api/v1/configurations/$APPLICATION/features/nl-portal.config.zakenapi")
+            .header("Authorization", "Bearer token")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(mapOf("enabled" to true))
+            .exchange()
+            .expectStatus()
+            .isOk
+
+        check(count() == 4)
+    }
+
+    @Test
     fun `rejects a feature delete outside the allowed prefixes`() {
         webTestClient
             .delete()
@@ -246,6 +290,50 @@ class ConfigurationsResourceIT(
             .exchange()
             .expectStatus()
             .isBadRequest
+
+        check(count() == 3)
+    }
+
+    @Test
+    fun `rejects a feature read outside the allowed prefixes`() {
+        webTestClient
+            .get()
+            .uri("/api/v1/configurations/$APPLICATION/features/spring")
+            .header("Authorization", "Bearer token")
+            .exchange()
+            .expectStatus()
+            .isBadRequest
+    }
+
+    @Test
+    fun `reading all configuration leaves out keys outside the allowed prefixes`() {
+        insert("spring.datasource.url", "jdbc:postgresql://evil/db", retiredIn = null)
+
+        webTestClient
+            .get()
+            .uri("/api/v1/configurations/$APPLICATION")
+            .header("Authorization", "Bearer token")
+            .exchange()
+            .expectStatus()
+            .isOk
+            .expectBody()
+            .jsonPath("$.length()")
+            .isEqualTo(1)
+            .jsonPath("$[0].propertyKey")
+            .isEqualTo("nl-portal.config.zakenapi.properties.url")
+    }
+
+    @Test
+    fun `deletes a retired key outside the allowed prefixes`() {
+        insert("nl-portal.security.legacy", "x", retiredIn = "4.0")
+
+        webTestClient
+            .delete()
+            .uri("/api/v1/configurations/$APPLICATION/retired?propertyKey={key}", "nl-portal.security.legacy")
+            .header("Authorization", "Bearer token")
+            .exchange()
+            .expectStatus()
+            .isNoContent
 
         check(count() == 3)
     }

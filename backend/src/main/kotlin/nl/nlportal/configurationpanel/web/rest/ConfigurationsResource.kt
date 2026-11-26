@@ -16,12 +16,11 @@
 
 package nl.nlportal.configurationpanel.web.rest
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
+import nl.nlportal.configurationpanel.exception.PropertyKeyNotAllowedException
 import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import nl.nlportal.configurationpanel.web.rest.dto.FeatureEnabledDTO
 import nl.nlportal.configurationpanel.web.rest.dto.RetiredConfigurationKeyDTO
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -39,16 +38,7 @@ import org.springframework.web.server.ResponseStatusException
 @RequestMapping("/api", produces = ["application/json"])
 class ConfigurationsResource(
     private val configService: ConfigurationPropertiesService,
-    @Value("\${configuration-panel.security.allowed-key-prefixes}") allowedKeyPrefixes: Array<String>,
 ) {
-    private val allowedKeyPrefixes = allowedKeyPrefixes.filter { it.isNotBlank() }
-
-    init {
-        if (this.allowedKeyPrefixes.isEmpty()) {
-            logger.warn { "configuration-panel.security.allowed-key-prefixes is empty: any property key can be written" }
-        }
-    }
-
     @GetMapping("/v1/configurations/{application}")
     fun getConfigurationPropertiesByApplicationOrNull(
         @PathVariable("application") application: String,
@@ -58,17 +48,29 @@ class ConfigurationsResource(
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String,
-    ): List<ConfigurationProperty>? = configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
+    ): List<ConfigurationProperty>? {
+        try {
+            return configService.getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(application, featureKey)
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }
+    }
 
     @GetMapping("/v1/configurations/{application}/features/{featureKey}/enabled")
     fun getFeatureToggleByApplicationAndFeatureKeyOrNull(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String,
-    ): FeatureEnabledDTO = configService
-        .getFeatureToggle(application, featureKey)
-        .let {
-            FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
+    ): FeatureEnabledDTO {
+        try {
+            return configService
+                .getFeatureToggle(application, featureKey)
+                .let {
+                    FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
+                }
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
+    }
 
     @PostMapping("/v1/configurations/{application}/features/{featureKey}")
     fun saveFeatureToggleByApplicationAndFeatureKeyOrNull(
@@ -76,12 +78,15 @@ class ConfigurationsResource(
         @PathVariable("featureKey") featureKey: String,
         @RequestBody featureEnabled: FeatureEnabledDTO,
     ): FeatureEnabledDTO {
-        requireAllowedKeys(listOf(featureKey))
-        return configService
-            .setFeatureToggle(application, featureKey, enabled = featureEnabled.enabled)
-            .let {
-                FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
-            }
+        try {
+            return configService
+                .setFeatureToggle(application, featureKey, enabled = featureEnabled.enabled)
+                .let {
+                    FeatureEnabledDTO(enabled = it?.propertyValue.toBoolean())
+                }
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }
     }
 
     @DeleteMapping("/v1/configurations/{application}/features/{featureKey}")
@@ -89,8 +94,11 @@ class ConfigurationsResource(
         @PathVariable("application") application: String,
         @PathVariable("featureKey") featureKey: String,
     ) {
-        requireAllowedKeys(listOf(featureKey))
-        configService.deleteConfigurationPropertiesByApplicationAndFeatureKey(application, featureKey)
+        try {
+            configService.deleteConfigurationPropertiesByApplicationAndFeatureKey(application, featureKey)
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }
     }
 
     @GetMapping("/v1/configurations/{application}/retired")
@@ -125,22 +133,10 @@ class ConfigurationsResource(
     fun saveConfigurationProperties(
         @RequestBody configs: List<ConfigurationProperty>,
     ): List<ConfigurationProperty> {
-        requireAllowedKeys(configs.map { it.propertyKey })
-        return configService.saveConfigurationProperties(configs)
-    }
-
-    private fun requireAllowedKeys(keys: List<String>) {
-        if (allowedKeyPrefixes.isEmpty()) return
-        val disallowed = keys.filter { key -> allowedKeyPrefixes.none { key.startsWith(it) } }
-        if (disallowed.isNotEmpty()) {
-            throw ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Property keys not allowed: $disallowed",
-            )
+        try {
+            return configService.saveConfigurationProperties(configs)
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
-    }
-
-    private companion object {
-        private val logger = KotlinLogging.logger { }
     }
 }

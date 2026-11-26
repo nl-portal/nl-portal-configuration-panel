@@ -1,7 +1,15 @@
 logging:
     level:
         root: ${LOGLEVEL:INFO}
-        org.hibernate.internal.util: INFO
+        # These log credentials or decrypted values at DEBUG or TRACE, so a root level doesn't enable them:
+        # entity listing on flush, with decrypted configuration values
+        org.hibernate.orm.core: INFO
+        # request headers in full: the notify client's secret (Basic) and service token (Bearer)
+        sun.net.www.protocol.http: INFO
+        # the configuration server token (preAuthenticatedPrincipal)
+        org.springframework.security.web.authentication.preauth: INFO
+        # incoming requests in full at TRACE: admins' bearer tokens and X-Config-Token
+        org.apache.coyote.http11: INFO
 
 server:
     servlet:
@@ -67,8 +75,8 @@ configuration-panel:
         config-ttl: ${CONFIG_CACHE_TTL}
     security:
         token: ${CONFIG_SERVER_TOKEN}
-        authorities: ${CONFIG_SECURITY_API_AUTHORITIES:ROLE_ADMIN}
-        allowed-key-prefixes: ${CONFIG_SECURITY_ALLOWED_KEY_PREFIXES:nl-portal.}
+        authorities: ${CONFIG_SECURITY_API_AUTHORITIES:ROLE_CONFIG_PANEL_ADMIN}
+        allowed-key-prefixes: ${CONFIG_SECURITY_ALLOWED_KEY_PREFIXES:nl-portal.config.,nl-portal.frontend.}
         cors:
             - path: "/api/v1/**"
               config:
@@ -76,6 +84,17 @@ configuration-panel:
                 allowed-methods: ${CORS_ALLOWED_METHODS:GET, POST, PUT, DELETE}
                 allowed-headers: ${CORS_ALLOWED_HEADERS:Authorization, Content-Type, Accept}
 
+    encryption:
+        enabled: ${CONFIG_ENCRYPTION_ENABLED:true}
+        key: ${CONFIG_ENCRYPTION_KEY:}
+
     notify:
         notify-on-changes: ${CONFIG_NOTIFY_ENABLED:false}
         notify-list: ${CONFIG_NOTIFY_LIST}
+        connect-timeout: ${CONFIG_NOTIFY_CONNECT_TIMEOUT:5s}
+        read-timeout: ${CONFIG_NOTIFY_READ_TIMEOUT:10s}
+        client:
+            token-uri: ${CONFIG_NOTIFY_CLIENT_TOKEN_URI:}
+            client-id: ${CONFIG_NOTIFY_CLIENT_ID:}
+            client-secret: ${CONFIG_NOTIFY_CLIENT_SECRET:}
+            scope: ${CONFIG_NOTIFY_CLIENT_SCOPE:}

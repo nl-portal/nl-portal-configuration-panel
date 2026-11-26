@@ -16,12 +16,16 @@
 
 package nl.nlportal.configurationpanel.service
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.event.ConfigurationPropertiesChangedEvent
 import nl.nlportal.configurationpanel.event.FeatureToggledEvent
+import nl.nlportal.configurationpanel.exception.PropertyKeyNotAllowedException
 import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
+import nl.nlportal.configurationpanel.security.PropertyKeyAllowlist
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,27 +33,40 @@ import org.springframework.transaction.annotation.Transactional
 class ConfigurationPropertiesService(
     private val configRepository: ConfigurationsRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
+    private val propertyKeyAllowlist: PropertyKeyAllowlist,
 ) {
     @Cacheable("configCache")
     fun getConfigurationPropertyByApplicationAndPropertyKeyOrNull(
         application: String,
         propertyKey: String,
-    ): ConfigurationProperty? = configRepository.findByApplicationAndPropertyKey(application, propertyKey)
+    ): ConfigurationProperty? {
+        requireAllowedKeys(listOf(propertyKey))
+        return configRepository.findByApplicationAndPropertyKey(application, propertyKey)
+    }
 
-    fun getConfigurationPropertiesByApplicationOrNull(application: String): List<ConfigurationProperty>? = configRepository.findByApplicationAndRetiredInIsNull(application)
+    fun getConfigurationPropertiesByApplicationOrNull(application: String): List<ConfigurationProperty>? = configRepository
+        .findByApplicationAndRetiredInIsNull(application)
+        ?.filter { propertyKeyAllowlist.isAllowed(it.propertyKey) }
 
     fun getConfigurationPropertiesByApplicationAndFeatureKeyOrNull(
         application: String,
         featureKey: String,
-    ): List<ConfigurationProperty>? = configRepository.findByApplicationAndPropertyKeyStartsWithAndRetiredInIsNull(application, featureKey)
+    ): List<ConfigurationProperty>? {
+        requireAllowedKeys(listOf(featureKey))
+        return configRepository.findByApplicationAndPropertyKeyStartsWithAndRetiredInIsNull(application, featureKey)
+    }
 
     fun deleteConfigurationPropertiesByApplicationAndFeatureKey(
         application: String,
         featureKey: String,
     ) {
+        requireAllowedKeys(listOf(featureKey))
         configRepository
             .findByApplicationAndPropertyKeyStartsWithAndRetiredInIsNull(application, featureKey)
-            ?.apply { configRepository.deleteAll(this) }
+            ?.apply {
+                configRepository.deleteAll(this)
+                logModified(map { it.propertyKey })
+            }
     }
 
     fun getRetiredConfigurationProperties(application: String): List<ConfigurationProperty> = configRepository.findByApplicationAndRetiredInIsNotNullOrderByRetiredInAscPropertyKeyAsc(application)
@@ -57,6 +74,7 @@ class ConfigurationPropertiesService(
     /**
      * Deletes one retired row. Returns false when the key doesn't exist or isn't retired.
      * Publishes no change event: the NL Portal versions that still read retired keys are not notified.
+     * Not allowlist-checked: retired keys can always be deleted.
      */
     @Transactional
     fun deleteRetiredConfigurationProperty(
@@ -81,7 +99,10 @@ class ConfigurationPropertiesService(
     fun getFeatureToggle(
         application: String,
         featureKey: String,
-    ): ConfigurationProperty? = configRepository.findByApplicationAndPropertyKey(application, "$featureKey.enabled")
+    ): ConfigurationProperty? {
+        requireAllowedKeys(listOf("$featureKey.enabled"))
+        return configRepository.findByApplicationAndPropertyKey(application, "$featureKey.enabled")
+    }
 
     @Transactional
     fun setFeatureToggle(
@@ -89,38 +110,68 @@ class ConfigurationPropertiesService(
         featureKey: String,
         enabled: Boolean,
     ): ConfigurationProperty? {
-        val existing = configRepository.findByApplicationAndPropertyKey(application, "$featureKey.enabled")
+        val propertyKey = "$featureKey.enabled"
+        requireAllowedKeys(listOf(propertyKey))
+
+        val existing = configRepository.findByApplicationAndPropertyKey(application, propertyKey)
 
         val payload =
             existing?.copy(propertyValue = enabled.toString())
                 ?: ConfigurationProperty(
                     application = application,
-                    propertyKey = "$featureKey.enabled",
+                    propertyKey = propertyKey,
                     propertyValue = enabled.toString(),
                 )
 
         return configRepository
             .save(payload)
             .also {
+                logModified(listOf(it.propertyKey))
                 applicationEventPublisher.publishEvent(FeatureToggledEvent(listOf(it)))
             }
     }
 
     @Transactional
-    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? = configRepository
-        .save(config)
-        .also {
-            applicationEventPublisher.publishEvent(
-                ConfigurationPropertiesChangedEvent(listOf(it)),
-            )
-        }
+    fun saveConfigurationProperty(config: ConfigurationProperty): ConfigurationProperty? {
+        requireAllowedKeys(listOf(config.propertyKey))
+        return configRepository
+            .save(config)
+            .also {
+                logModified(listOf(it.propertyKey))
+                applicationEventPublisher.publishEvent(
+                    ConfigurationPropertiesChangedEvent(listOf(it)),
+                )
+            }
+    }
 
     @Transactional
-    fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> = configRepository
-        .saveAll(configs)
-        .also {
-            applicationEventPublisher.publishEvent(
-                ConfigurationPropertiesChangedEvent(it),
-            )
+    fun saveConfigurationProperties(configs: List<ConfigurationProperty>): List<ConfigurationProperty> {
+        requireAllowedKeys(configs.map { it.propertyKey })
+        return configRepository
+            .saveAll(configs)
+            .also {
+                logModified(it.map { config -> config.propertyKey })
+                applicationEventPublisher.publishEvent(
+                    ConfigurationPropertiesChangedEvent(it),
+                )
+            }
+    }
+
+    private fun requireAllowedKeys(keys: List<String>) {
+        val disallowed = propertyKeyAllowlist.disallowed(keys)
+        if (disallowed.isNotEmpty()) {
+            logger.warn { "User ${currentUser()}: property keys $disallowed denied" }
+            throw PropertyKeyNotAllowedException(disallowed)
         }
+    }
+
+    private fun logModified(keys: List<String>) {
+        if (keys.isNotEmpty()) logger.info { "User ${currentUser()} modified the following keys: $keys" }
+    }
+
+    private fun currentUser() = SecurityContextHolder.getContext().authentication?.name ?: "unknown"
+
+    private companion object {
+        private val logger = KotlinLogging.logger { }
+    }
 }

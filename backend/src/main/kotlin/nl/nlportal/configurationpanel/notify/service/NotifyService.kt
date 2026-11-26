@@ -19,10 +19,9 @@ package nl.nlportal.configurationpanel.notify.service
 import io.github.oshai.kotlinlogging.KotlinLogging
 import nl.nlportal.configurationpanel.notify.client.NlPortalClient
 import nl.nlportal.configurationpanel.notify.configuration.ConfigurationPanelNotifyConfigurationProperties
-import org.springframework.stereotype.Service
+import org.springframework.security.oauth2.core.OAuth2AuthorizationException
 import org.springframework.web.client.RestClientException
 
-@Service
 class NotifyService(
     private val notifyConfigurationProperties: ConfigurationPanelNotifyConfigurationProperties,
     private val nlPortalClient: NlPortalClient,
@@ -36,7 +35,9 @@ class NotifyService(
             try {
                 nlPortalClient.restartNlPortalClient(it)
             } catch (e: RestClientException) {
-                logger.debug(e) { "Failed to restart NL Portal Client at url $it" }
+                logger.warn { "Failed to restart NL Portal at $it: ${e.message}" }
+            } catch (e: OAuth2AuthorizationException) {
+                logger.warn { "Failed to restart NL Portal at $it: ${e.message}" }
             }
         }
     }
@@ -50,7 +51,9 @@ class NotifyService(
             try {
                 nlPortalClient.refreshNlPortalClient(it)
             } catch (e: RestClientException) {
-                logger.debug(e) { "Failed to refresh NL Portal Client at url $it" }
+                logger.warn { "Failed to refresh NL Portal at $it: ${e.message}" }
+            } catch (e: OAuth2AuthorizationException) {
+                logger.warn { "Failed to refresh NL Portal at $it: ${e.message}" }
             }
         }
     }

@@ -16,12 +16,13 @@
 
 package nl.nlportal.configurationpanel.theme.web.rest
 
+import nl.nlportal.configurationpanel.exception.PropertyKeyNotAllowedException
 import nl.nlportal.configurationpanel.theme.service.ThemeService
 import nl.nlportal.configurationpanel.theme.web.dto.ThemeLogoDTO
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
 
 @RestController
@@ -71,22 +73,32 @@ class ThemeLogoConfigurationResource(
         @PathVariable application: String,
         @PathVariable id: UUID,
     ): ResponseEntity<Nothing> {
-        themeService.deleteThemeLogoById(id)
+        try {
+            themeService.deleteThemeLogoById(id)
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+        }
         return ResponseEntity.ok().build()
     }
 
-    @Transactional
+    // Not @Transactional: ThemeService commits, so a key refused by the BEFORE_COMMIT listener is caught here
     @PostMapping("/v1/theme/{application}/logo", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun storeThemeLogo(
         @RequestParam("file") file: MultipartFile,
         @PathVariable application: String,
         @RequestParam profile: String? = null,
         @RequestParam label: String? = null,
-    ): ResponseEntity<ThemeLogoDTO> = themeService
-        .saveThemeLogo(file, application, profile, label)
-        .let { themeLogo ->
-            ResponseEntity.ok(
-                ThemeLogoDTO.fromThemeLogo(themeLogo),
-            )
+    ): ResponseEntity<ThemeLogoDTO> {
+        try {
+            return themeService
+                .saveThemeLogo(file, application, profile, label)
+                .let { themeLogo ->
+                    ResponseEntity.ok(
+                        ThemeLogoDTO.fromThemeLogo(themeLogo),
+                    )
+                }
+        } catch (e: PropertyKeyNotAllowedException) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
+    }
 }

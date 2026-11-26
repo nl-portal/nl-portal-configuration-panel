@@ -34,7 +34,7 @@ import org.springframework.cache.concurrent.ConcurrentMapCacheManager
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
@@ -52,10 +52,11 @@ class NotifyEventListenerDisabledIT(
         fun cacheManager(): CacheManager = ConcurrentMapCacheManager("configCache")
     }
 
-    @MockitoSpyBean
+    // Mocks: with notify off these beans don't exist, so there is nothing to spy on
+    @MockitoBean
     lateinit var notifyService: NotifyService
 
-    @MockitoSpyBean
+    @MockitoBean
     lateinit var nlPortalClient: NlPortalClient
 
     @Test

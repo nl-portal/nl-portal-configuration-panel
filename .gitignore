@@ -1,5 +1,4 @@
 /.idea/
 *.iml
 .editorconfig
-imports/router/conf.d/
 .DS_Store

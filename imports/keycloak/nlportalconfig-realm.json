@@ -87,8 +87,16 @@
       "attributes" : { }
     }, {
       "id" : "5d0c8a41-6f2e-4b7a-9e13-2c8f4a7b1d90",
-      "name" : "ROLE_ADMIN",
-      "description" : "Configuration Panel API access",
+      "name" : "ROLE_CONFIG_PANEL_ADMIN",
+      "description" : "Configuration Panel admin",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "c49ad262-dcad-44fd-9cd7-ea029e9fb47d",
+      "attributes" : { }
+    }, {
+      "id" : "e0d8612d-9727-47d9-813f-bd9153d46e5c",
+      "name" : "ROLE_ACTUATOR",
+      "description" : "NL Portal actuator endpoints",
       "composite" : false,
       "clientRole" : false,
       "containerId" : "c49ad262-dcad-44fd-9cd7-ea029e9fb47d",
@@ -415,7 +423,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-nlportalconfig", "ROLE_ADMIN" ],
+    "realmRoles" : [ "default-roles-nlportalconfig", "ROLE_CONFIG_PANEL_ADMIN" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -429,7 +437,7 @@
     "credentials" : [ ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-nlportalconfig" ],
+    "realmRoles" : [ "default-roles-nlportalconfig", "ROLE_ACTUATOR" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {

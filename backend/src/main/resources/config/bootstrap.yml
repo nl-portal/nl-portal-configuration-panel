@@ -12,3 +12,7 @@ spring:
                     sql: SELECT property_key as KEY, property_value as VALUE from nlp_configuration where application=? and (profile=? or label=?)
                     sql-without-profile: SELECT property_key as KEY, property_value as VALUE from nlp_configuration where application=? and (profile is null or label=?)
                 prefix: ${CONFIG_SERVER_PREFIX}
+                # Values are served as stored ({cipher}...); NL Portal decrypts them. Unconditional: otherwise the stock
+                # no-op encryptor strips {cipher} and serves the bare ciphertext.
+                encrypt:
+                    enabled: false

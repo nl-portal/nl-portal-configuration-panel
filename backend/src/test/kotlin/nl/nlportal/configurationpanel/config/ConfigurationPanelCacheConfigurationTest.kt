@@ -20,6 +20,7 @@ import nl.nlportal.configurationpanel.configuration.ConfigurationPanelCacheConfi
 import nl.nlportal.configurationpanel.domain.ConfigurationProperty
 import nl.nlportal.configurationpanel.notify.service.NotifyService
 import nl.nlportal.configurationpanel.repository.ConfigurationsRepository
+import nl.nlportal.configurationpanel.security.PropertyKeyAllowlist
 import nl.nlportal.configurationpanel.service.ConfigurationPropertiesService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -41,6 +42,7 @@ import java.time.Instant
     classes = [
         ConfigurationPanelCacheConfiguration::class,
         ConfigurationPropertiesService::class,
+        PropertyKeyAllowlist::class,
         NotifyService::class,
         TestCacheConfiguration::class,
     ],
@@ -59,32 +61,32 @@ class ConfigurationPanelCacheConfigurationTest {
     fun `test caching behavior`() {
         val config =
             ConfigurationProperty(
-                propertyKey = "feature1",
+                propertyKey = "nl-portal.config.feature1",
                 propertyValue = "value1",
                 application = "my-application1",
                 modifiedOn = Instant.now(),
             )
 
         `when`(
-            configRepository.findByApplicationAndPropertyKey("my-application1", "feature1"),
+            configRepository.findByApplicationAndPropertyKey("my-application1", "nl-portal.config.feature1"),
         ).thenReturn(config)
 
         // First call (should fetch from DB)
         val firstCall =
             configService
-                .getConfigurationPropertyByApplicationAndPropertyKeyOrNull("my-application1", "feature1")
+                .getConfigurationPropertyByApplicationAndPropertyKeyOrNull("my-application1", "nl-portal.config.feature1")
 
         // Second call (should return cached value)
         val secondCall =
             configService
-                .getConfigurationPropertyByApplicationAndPropertyKeyOrNull("my-application1", "feature1")
+                .getConfigurationPropertyByApplicationAndPropertyKeyOrNull("my-application1", "nl-portal.config.feature1")
 
         assertEquals(firstCall, secondCall)
 
         // Verify repository was only called once
         Mockito
             .verify(configRepository, Mockito.times(1))
-            .findByApplicationAndPropertyKey("my-application1", "feature1")
+            .findByApplicationAndPropertyKey("my-application1", "nl-portal.config.feature1")
     }
 }
 

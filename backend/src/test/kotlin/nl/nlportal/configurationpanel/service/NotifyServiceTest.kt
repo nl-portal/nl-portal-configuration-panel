@@ -28,6 +28,11 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.whenever
+import org.springframework.security.oauth2.core.OAuth2AuthorizationException
+import org.springframework.security.oauth2.core.OAuth2Error
+import org.springframework.web.client.ResourceAccessException
 
 @ExtendWith(MockitoExtension::class)
 class NotifyServiceTest {
@@ -62,5 +67,27 @@ class NotifyServiceTest {
 
         // Then
         verify(nlPortalClient, times(2)).restartNlPortalClient(any())
+    }
+
+    @Test
+    fun `a failed token request does not stop the other clients`() {
+        doThrow(OAuth2AuthorizationException(OAuth2Error("invalid_client")))
+            .whenever(nlPortalClient)
+            .refreshNlPortalClient("https://localhost:9001")
+
+        notifyService.refreshNlPortalClients()
+
+        verify(nlPortalClient).refreshNlPortalClient("https://localhost:9002")
+    }
+
+    @Test
+    fun `a failed actuator call does not stop the other clients`() {
+        doThrow(ResourceAccessException("timeout"))
+            .whenever(nlPortalClient)
+            .restartNlPortalClient("https://localhost:9001")
+
+        notifyService.restartNlPortalClients()
+
+        verify(nlPortalClient).restartNlPortalClient("https://localhost:9002")
     }
 }

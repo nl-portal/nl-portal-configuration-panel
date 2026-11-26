@@ -52,6 +52,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-security-oauth2-resource-server")
+    // Plain library, not the starter: the notify client builds its own registration, no Boot OAuth2 client auto-configuration
+    implementation("org.springframework.security:spring-security-oauth2-client")
     implementation("org.springframework.cloud:spring-cloud-config-server:$springCloudServerVersion")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:$springCloudBootstrapVersion")
 
@@ -78,6 +80,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.mockito.kotlin:mockito-kotlin:6.3.0")
     testImplementation("com.h2database:h2:2.4.240")
+    testImplementation("com.squareup.okhttp3:mockwebserver3:5.2.0")
 
     mockitoAgent("org.mockito:mockito-core:5.16.1") { isTransitive = false }
 }

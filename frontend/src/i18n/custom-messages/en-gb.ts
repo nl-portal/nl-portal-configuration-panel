@@ -443,6 +443,10 @@ export const EN_GB_MESSAGES: Messages = {
     "features.payment.direct.show-result-page": "Show result page",
     "features.payment.direct.show-result-page.description":
       "Show Worldline's result page after the payment",
+    "features.payment.direct.accept-legacy-amount-rounding":
+      "Accept NL Portal 3.x amount rounding",
+    "features.payment.direct.accept-legacy-amount-rounding.description":
+      "Also accept payments started on NL Portal 3.x and finished after the upgrade. Turn it off once those are finished; removed in NL Portal 5.0",
     "features.payment.direct.sha-out-parameters": "SHA-OUT parameters",
     "features.payment.direct.sha-out-parameters.description":
       "The payment return parameters that should be validated. NL Portal 4.0 doesn't read this setting.",

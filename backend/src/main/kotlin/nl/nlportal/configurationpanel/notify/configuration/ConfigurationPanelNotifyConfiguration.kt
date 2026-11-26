@@ -16,6 +16,7 @@
 
 package nl.nlportal.configurationpanel.notify.configuration
 
+import nl.nlportal.configurationpanel.notify.client.NlPortalClient
 import nl.nlportal.configurationpanel.notify.listener.NotifyEventListener
 import nl.nlportal.configurationpanel.notify.service.NotifyService
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -25,8 +26,27 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableConfigurationProperties(ConfigurationPanelNotifyConfigurationProperties::class)
+@ConditionalOnProperty(prefix = "configuration-panel.notify", name = ["notify-on-changes"], havingValue = "true")
 class ConfigurationPanelNotifyConfiguration {
     @Bean
-    @ConditionalOnProperty(prefix = "configuration-panel.notify", name = ["notify-on-changes"], havingValue = "true")
+    fun nlPortalClient(properties: ConfigurationPanelNotifyConfigurationProperties): NlPortalClient {
+        val client = properties.client
+        val missing =
+            mapOf(
+                "CONFIG_NOTIFY_CLIENT_TOKEN_URI" to client.tokenUri,
+                "CONFIG_NOTIFY_CLIENT_ID" to client.clientId,
+                "CONFIG_NOTIFY_CLIENT_SECRET" to client.clientSecret,
+            ).filterValues { it.isNullOrBlank() }.keys
+        require(missing.isEmpty()) { "$missing required when CONFIG_NOTIFY_ENABLED=true" }
+        return NlPortalClient(properties)
+    }
+
+    @Bean
+    fun notifyService(
+        properties: ConfigurationPanelNotifyConfigurationProperties,
+        nlPortalClient: NlPortalClient,
+    ): NotifyService = NotifyService(properties, nlPortalClient)
+
+    @Bean
     fun configurationPropertiesChangedEventListener(notifyService: NotifyService): NotifyEventListener = NotifyEventListener(notifyService)
 }
