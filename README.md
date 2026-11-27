@@ -1,5 +1,18 @@
 # nl-portal-configuration-panel
 
+## Security
+
+> [!WARNING]
+> **Do NOT expose the Configuration Panel to the public internet.**
+>
+> - The frontend and REST API (`/api/v1/**`) belong on an internal network or behind a WAF.
+> - The configuration server (`CONFIG_SERVER_PREFIX`) is for NL Portal only and must never be reachable from outside the
+>   Kubernetes cluster or Docker network. Don't route it through an ingress.
+> - Use a Keycloak realm of its own for the panel, containing only the people who manage NL Portal's configuration, as
+>   in the Docker Compose example. By default any valid token from that realm gets full access to the REST API.
+> - If the realm is shared with other users, set `CONFIG_SECURITY_API_AUTHORITIES_ENABLED` to `true` to require a role,
+>   see [Authorization](#authorization).
+
 ## Requirements
 
 The following software has to be installed to be able to use this application
